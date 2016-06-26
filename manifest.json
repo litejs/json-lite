@@ -6,9 +6,6 @@
   "permissions": [
     "<all_urls>"
   ],
-  "web_accessible_resources": [
-    "json.css"
-  ],
   "content_scripts": [
     {
       "matches": [

@@ -82,11 +82,10 @@
 		str = first.textContent
 		chr = str.charAt(0)
 		if (chr == "{" || chr == "[") {
+			var tag = document.createElement("style")
+			tag.textContent = 'div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px monospace}body>div{border:none}i{cursor:pointer;color:#ccc}i:hover{color:#999}i:before{content:" ▼ "}i:after{content:attr(data-content)}i.is-collpsed:before{content:" ▶ "}i.is-collpsed+div{display:none}.c1{color:#11c}.c2{color:#192}.c3{color:#f12}'
+			document.head.appendChild(tag)
 			body.removeChild(first)
-			var tag = document.createElement("link")
-			tag.rel = "stylesheet"
-			tag.href = chrome.extension.getURL("json.css")
-			body.appendChild(tag)
 			draw(str, body)
 		}
 	}
