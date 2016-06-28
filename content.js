@@ -7,8 +7,8 @@
 	}
 
 	function draw(str, to, first) {
-		var tmp, match, val
-		, re = /(")(?:\\?.)*?"|(-?[\d.]+)|true|false|null|[[\]{},:]/g
+		var match, val, err
+		, re = /(")(?:\\?.)*?"|-?[\d.]+|true|false|null|[[\]{},:]|(\S[^-[\]{}.:"\d]*)/g
 		, node = document.createElement("div")
 		, span = document.createElement("span")
 		, comm = document.createElement("i")
@@ -41,7 +41,8 @@
 		loop(str, re)
 
 		function loop(srt, re) {
-			var ii = 0
+			var tmp
+			, ii = 0
 			try {
 				for (; match = re.exec(str); ) {
 					val = match[0]
@@ -70,8 +71,11 @@
 					} else {
 						tmp = span.cloneNode()
 						tmp.textContent = val
-						tmp.className = match[1] ? "c2": "c1"
+						tmp.className = match[1] ? "c2": match[2] ? "c3" : "c1"
 						node.appendChild(tmp)
+						if (match[2]) {
+							validate()
+						}
 					}
 					if (++ii > 1000) {
 						document.title = (0|(100*re.lastIndex/str.length)) + "% of " + units(str.length)
@@ -83,14 +87,21 @@
 				}
 				document.title = ""
 			} catch(e1) {
-				to.className = "c3"
-				try {
-					JSON.parse(str)
-					to.textContent = e1
-				} catch (e2) {
-					to.textContent = e2
-				}
+				validate(e1)
 			}
+		}
+
+		function validate(e1) {
+			if (err) return
+			err = document.createElement("h3")
+			err.className = "c3"
+			try {
+				JSON.parse(str)
+				err.textContent = e1
+			} catch(e2) {
+				err.textContent = e2
+			}
+			to.insertBefore(err, to.firstChild)
 		}
 	}
 
@@ -102,7 +113,7 @@
 		chr = str.charAt(0)
 		if (chr == "{" || chr == "[") {
 			var tag = document.createElement("style")
-			tag.textContent = 'div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px monospace}body>div{border:none}i{cursor:pointer;color:#ccc}i:hover{color:#999}i:before{content:" ▼ "}i:after{content:attr(data-content)}i.is-collpsed:before{content:" ▶ "}i.is-collpsed+div{display:none}.c1{color:#11c}.c2{color:#192}.c3{color:#f12}'
+			tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px monospace}body>div{border:none}i{cursor:pointer;color:#ccc}i:hover{color:#999}i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}i.is-collpsed+div{display:none}.c1{color:#11c}.c2{color:#192}.c3{color:#f12;font-weight:bold}'
 			document.head.appendChild(tag)
 			draw(str, body, first)
 		}
