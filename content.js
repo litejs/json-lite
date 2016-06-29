@@ -41,9 +41,10 @@
 		loop(str, re)
 
 		function loop(srt, re) {
-			var tmp
-			, ii = 0
 			try {
+				var tmp
+				, i = 0
+				, len = str.length
 				for (; match = re.exec(str); ) {
 					val = match[0]
 					if (val == "{" || val == "[") {
@@ -79,8 +80,8 @@
 							validate()
 						}
 					}
-					if (++ii > 1000) {
-						document.title = (0|(100*re.lastIndex/str.length)) + "% of " + units(str.length)
+					if (++i > 1000) {
+						document.title = (0|(100*re.lastIndex/len)) + "% of " + units(len)
 						setTimeout(function() {
 							loop(str, re)
 						}, 1)
