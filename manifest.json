@@ -1,11 +1,8 @@
 {
   "manifest_version": 2,
   "name": "JSON Lite",
-  "version": "0.2",
+  "version": "0.3",
   "description": "Fast non-blocking JSON viewer",
-  "permissions": [
-    "<all_urls>"
-  ],
   "content_scripts": [
     {
       "matches": [

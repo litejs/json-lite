@@ -8,7 +8,7 @@
 
 	function draw(str, to, first) {
 		var match, val, err
-		, re = /("(?:\\?.)*?")\s*(:?)|-?[\d.]+|true|false|null|[[\]{},]|(\S[^-[\]{}."\d]*)/g
+		, re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 		, node = document.createElement("div")
 		, span = document.createElement("span")
 		, comm = document.createElement("i")
