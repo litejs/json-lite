@@ -55,9 +55,11 @@
 					} else if (val == "}" || val == "]") {
 						if (node.childNodes.length) {
 							tmp = comm.cloneNode()
-							tmp.dataset.content = node.len +
-								(node.len == 1 ? " item, " : " items, ") +
-								units(re.lastIndex - node.start + 1)
+							tmp.dataset.content = node.len + (
+								node.len == 1 ?
+								(val == "]" ? " item, " : " property, ") :
+								(val == "]" ? " items, " : " properties, ")
+							) + units(re.lastIndex - node.start + 1)
 							node.parentNode.insertBefore(tmp, node)
 						} else {
 							node.parentNode.removeChild(node)
