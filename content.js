@@ -76,8 +76,6 @@
 						node.appendChild(tmp)
 						if (match[2]) {
 							node.appendChild(colon.cloneNode())
-						} else if (match[3]) {
-							validate()
 						}
 					}
 					if (++i > 1000) {
@@ -89,22 +87,14 @@
 					}
 				}
 				document.title = ""
-			} catch(e1) {
-				validate(e1)
-			}
-		}
-
-		function validate(e1) {
-			if (err) return
-			err = document.createElement("h3")
-			err.className = "c3"
-			try {
 				JSON.parse(str)
-				err.textContent = e1
-			} catch(e2) {
-				err.textContent = e2
+
+			} catch(e) {
+				tmp = document.createElement("h3")
+				tmp.className = "c3"
+				tmp.textContent = e
+				to.insertBefore(tmp, to.firstChild)
 			}
-			to.insertBefore(err, to.firstChild)
 		}
 	}
 
