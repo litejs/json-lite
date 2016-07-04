@@ -52,7 +52,7 @@
 						node = node.lastChild.previousSibling
 						node.len = 1
 						node.start = re.lastIndex
-					} else if (val == "}" || val == "]") {
+					} else if ((val == "}" || val == "]") && node.len) {
 						if (node.childNodes.length) {
 							tmp = comm.cloneNode()
 							tmp.dataset.content = node.len + (
