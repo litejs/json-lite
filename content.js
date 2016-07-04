@@ -7,8 +7,7 @@
 	}
 
 	function draw(str, to, first) {
-		var match, val, err
-		, re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
+		var re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 		, node = document.createElement("div")
 		, span = document.createElement("span")
 		, comm = document.createElement("i")
@@ -41,10 +40,10 @@
 		loop(str, re)
 
 		function loop(srt, re) {
+			var match, val, tmp
+			, i = 0
+			, len = str.length
 			try {
-				var tmp
-				, i = 0
-				, len = str.length
 				for (; match = re.exec(str); ) {
 					val = match[0]
 					if (val == "{" || val == "[") {
