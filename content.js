@@ -130,7 +130,7 @@
 	var str, chr
 	, body = document.body
 	, first = body && body.firstChild
-	if (first && first == body.lastChild && first.tagName == "PRE") {
+	if (first && first == body.lastChild && (first.tagName == "PRE" || first.nodeType == 3)) {
 		str = first.textContent
 		chr = str.charAt(0)
 		if (chr == "{" || chr == "[") {
