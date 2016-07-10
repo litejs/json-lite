@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "JSON Lite",
-  "version": "0.4",
-  "description": "Fast non-blocking JSON viewer",
+  "version": "0.5",
+  "description": "Fast JSON highlighter - shows items count/size, handles large files, collapses all similar items with Ctrl+Click",
   "content_scripts": [
     {
       "matches": [
