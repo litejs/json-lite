@@ -6,6 +6,32 @@
 		size + " bytes "
 	}
 
+	function toggleAll(node, toggle) {
+		var txt
+		, tmp = ".c2"
+
+		for (; node = !txt && (node.previousSibling || node.parentNode); ) {
+			if (node.className == "c2") {
+				txt = node.textContent
+				break
+			}
+		}
+		for (; node; node = node.parentNode) {
+			if (node.tagName == "DIV") {
+				tmp = "div>" + tmp
+			}
+		}
+
+		node = document.querySelectorAll("body>" + tmp)
+
+		for (tmp = node.length; tmp--; ) {
+			if (node[tmp].textContent == txt) {
+				node[tmp].nextSibling.nextSibling.nextSibling.classList
+				.toggle("is-collpsed", toggle)
+			}
+		}
+	}
+
 	function draw(str, to, first) {
 		var re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 		, node = document.createElement("div")
@@ -30,9 +56,13 @@
 		}
 
 		to.addEventListener("click", function(e) {
-			var target = e.target
+			var toggle
+			, target = e.target
 			if (target.tagName == "I") {
-				target.classList.toggle("is-collpsed")
+				toggle = target.classList.toggle("is-collpsed")
+				if (e.ctrlKey) {
+					toggleAll(target, toggle)
+				}
 			}
 		}, true)
 
