@@ -1,9 +1,21 @@
 
 !function() {
+	var div = document.createElement("div")
+
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
 		size > 1024 ? (0|(size / 1024)) + " KB " :
 		size + " bytes "
+	}
+
+	function fragment(a, b) {
+		var frag = document.createDocumentFragment()
+		frag.appendChild(document.createTextNode(a))
+		frag.appendChild(div.cloneNode())
+		if (b) {
+			frag.appendChild(document.createTextNode(b))
+		}
+		return frag
 	}
 
 	function toggleAll(node, toggle) {
@@ -34,7 +46,7 @@
 
 	function draw(str, to, first) {
 		var re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
-		, node = document.createElement("div")
+		, node = div
 		, span = document.createElement("span")
 		, comm = document.createElement("i")
 		, colon = document.createTextNode(": ")
@@ -43,16 +55,6 @@
 			"{": fragment("{", "}"),
 			"[": fragment("[", "]"),
 			",": fragment(",")
-		}
-
-		function fragment(a, b) {
-			var frag = document.createDocumentFragment()
-			frag.appendChild(document.createTextNode(a))
-			frag.appendChild(node.cloneNode())
-			if (b) {
-				frag.appendChild(document.createTextNode(b))
-			}
-			return frag
 		}
 
 		to.addEventListener("click", function(e) {
@@ -127,16 +129,21 @@
 		}
 	}
 
-	var str, chr
+	var str
+	, re = /^\s*(?:[[{]|(\w+\s*\()([[{].*)\)\s*$)/
 	, body = document.body
 	, first = body && body.firstChild
 	if (first && first == body.lastChild && (first.tagName == "PRE" || first.nodeType == 3)) {
 		str = first.textContent
-		chr = str.charAt(0)
-		if (chr == "{" || chr == "[") {
+		if (re = re.exec(str)) {
 			var tag = document.createElement("style")
 			tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px monospace}body>div{border:none}i{cursor:pointer;color:#ccc}i:hover{color:#999}i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}i.is-collpsed+div{display:none}.c1{color:#293}.c2{color:#66d}.c3{color:#f12}.c4{color:#10c}.c3,.c4{font-weight:bold}'
 			document.head.appendChild(tag)
+			if (re[1]) {
+				str = re[2]
+				body.replaceChild(fragment(re[1], ")"), first)
+				first = body.lastChild.previousSibling
+			}
 			draw(str, body, first)
 		}
 	}
