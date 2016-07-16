@@ -18,7 +18,7 @@
 		return frag
 	}
 
-	function toggleAll(node, toggle) {
+	function toggleAll(node, name) {
 		var txt
 		, tmp = ".c2"
 
@@ -38,8 +38,7 @@
 
 		for (tmp = node.length; tmp--; ) {
 			if (node[tmp].textContent == txt) {
-				node[tmp].nextSibling.nextSibling.nextSibling.classList
-				.toggle("is-collpsed", toggle)
+				node[tmp].nextSibling.nextSibling.nextSibling.className = name
 			}
 		}
 	}
@@ -58,12 +57,13 @@
 		}
 
 		to.addEventListener("click", function(e) {
-			var toggle
-			, target = e.target
+			var target = e.target
+			, name = target.className ? "" : "is-collpsed"
 			if (target.tagName == "I") {
-				toggle = target.classList.toggle("is-collpsed")
 				if (e.ctrlKey) {
-					toggleAll(target, toggle)
+					toggleAll(target, name)
+				} else {
+					target.className = name
 				}
 			}
 		}, true)
