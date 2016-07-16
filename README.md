@@ -14,12 +14,14 @@ Features:
 
  * Syntax highlighting
  * Collapsible trees
- * Collapse all similar items with Ctrl+Click
+ * Collapse all childs with Shift + Click
+ * Collapse selected property also on all sibling items with Ctrl + Click
  * Counts items and properties in a collection
  * Shows collection sizes
  * Works with JSONP
  * Shows JSON errors
- * Does it's best to show invalid JSON
+ * Does it's best to show large (10MB+) JSON files
+ * Does it's best to show invalid JSON files
 
 Source/bugs/suggestions: https://github.com/lauriro/json-lite
 
