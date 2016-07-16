@@ -62,6 +62,13 @@
 			if (target.tagName == "I") {
 				if (e.ctrlKey) {
 					toggleAll(target, name)
+				} else if (e.shiftKey) {
+					var childs = target.nextSibling.querySelectorAll("i")
+					, i = childs.length
+					name = childs[0] && childs[0].className ? "" : "is-collpsed"
+					for (; i--; ) {
+						childs[i].className = name
+					}
 				} else {
 					target.className = name
 				}
