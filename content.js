@@ -45,6 +45,7 @@
 
 	function draw(str, to, first) {
 		var re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
+		, isDown = {}
 		, node = div
 		, span = document.createElement("span")
 		, comm = document.createElement("i")
@@ -56,13 +57,21 @@
 			",": fragment(",")
 		}
 
+		document.onkeydown = function(e) {
+			isDown[e.keyCode] = 1
+		}
+
+		document.onkeyup = function(e) {
+			isDown[e.keyCode] = 0
+		}
+
 		to.addEventListener("click", function(e) {
 			var target = e.target
 			, name = target.className ? "" : "is-collpsed"
 			if (target.tagName == "I") {
-				if (e.ctrlKey) {
+				if (e.altKey) {
 					toggleAll(target, name)
-				} else if (e.shiftKey) {
+				} else if (isDown[17] || isDown[91] || isDown[93] || isDown[224]) {
 					var childs = target.nextSibling.querySelectorAll("i")
 					, i = childs.length
 					name = childs[0] && childs[0].className ? "" : "is-collpsed"

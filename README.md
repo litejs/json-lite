@@ -14,8 +14,8 @@ Features:
 
  * Syntax highlighting
  * Collapsible trees
- * Collapse all childs with Shift + Click
- * Collapse selected property also on all sibling items with Ctrl + Click
+ * Collapse all childs with Ctrl(Command) + Click
+ * Collapse selected property also on all sibling items with Alt(Option) + Click
  * Counts items and properties in a collection
  * Shows collection sizes
  * Works with JSONP
