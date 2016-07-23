@@ -3,6 +3,9 @@
   "name": "JSON Lite",
   "version": "0.6",
   "description": "Fast JSON highlighter - shows items count/size, handles large files, collapses all similar items with Ctrl+Click",
+  "browser_action": {
+    "default_popup": "README.md"
+  },
   "content_scripts": [
     {
       "all_frames": true,
