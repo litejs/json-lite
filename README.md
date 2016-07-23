@@ -1,12 +1,10 @@
-[Chrome Web Store]: https://chrome.google.com/webstore/detail/json-lite/acacmjcicejlmjcheoklfdchempahoag
 
-
-JSON Lite
-=========
+JSON Lite v0.7
+==============
 
 Chrome extension for viewing JSON.
 
- * Install through [Chrome Web Store]
+ * Install through [Chrome Web Store][]
 
 Fast non-blocking JSON viewer weighing in at just 4KB.
 
@@ -27,4 +25,6 @@ Source/bugs/suggestions: https://github.com/lauriro/json-lite
 
 Copyright (c) 2016 Lauri Rooden  
 The MIT License
+
+[Chrome Web Store]: https://chrome.google.com/webstore/detail/json-lite/acacmjcicejlmjcheoklfdchempahoag
 
