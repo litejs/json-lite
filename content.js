@@ -149,7 +149,10 @@
 	, re = /^\s*(?:[[{]|(\w+\s*\()([[{].*)\)\s*$)/
 	, body = document.body
 	, first = body && body.firstChild
-	if (first && first == body.lastChild && (first.tagName == "PRE" || first.nodeType == 3)) {
+	if (first && (
+			first == body.lastElementChild && first.tagName == "PRE" ||
+			first == body.lastChild && first.nodeType == 3
+		)) {
 		str = first.textContent
 		if (re = re.exec(str)) {
 			var tag = document.createElement("style")
