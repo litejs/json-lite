@@ -1,6 +1,10 @@
 
 !function() {
-	var div = document.createElement("div")
+	var str
+	, div = document.createElement("div")
+	, re = /^\s*(?:[[{]|(\w+\s*\()([[{].*)\)\s*$)/
+	, body = document.body
+	, first = body && body.firstChild
 
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
@@ -145,10 +149,6 @@
 		}
 	}
 
-	var str
-	, re = /^\s*(?:[[{]|(\w+\s*\()([[{].*)\)\s*$)/
-	, body = document.body
-	, first = body && body.firstChild
 	if (first && (
 			first == body.lastElementChild && first.tagName == "PRE" ||
 			first == body.lastChild && first.nodeType == 3
