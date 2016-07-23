@@ -5,6 +5,7 @@
   "description": "Fast JSON highlighter - shows items count/size, handles large files, collapses all similar items with Ctrl+Click",
   "content_scripts": [
     {
+      "all_frames": true,
       "matches": [
         "<all_urls>"
       ],
