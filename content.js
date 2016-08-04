@@ -5,6 +5,7 @@
 	, re = /^\s*(?:[[{]|(\w+\s*\()([[{].*)\)\s*$)/
 	, body = document.body
 	, first = body && body.firstChild
+	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? 91 : 17
 
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
@@ -75,7 +76,7 @@
 			if (target.tagName == "I") {
 				if (e.altKey) {
 					toggleAll(target, name)
-				} else if (isDown[17] || isDown[91] || isDown[93] || isDown[224]) {
+				} else if (isDown[mod]) {
 					var childs = target.nextSibling.querySelectorAll("i")
 					, i = childs.length
 					name = childs[0] && childs[0].className ? "" : "is-collpsed"
