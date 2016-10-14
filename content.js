@@ -62,13 +62,13 @@
 			",": fragment(",")
 		}
 
-		document.onkeydown = function(e) {
+		document.addEventListener("keydown", function(e) {
 			isDown[e.keyCode] = 1
-		}
+		})
 
-		document.onkeyup = function(e) {
+		document.addEventListener("keyup", function(e) {
 			isDown[e.keyCode] = 0
-		}
+		})
 
 		to.addEventListener("click", function(e) {
 			var target = e.target
