@@ -1,10 +1,10 @@
 
-JSON Lite v0.7
-==============
+JSON Lite v0.10
+===============
 
-Chrome extension for viewing JSON.
+Browser extension for viewing JSON files.
 
- * Install through [Chrome Web Store][]
+ * Install through [Chrome Web Store][] or [Firefox Add-ons][]
 
 Fast non-blocking JSON viewer weighing in at just 4KB.
 
@@ -27,4 +27,5 @@ Copyright (c) 2016 Lauri Rooden
 The MIT License
 
 [Chrome Web Store]: https://chrome.google.com/webstore/detail/json-lite/acacmjcicejlmjcheoklfdchempahoag
+[Firefox Add-ons]: https://addons.mozilla.org/en-US/firefox/addon/json-lite/
 
