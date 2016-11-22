@@ -4,7 +4,7 @@
   "version": "0.10",
   "description": "Fast JSON highlighter - shows items count/size, handles large files, collapse items",
   "browser_action": {
-    "default_popup": "README.txt"
+    "default_popup": "README.html"
   },
   "content_scripts": [
     {
