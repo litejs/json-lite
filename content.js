@@ -16,9 +16,11 @@
 	function fragment(a, b) {
 		var frag = document.createDocumentFragment()
 		frag.appendChild(document.createTextNode(a))
-		frag.appendChild(div.cloneNode())
 		if (b) {
+			frag.appendChild(div.cloneNode())
 			frag.appendChild(document.createTextNode(b))
+		} else {
+			frag.appendChild(document.createElement("br"))
 		}
 		return frag
 	}
