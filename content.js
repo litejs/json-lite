@@ -55,13 +55,13 @@
 		, isDown = {}
 		, node = div
 		, span = document.createElement("span")
-		, comm = document.createElement("i")
+		, info = document.createElement("i")
 		, colon = document.createTextNode(": ")
+		, comma = fragment(",")
 		, path = []
 		, cache = {
 			"{": fragment("{", "}"),
-			"[": fragment("[", "]"),
-			",": fragment(",")
+			"[": fragment("[", "]")
 		}
 
 		document.addEventListener("keydown", function(e) {
@@ -109,7 +109,7 @@
 						node.start = re.lastIndex
 					} else if ((val == "}" || val == "]") && node.len) {
 						if (node.childNodes.length) {
-							tmp = comm.cloneNode()
+							tmp = info.cloneNode()
 							tmp.dataset.content = node.len + (
 								node.len == 1 ?
 								(val == "]" ? " item, " : " property, ") :
@@ -122,7 +122,7 @@
 						node = path.pop()
 					} else if (val == ",") {
 						node.len += 1
-						node.appendChild(cache[val].cloneNode(true))
+						node.appendChild(comma.cloneNode(true))
 					} else {
 						tmp = span.cloneNode()
 						tmp.textContent = match[1] || val
