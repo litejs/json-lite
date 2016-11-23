@@ -5,7 +5,7 @@
 	, re = /^\s*(?:[[{]|(\w+\s*\()([[{].*)\)\s*$)/
 	, body = document.body
 	, first = body && body.firstChild
-	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? 91 : 17
+	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? "metaKey" : "ctrlKey"
 
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
@@ -52,7 +52,6 @@
 
 	function draw(str, to, first) {
 		var re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
-		, isDown = {}
 		, node = div
 		, span = document.createElement("span")
 		, info = document.createElement("i")
@@ -64,21 +63,13 @@
 			"[": fragment("[", "]")
 		}
 
-		document.addEventListener("keydown", function(e) {
-			isDown[e.keyCode] = 1
-		})
-
-		document.addEventListener("keyup", function(e) {
-			isDown[e.keyCode] = 0
-		})
-
 		to.addEventListener("click", function(e) {
 			var target = e.target
 			, name = target.className ? "" : "is-collpsed"
 			if (target.tagName == "I") {
 				if (e.altKey) {
 					toggleAll(target, name)
-				} else if (isDown[mod]) {
+				} else if (e[mod]) {
 					var childs = target.nextSibling.querySelectorAll("i")
 					, i = childs.length
 					name = childs[0] && childs[0].className ? "" : "is-collpsed"
