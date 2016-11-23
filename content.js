@@ -25,33 +25,37 @@
 		return frag
 	}
 
-	function toggleAll(node, name) {
-		var txt
-		, tmp = ".c2"
+	function change(node, query, name, set) {
+		var list = node.querySelectorAll(query)
+		, i = list.length
+		for (; i--; ) list[i].classList[set ? "add" : "remove"](name)
+	}
 
-		for (; node = !txt && (node.previousSibling || node.parentNode); ) {
-			if (node.className == "c2") {
-				txt = node.textContent
-				break
-			}
-		}
-		for (; node; node = node.parentNode) {
-			if (node.tagName == "DIV") {
-				tmp = "div>" + tmp
-			}
-		}
+	function changeSiblings(node, name, set) {
+		var txt, tmp
+		, i = 0
+		, query = []
 
-		node = document.querySelectorAll("body>" + tmp)
-
-		for (tmp = node.length; tmp--; ) {
-			if (node[tmp].textContent == txt) {
-				node[tmp].nextSibling.nextSibling.nextSibling.className = name
+		for (; node && node.tagName === "I"; ) {
+			if ((tmp = node.previousElementSibling) && tmp.className == "c2") {
+				txt = tmp.textContent
+				query.unshift("div>.c2+i[data-key='" + node.dataset.key + "']")
+			} else {
+				i = 0
+				for (tmp = node; tmp = tmp.previousElementSibling; tmp.tagName === "BR" && i++);
+				query.unshift("div>" + (i ? "br:nth-of-type(" + i + ")+i" : "i:first-child"))
 			}
+			node = node.parentNode && node.parentNode.previousElementSibling
 		}
+		if (!query[1]) return
+		query[0] = query[1] = "div>i"
+
+		change(document, "body>" + query.join("+"), name, set)
 	}
 
 	function draw(str, to, first) {
-		var re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
+		var hovered
+		, re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 		, node = div
 		, span = document.createElement("span")
 		, info = document.createElement("i")
@@ -63,29 +67,53 @@
 			"[": fragment("[", "]")
 		}
 
+		function keydown(e) {
+			if (hovered) {
+				e.preventDefault()
+				if (e.altKey) {
+					changeSiblings(hovered, "hi", 1)
+				} else if (e[mod]) {
+					change(hovered.nextSibling, "i", "hi", 1)
+				}
+			}
+		}
+		document.addEventListener("keydown", keydown)
+
+		document.addEventListener("keyup", function(e) {
+			if (hovered) change(document, ".hi", "hi")
+		})
+
+		document.addEventListener("mouseover", function(e) {
+			if (e.target.tagName === "I") {
+				hovered = e.target
+				keydown(e)
+			}
+		})
+
+		document.addEventListener("mouseout", function(e) {
+			if (hovered && (e.altKey || e[mod])) change(document, ".hi", "hi")
+			hovered = null
+		})
+
 		to.addEventListener("click", function(e) {
 			var target = e.target
-			, name = target.className ? "" : "is-collpsed"
+			, open = target.classList.contains("is-collpsed")
 			if (target.tagName == "I") {
 				if (e.altKey) {
-					toggleAll(target, name)
+					changeSiblings(target, "is-collpsed", !open)
 				} else if (e[mod]) {
-					var childs = target.nextSibling.querySelectorAll("i")
-					, i = childs.length
-					name = childs[0] && childs[0].className ? "" : "is-collpsed"
-					for (; i--; ) {
-						childs[i].className = name
-					}
+					open = target.nextSibling.querySelector("i")
+					if (open) change(target.nextSibling, "i", "is-collpsed", !open.classList.contains("is-collpsed"))
 				} else {
-					target.className = name
+					target.classList[open ? "remove" : "add"]("is-collpsed")
 				}
 			}
 		}, true)
 
 		to.replaceChild(node, first)
-		loop(str, re)
+		loop()
 
-		function loop(srt, re) {
+		function loop() {
 			var match, val, tmp
 			, i = 0
 			, len = str.length
@@ -106,6 +134,10 @@
 								(val == "]" ? " item, " : " property, ") :
 								(val == "]" ? " items, " : " properties, ")
 							) + units(re.lastIndex - node.start + 1)
+
+							if ((val = node.previousElementSibling) && val.className == "c2") {
+								tmp.dataset.key = val.textContent.slice(1, -1).replace(/'/, "\\'")
+							}
 							node.parentNode.insertBefore(tmp, node)
 						} else {
 							node.parentNode.removeChild(node)
@@ -125,9 +157,7 @@
 					}
 					if (++i > 1000) {
 						document.title = (0|(100*re.lastIndex/len)) + "% of " + units(len)
-						setTimeout(function() {
-							loop(str, re)
-						}, 1)
+						requestAnimationFrame(loop)
 						return
 					}
 				}
@@ -150,7 +180,7 @@
 		str = first.textContent
 		if (re = re.exec(str)) {
 			var tag = document.createElement("style")
-			tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px Menlo,monospace}body>div{border:none}i{cursor:pointer;color:#ccc}i:hover{color:#999}i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}i.is-collpsed+div{display:none}.c1{color:#293}.c2{color:#66d}.c3{color:#f12}.c4{color:#10c}.c3,.c4{font-weight:bold}'
+			tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px Menlo,monospace;pointer-events:none}body>div{border:none}i{cursor:pointer;color:#ccc;pointer-events:auto}.hi,i:hover{text-shadow: 1px 1px 3px #999;color:#333}i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}i.is-collpsed+div{display:none}.c1{color:#293}.c2{color:#66d}.c3{color:#f12}.c4{color:#10c}.c3,.c4{font-weight:bold}'
 			document.head.appendChild(tag)
 			if (re[1]) {
 				str = re[2]
