@@ -183,8 +183,8 @@
 		) &&
 		(str = first.textContent) &&
 		(
-			/\/json$/i.test(document.contentType) ||
-			(jsonpMatch = /^\s*([$a-z_][$\w]*\s*\()\s*([^]+)\)\s*$/i.exec(str)) && jsonRe.test(jsonpMatch[2]) ||
+			/[+\/]json$/i.test(document.contentType) ||
+			(jsonpMatch = /^\s*((?:\/\*\*\/\s*)?([$a-z_][$\w]*)\s*(?:&&\s*\2\s*)?\()([^]+)(\)[\s;]*)$/i.exec(str)) && jsonRe.test(jsonpMatch[3]) ||
 			jsonRe.test(str)
 		)
 	) {
@@ -192,8 +192,8 @@
 		tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px Menlo,monospace;pointer-events:none}body>div{border:none}i{cursor:pointer;color:#ccc;pointer-events:auto}.hi,i:hover{text-shadow: 1px 1px 3px #999;color:#333}i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}i.is-collpsed+div{display:none}.c1{color:#293}.c2{color:#66d}.c3{color:#f12}.c4{color:#10c}.c3,.c4{font-weight:bold}'
 		document.head.appendChild(tag)
 		if (jsonpMatch) {
-			str = jsonpMatch[2]
-			body.replaceChild(fragment(jsonpMatch[1], ")"), first)
+			str = jsonpMatch[3]
+			body.replaceChild(fragment(jsonpMatch[1], jsonpMatch[4]), first)
 			first = body.lastChild.previousSibling
 		}
 		draw(str, body, first)
