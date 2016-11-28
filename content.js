@@ -1,7 +1,7 @@
 
 !function() {
 	var str, jsonpMatch
-	, jsonRe = /^\s*(?:\[(?=\s*[\d"[{])[^]*\]|\{\s*"[^]+\})\s*$/
+	, jsonRe = /^\s*(?:\[\s*(?=-?\d|true|false|null|["[{])[^]*\]|\{\s*"[^]+\})\s*$/
 	, div = document.createElement("div")
 	, body = document.body
 	, first = body && body.firstChild
