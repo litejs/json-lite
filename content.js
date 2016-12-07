@@ -55,8 +55,9 @@
 
 	function draw(str, to, first) {
 		var hovered
-		, re = /("(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
+		, re = /("(?:((?:https?|file):\/\/(?:\\?\S)+?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 		, node = div
+		, link = document.createElement("a")
 		, span = document.createElement("span")
 		, info = document.createElement("i")
 		, colon = document.createTextNode(": ")
@@ -147,11 +148,16 @@
 						node.len += 1
 						node.appendChild(comma.cloneNode(true))
 					} else {
-						tmp = span.cloneNode()
-						tmp.textContent = match[1] || val
-						tmp.className = match[2] ? "c2": match[1] ? "c1": match[3] ? "c3" : "c4"
-						node.appendChild(tmp)
 						if (match[2]) {
+							tmp = link.cloneNode()
+							tmp.href = match[2].replace(/\\"/g, '"')
+						} else {
+							tmp = span.cloneNode()
+						}
+						tmp.textContent = match[1] || val
+						tmp.className = match[3] ? "c2": match[1] ? "c1": match[4] ? "c3" : "c4"
+						node.appendChild(tmp)
+						if (match[3]) {
 							node.appendChild(colon.cloneNode())
 						}
 					}
@@ -189,7 +195,11 @@
 		)
 	) {
 		var tag = document.createElement("style")
-		tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px Menlo,monospace;pointer-events:none}body>div{border:none}i{cursor:pointer;color:#ccc;pointer-events:auto}.hi,i:hover{text-shadow: 1px 1px 3px #999;color:#333}i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}i.is-collpsed+div{display:none}.c1{color:#293}.c2{color:#66d}.c3{color:#f12}.c4{color:#10c}.c3,.c4{font-weight:bold}'
+		tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px Menlo,monospace;pointer-events:none}'
+		+ 'body>div{border:none}a{color:inherit;text-decoration:none}a:hover,a:focus{text-decoration:underline}'
+		+ 'a,i{pointer-events:auto}i{cursor:pointer;color:#ccc}.hi,i:hover{text-shadow: 1px 1px 3px #999;color:#333}'
+		+ 'i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}i.is-collpsed+div{display:none}'
+		+ '.c1{color:#293}.c2{color:#66d}.c3{color:#f12}.c4{color:#10c}.c3,.c4{font-weight:bold}'
 		document.head.appendChild(tag)
 		if (jsonpMatch) {
 			str = jsonpMatch[3]
