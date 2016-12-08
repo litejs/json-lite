@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
   "name": "JSON Lite",
-  "version": "0.14",
+  "version": "0.15",
   "author" : "Lauri Rooden",
-  "description": "Fast JSON highlighter - shows items count/size, handles large files, collapse items",
+  "description": "Fast JSON viewer - highlights, shows items count/size, handles large files",
   "browser_action": {
     "default_popup": "README.html"
   },
