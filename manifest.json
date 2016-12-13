@@ -4,9 +4,6 @@
   "version": "0.15",
   "author" : "Lauri Rooden",
   "description": "Fast JSON viewer - highlights, shows items count/size, handles large files",
-  "browser_action": {
-    "default_popup": "README.html"
-  },
   "icons": {
     "128": "icon128.png",
     "48": "icon48.png",
