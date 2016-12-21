@@ -198,7 +198,8 @@
 		tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px Menlo,monospace}'
 		+ 'body>div{border:none}a{color:inherit;text-decoration:none}a:hover,a:focus{text-decoration:underline}'
 		+ 'i{cursor:pointer;color:#ccc}.hi,i:hover{text-shadow: 1px 1px 3px #999;color:#333}'
-		+ 'i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}i.is-collpsed+div{display:none}'
+		+ 'i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}'
+		+ 'i.is-collpsed+div{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden}'
 		+ '.c1{color:#293}.c2{color:#66d}.c3{color:#f12}.c4{color:#10c}.c3,.c4{font-weight:bold}'
 		document.head.appendChild(tag)
 		if (jsonpMatch) {
