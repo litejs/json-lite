@@ -112,9 +112,9 @@
 		}, true)
 
 		to.replaceChild(node, first)
-		loop()
+		loop(str, re)
 
-		function loop() {
+		function loop(str, re) {
 			var match, val, tmp
 			, i = 0
 			, len = str.length
@@ -163,8 +163,7 @@
 					}
 					if (++i > 1000) {
 						document.title = (0|(100*re.lastIndex/len)) + "% of " + units(len)
-						requestAnimationFrame(loop)
-						return
+						return setTimeout(function() { loop(str, re) })
 					}
 				}
 				document.title = ""
