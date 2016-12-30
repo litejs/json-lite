@@ -1,11 +1,19 @@
 
 !function() {
-	var str, jsonpMatch
+	var str, jsonpMatch, hovered, tag
 	, jsonRe = /^\s*(?:\[\s*(?=-?\d|true|false|null|["[{])[^]*\]|\{\s*"[^]+\})\s*$/
 	, div = document.createElement("div")
 	, body = document.body
 	, first = body && body.firstChild
 	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? "metaKey" : "ctrlKey"
+	, rand = Math.random().toString(36).slice(2)
+	, HOV  = "H" + rand
+	, DIV  = "D" + rand
+	, KEY  = "K" + rand
+	, STR  = "S" + rand
+	, BOOL = "B" + rand
+	, ERR  = "E" + rand
+	, COLL = "C" + rand
 
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
@@ -37,26 +45,79 @@
 		, query = []
 
 		for (; node && node.tagName === "I"; ) {
-			if ((tmp = node.previousElementSibling) && tmp.className == "c2") {
+			if ((tmp = node.previousElementSibling) && tmp.className == KEY) {
 				txt = tmp.textContent
-				query.unshift("div>.c2+i[data-key='" + node.dataset.key + "']")
+				query.unshift(".D" + rand + ">." + KEY + "+i.I" + rand + "[data-key='" + node.dataset.key + "']")
 			} else {
 				i = 0
 				for (tmp = node; tmp = tmp.previousElementSibling; tmp.tagName === "BR" && i++);
-				query.unshift("div>" + (i ? "br:nth-of-type(" + i + ")+i" : "i:first-child"))
+				query.unshift(".D" + rand + ">" + (i ? "br:nth-of-type(" + i + ")+i.I" + rand : "i.I" + rand + ":first-child"))
 			}
 			node = node.parentNode && node.parentNode.previousElementSibling
 		}
 		if (!query[1]) return
-		query[0] = query[1] = "div>i"
+		query[0] = query[1] = ".D" + rand + ">i.I" + rand
 
-		change(document, "body>" + query.join("+"), name, set)
+		change(document, ".R" + rand + ">" + query.join("+"), name, set)
 	}
 
-	function draw(str, to, first) {
-		var hovered
-		, re = /("(?:((?:https?|file):\/\/(?:\\?\S)+?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
-		, node = div
+	function keydown(e) {
+		if (hovered) {
+			e.preventDefault()
+			if (e.altKey) {
+				changeSiblings(hovered, HOV, 1)
+			} else if (e[mod]) {
+				change(hovered.nextSibling, "i.I" + rand, HOV, 1)
+			}
+		}
+	}
+
+	function init() {
+		tag = document.createElement("style")
+		tag.textContent = [
+			'.R', '{background:#fff}' +
+			'.R', ',.D', '{font:13px Menlo,monospace}' +
+			'.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;}' +
+			'.X', '{border:1px solid #ccc;padding:1em}' +
+			'a.L', '{text-decoration:none}' +
+			'a.L', ':hover,a.L', ':focus{text-decoration:underline}' +
+			'i.I', '{cursor:pointer;color:#ccc}' +
+			'i.H', ',i.I', ':hover{text-shadow: 1px 1px 3px #999;color:#333}'+
+			'i.I', ':before{content:" ▼ "}' +
+			'i.C', ':before{content:" ▶ "}' +
+			'i.I', ':after{content:attr(data-content)}' +
+			'i.C', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden}' +
+			'.S', '{color:#293}' +
+			'.K', '{color:#66d}' +
+			'.E', '{color:#f12}' +
+			'.B', '{color:#10c}' +
+			'.E', ',.B', '{font-weight:bold}' +
+			'h3.E', '{margin:1em}'
+		].join(rand)
+
+		div.classList.add(DIV)
+		document.head.appendChild(tag)
+		document.addEventListener("keydown", keydown)
+		document.addEventListener("keyup", function(e) {
+			if (hovered) change(document, "." + HOV, HOV)
+		})
+		document.addEventListener("mouseover", function(e) {
+			if (e.target.tagName === "I") {
+				hovered = e.target
+				keydown(e)
+			}
+		})
+		document.addEventListener("mouseout", function(e) {
+			if (hovered && (e.altKey || e[mod])) change(document, "." + HOV, HOV)
+			hovered = null
+		})
+	}
+
+	function draw(str, to, first, box) {
+		tag || init()
+
+		var re = /("(?:((?:https?|file):\/\/(?:\\?\S)+?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
+		, node = div.cloneNode()
 		, link = document.createElement("a")
 		, span = document.createElement("span")
 		, info = document.createElement("i")
@@ -68,45 +129,22 @@
 			"[": fragment("[", "]")
 		}
 
-		function keydown(e) {
-			if (hovered) {
-				e.preventDefault()
-				if (e.altKey) {
-					changeSiblings(hovered, "hi", 1)
-				} else if (e[mod]) {
-					change(hovered.nextSibling, "i", "hi", 1)
-				}
-			}
-		}
-		document.addEventListener("keydown", keydown)
+		node.className = "R" + rand + (box ? " " + box : "")
 
-		document.addEventListener("keyup", function(e) {
-			if (hovered) change(document, ".hi", "hi")
-		})
-
-		document.addEventListener("mouseover", function(e) {
-			if (e.target.tagName === "I") {
-				hovered = e.target
-				keydown(e)
-			}
-		})
-
-		document.addEventListener("mouseout", function(e) {
-			if (hovered && (e.altKey || e[mod])) change(document, ".hi", "hi")
-			hovered = null
-		})
+		link.classList.add("L" + rand)
+		info.classList.add("I" + rand)
 
 		to.addEventListener("click", function(e) {
 			var target = e.target
-			, open = target.classList.contains("is-collpsed")
+			, open = target.classList.contains(COLL)
 			if (target.tagName == "I") {
 				if (e.altKey) {
-					changeSiblings(target, "is-collpsed", !open)
+					changeSiblings(target, COLL, !open)
 				} else if (e[mod]) {
 					open = target.nextSibling.querySelector("i")
-					if (open) change(target.nextSibling, "i", "is-collpsed", !open.classList.contains("is-collpsed"))
+					if (open) change(target.nextSibling, "i", COLL, !open.classList.contains(COLL))
 				} else {
-					target.classList[open ? "remove" : "add"]("is-collpsed")
+					target.classList[open ? "remove" : "add"](COLL)
 				}
 			}
 		}, true)
@@ -136,7 +174,7 @@
 								(val == "]" ? " items, " : " properties, ")
 							) + units(re.lastIndex - node.start + 1)
 
-							if ((val = node.previousElementSibling) && val.className == "c2") {
+							if ((val = node.previousElementSibling) && val.className == KEY) {
 								tmp.dataset.key = val.textContent.slice(1, -1).replace(/'/, "\\'")
 							}
 							node.parentNode.insertBefore(tmp, node)
@@ -155,7 +193,7 @@
 							tmp = span.cloneNode()
 						}
 						tmp.textContent = match[1] || val
-						tmp.className = match[3] ? "c2": match[1] ? "c1": match[4] ? "c3" : "c4"
+						tmp.classList.add(match[3] ? KEY : match[1] ? STR : match[4] ? ERR : BOOL)
 						node.appendChild(tmp)
 						if (match[3]) {
 							node.appendChild(colon.cloneNode())
@@ -171,7 +209,7 @@
 
 			} catch(e) {
 				tmp = document.createElement("h3")
-				tmp.className = "c3"
+				tmp.className = ERR
 				tmp.textContent = e
 				to.insertBefore(tmp, to.firstChild)
 			}
@@ -193,14 +231,6 @@
 			jsonRe.test(str)
 		)
 	) {
-		var tag = document.createElement("style")
-		tag.textContent = 'h3{margin:1em}div{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;font:13px Menlo,monospace}'
-		+ 'body>div{border:none}a{color:inherit;text-decoration:none}a:hover,a:focus{text-decoration:underline}'
-		+ 'i{cursor:pointer;color:#ccc}.hi,i:hover{text-shadow: 1px 1px 3px #999;color:#333}'
-		+ 'i:before{content:" ▼ "}i.is-collpsed:before{content:" ▶ "}i:after{content:attr(data-content)}'
-		+ 'i.is-collpsed+div{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden}'
-		+ '.c1{color:#293}.c2{color:#66d}.c3{color:#f12}.c4{color:#10c}.c3,.c4{font-weight:bold}'
-		document.head.appendChild(tag)
 		if (jsonpMatch) {
 			str = jsonpMatch[3]
 			body.replaceChild(fragment(jsonpMatch[1], jsonpMatch[4]), first)
