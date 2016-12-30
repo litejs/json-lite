@@ -1,6 +1,7 @@
 
 !function() {
 	var str, jsonpMatch, hovered, tag
+	, browser = this.chrome || this.browser
 	, jsonRe = /^\s*(?:\[\s*(?=-?\d|true|false|null|["[{])[^]*\]|\{\s*"[^]+\})\s*$/
 	, div = document.createElement("div")
 	, body = document.body
@@ -238,5 +239,68 @@
 		}
 		draw(str, body, first)
 	}
+
+	var fns = {
+		btoa: function(str) {
+			return btoa(str)
+		},
+		atob: function(str) {
+			return atob(str)
+		},
+		toIso: function(str) {
+			var num = +str
+			if (isNaN(num)) throw new Error("NaN")
+			return new Date(num < 4294967296 ? num * 1000 : num).toISOString()
+		},
+		toUnixTimestamp: function(str) {
+			var num = new Date(str)/1000
+			if (isNaN(num)) throw new Error("NaN")
+			return num
+		},
+		toTimestamp: function(str) {
+			var num = +new Date(str)
+			if (isNaN(num)) throw new Error("NaN")
+			return num
+		},
+		unicode_encode: function(str) {
+			return unescape(escape(str).replace(/%u/g, "\\u"))
+		},
+		unicode_decode: function(str) {
+			return unescape(str.replace(/\\u/g, "%u"))
+		},
+		escape: function(str) {
+			return escape(str)
+		},
+		unescape: function(str) {
+			return unescape(str)
+		}
+	}
+
+
+	browser.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+		var node
+		, fn = fns[req.op]
+		, sel = window.getSelection()
+		, range = sel.rangeCount && sel.getRangeAt(0)
+		, str = range && range.toString()
+
+		if (!str) return
+		// var c=getSelection().getRangeAt(0).cloneContents(); c.querySelectorAll('*')
+
+		if (req.op === "formatSelection") {
+			node = document.createElement("div")
+			range.deleteContents()
+			range.insertNode(node)
+			draw(str, node.parentNode, node, "X" + rand)
+		} else if (fn) {
+			try {
+				node = document.createTextNode(fn(str))
+				range.deleteContents()
+				range.insertNode(node)
+			} catch(e) {
+				alert(e)
+			}
+		}
+	})
 }()
 

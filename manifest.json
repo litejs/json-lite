@@ -9,6 +9,17 @@
     "48": "icon48.png",
     "32": "icon32.png"
   },
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "<all_urls>"
+  ],
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "background.js"
+    ]
+  },
   "content_scripts": [
     {
       "all_frames": true,
