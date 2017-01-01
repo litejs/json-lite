@@ -254,6 +254,7 @@
 			node = document.createElement("div")
 			range.deleteContents()
 			range.insertNode(node)
+			sel.removeAllRanges()
 			draw(str, node.parentNode, node, "X" + rand)
 		}
 	})
