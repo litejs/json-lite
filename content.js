@@ -109,8 +109,10 @@
 			}
 		})
 		document.addEventListener("mouseout", function(e) {
-			if (hovered && (e.altKey || e[mod])) change(document, "." + HOV, HOV)
-			hovered = null
+			if (hovered) {
+				change(document, "." + HOV, HOV)
+				hovered = null
+			}
 		})
 	}
 
