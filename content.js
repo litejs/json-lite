@@ -41,25 +41,25 @@
 	}
 
 	function changeSiblings(node, name, set) {
-		var txt, tmp
+		var tmp
 		, i = 0
 		, query = []
 
 		for (; node && node.tagName === "I"; ) {
-			if ((tmp = node.previousElementSibling) && tmp.className == KEY) {
-				txt = tmp.textContent
-				query.unshift(".D" + rand + ">." + KEY + "+i.I" + rand + "[data-key='" + node.dataset.key + "']")
+			tmp = node.previousElementSibling
+			if (tmp && tmp.className == KEY) {
+				query.unshift(".D" + rand + ">i.I" + rand + "[data-key='" + node.dataset.key + "']")
+			} else if (query[0]) {
+				query.unshift(".D" + rand + ">i.I" + rand)
 			} else {
-				i = 0
-				for (tmp = node; tmp = tmp.previousElementSibling; tmp.tagName === "BR" && i++);
+				for (; tmp; tmp = tmp.previousElementSibling) if (tmp.tagName === "BR") i++
 				query.unshift(".D" + rand + ">" + (i ? "br:nth-of-type(" + i + ")+i.I" + rand : "i.I" + rand + ":first-child"))
 			}
 			node = node.parentNode && node.parentNode.previousElementSibling
 		}
 		if (!query[1]) return
-		query[0] = query[1] = ".D" + rand + ">i.I" + rand
-
-		change(document, ".R" + rand + ">" + query.join("+"), name, set)
+		query[0] = ".R" + rand + ">i.I" + rand
+		change(document, query.join("+"), name, set)
 	}
 
 	function keydown(e) {
