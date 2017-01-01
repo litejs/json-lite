@@ -1,7 +1,7 @@
 
 !function() {
 	var str, jsonpMatch, hovered, tag
-	, browser = this.chrome || this.browser
+	, chrome = this.chrome || this.browser
 	, jsonRe = /^\s*(?:\[\s*(?=-?\d|true|false|null|["[{])[^]*\]|\{\s*"[^]+\})\s*$/
 	, div = document.createElement("div")
 	, body = document.body
@@ -279,7 +279,7 @@
 	}
 
 
-	browser.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+	chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
 		var node
 		, fn = fns[req.op]
 		, sel = window.getSelection()
