@@ -1,6 +1,41 @@
 
 
 var chrome = this.chrome || this.browser
+, fns = {
+	btoa: function(str) {
+		return btoa(str)
+	},
+	atob: function(str) {
+		return atob(str)
+	},
+	toIso: function(str) {
+		var num = +str
+		if (isNaN(num)) throw new Error("NaN")
+		return new Date(num < 4294967296 ? num * 1000 : num).toISOString()
+	},
+	toUnixTimestamp: function(str) {
+		var num = new Date(str)/1000
+		if (isNaN(num)) throw new Error("NaN")
+		return num
+	},
+	toTimestamp: function(str) {
+		var num = +new Date(str)
+		if (isNaN(num)) throw new Error("NaN")
+		return num
+	},
+	unicode_encode: function(str) {
+		return unescape(escape(str).replace(/%u/g, "\\u"))
+	},
+	unicode_decode: function(str) {
+		return unescape(str.replace(/\\u/g, "%u"))
+	},
+	escape: function(str) {
+		return escape(str)
+	},
+	unescape: function(str) {
+		return unescape(str)
+	}
+}
 
 if (chrome.runtime.onInstalled) {
 	chrome.runtime.onInstalled.addListener(initMenu)
@@ -107,8 +142,32 @@ function initMenu() {
 	})
 }
 
+
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-	chrome.tabs.sendMessage(tab.id, { op: info.menuItemId })
+	if (info.menuItemId === "formatSelection") {
+		chrome.tabs.sendMessage(tab.id, { op: info.menuItemId })
+	} else {
+		chrome.tabs.executeScript(tab.id, {
+			code: repaceSelection.toString()+";repaceSelection(" + fns[info.menuItemId].toString() + ")"
+		})
+	}
 })
 
+// var c=getSelection().getRangeAt(0).cloneContents(); c.querySelectorAll('*')
+function repaceSelection(fn) {
+	var node
+	, sel = window.getSelection()
+	, range = sel.rangeCount && sel.getRangeAt(0)
+	, str = range && range.toString()
+
+	if (!str) return
+
+	try {
+		node = document.createTextNode(fn(str))
+		range.deleteContents()
+		range.insertNode(node)
+	} catch(e) {
+		alert(e)
+	}
+}
 
