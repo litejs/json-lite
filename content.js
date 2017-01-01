@@ -93,7 +93,7 @@
 			'.E', '{color:#f12}' +
 			'.B', '{color:#10c}' +
 			'.E', ',.B', '{font-weight:bold}' +
-			'h3.E', '{margin:1em}'
+			'h3.E', '{margin:0 0 1em}'
 		].join(rand)
 
 		div.classList.add(DIV)
@@ -152,7 +152,7 @@
 			}
 		}, true)
 
-		to.replaceChild(node, first)
+		to.replaceChild(box = node, first)
 		loop(str, re)
 
 		function loop(str, re) {
@@ -214,7 +214,7 @@
 				tmp = document.createElement("h3")
 				tmp.className = ERR
 				tmp.textContent = e
-				to.insertBefore(tmp, to.firstChild)
+				box.insertBefore(tmp, box.firstChild)
 			}
 		}
 	}
