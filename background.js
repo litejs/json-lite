@@ -57,88 +57,82 @@ function initMenu() {
 		contexts: [ "selection" ],
 	})
 
-	var base64Menu = chrome.contextMenus.create({
-		title: "Base64",
-		id: "b",
+	var encMenu = chrome.contextMenus.create({
+		title: "Encode",
+		id: "e",
 		contexts: [ "selection" ]
 	})
 
-	chrome.contextMenus.create({
-		title: "Encode",
-		id: "btoa",
-		contexts: [ "selection" ],
-		parentId: base64Menu
-	})
-
-	chrome.contextMenus.create({
+	var decMenu = chrome.contextMenus.create({
 		title: "Decode",
-		id: "atob",
-		contexts: [ "selection" ],
-		parentId: base64Menu
-	})
-
-	var dateMenu = chrome.contextMenus.create({
-		title: "Date",
 		id: "d",
 		contexts: [ "selection" ]
 	})
 
 	chrome.contextMenus.create({
-		title: "Timestamp To ISO String",
+		title: "Base64",
+		id: "btoa",
+		contexts: [ "selection" ],
+		parentId: encMenu
+	})
+
+	chrome.contextMenus.create({
+		title: "Base64",
+		id: "atob",
+		contexts: [ "selection" ],
+		parentId: decMenu
+	})
+
+	chrome.contextMenus.create({
+		title: "Unicode",
+		id: "unicode_encode",
+		contexts: [ "selection" ],
+		parentId: encMenu
+	})
+	chrome.contextMenus.create({
+		title: "Unicode",
+		id: "unicode_decode",
+		contexts: [ "selection" ],
+		parentId: decMenu
+	})
+
+	chrome.contextMenus.create({
+		title: "Percent-encoding",
+		id: "escape",
+		contexts: [ "selection" ],
+		parentId: encMenu
+	})
+	chrome.contextMenus.create({
+		title: "Percent-encoding",
+		id: "unescape",
+		contexts: [ "selection" ],
+		parentId: decMenu
+	})
+	var dateMenu = chrome.contextMenus.create({
+		title: "Convert Time",
+		id: "t",
+		contexts: [ "selection" ]
+	})
+
+	chrome.contextMenus.create({
+		title: "Timestamp to String",
 		id: "toIso",
 		contexts: [ "selection" ],
 		parentId: dateMenu
 	})
 
 	chrome.contextMenus.create({
-		title: "To Timestamp",
+		title: "String to Timestamp",
 		id: "toUnixTimestamp",
 		contexts: [ "selection" ],
 		parentId: dateMenu
 	})
 
 	chrome.contextMenus.create({
-		title: "To Timestamp in milliseconds",
+		title: "String to Timestamp (ms)",
 		id: "toTimestamp",
 		contexts: [ "selection" ],
 		parentId: dateMenu
-	})
-
-	var unicodeMenu = chrome.contextMenus.create({
-		title: "Unicode",
-		id: "u",
-		contexts: [ "selection" ]
-	})
-
-	chrome.contextMenus.create({
-		title: "Encode",
-		id: "unicode_encode",
-		contexts: [ "selection" ],
-		parentId: unicodeMenu
-	})
-	chrome.contextMenus.create({
-		title: "Decode",
-		id: "unicode_decode",
-		contexts: [ "selection" ],
-		parentId: unicodeMenu
-	})
-	var percentMenu = chrome.contextMenus.create({
-		title: "Percent-encoding",
-		id: "p",
-		contexts: [ "selection" ]
-	})
-
-	chrome.contextMenus.create({
-		title: "Encode",
-		id: "escape",
-		contexts: [ "selection" ],
-		parentId: percentMenu
-	})
-	chrome.contextMenus.create({
-		title: "Decode",
-		id: "unescape",
-		contexts: [ "selection" ],
-		parentId: percentMenu
 	})
 }
 
