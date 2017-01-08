@@ -26,6 +26,7 @@
 		var frag = document.createDocumentFragment()
 		frag.appendChild(document.createTextNode(a))
 		if (b) {
+			frag.appendChild(document.createElement("i")).classList.add("I" + rand)
 			frag.appendChild(div.cloneNode())
 			frag.appendChild(document.createTextNode(b))
 		} else {
@@ -123,7 +124,6 @@
 		, node = div.cloneNode()
 		, link = document.createElement("a")
 		, span = document.createElement("span")
-		, info = document.createElement("i")
 		, colon = document.createTextNode(": ")
 		, comma = fragment(",")
 		, path = []
@@ -135,7 +135,6 @@
 		node.className = "R" + rand + (box ? " " + box : "")
 
 		link.classList.add("L" + rand)
-		info.classList.add("I" + rand)
 
 		to.addEventListener("click", function(e) {
 			var target = e.target
@@ -170,18 +169,19 @@
 						node.start = re.lastIndex
 					} else if ((val == "}" || val == "]") && node.len) {
 						if (node.childNodes.length) {
-							tmp = info.cloneNode()
+							tmp = node.previousElementSibling
 							tmp.dataset.content = node.len + (
 								node.len == 1 ?
 								(val == "]" ? " item, " : " property, ") :
 								(val == "]" ? " items, " : " properties, ")
 							) + units(re.lastIndex - node.start + 1)
 
-							if ((val = node.previousElementSibling) && val.className == KEY) {
+							if ((val = tmp.previousElementSibling) && val.className == KEY) {
 								tmp.dataset.key = val.textContent.slice(1, -1).replace(/'/, "\\'")
 							}
 							node.parentNode.insertBefore(tmp, node)
 						} else {
+							node.parentNode.removeChild(node.previousSibling)
 							node.parentNode.removeChild(node)
 						}
 						node = path.pop()
@@ -238,6 +238,7 @@
 			str = jsonpMatch[3]
 			body.replaceChild(fragment(jsonpMatch[1], jsonpMatch[4]), first)
 			first = body.lastChild.previousSibling
+			first.parentNode.removeChild(first.previousSibling)
 		}
 		draw(str, body, first)
 	}
