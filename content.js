@@ -120,7 +120,7 @@
 	function draw(str, to, first, box) {
 		tag || init()
 
-		var re = /("(?:((?:https?|file):\/\/(?:\\?\S)+?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
+		var re = /("(?:((?:(?:https?|file):\/\/|data:[-+.=;\/\w]*,)(?:\\?\S)+?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 		, node = div.cloneNode()
 		, link = document.createElement("a")
 		, span = document.createElement("span")
