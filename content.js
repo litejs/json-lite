@@ -94,7 +94,7 @@
 			'.E', '{color:#f12}' +
 			'.B', '{color:#10c}' +
 			'.E', ',.B', '{font-weight:bold}' +
-			'h3.E', '{margin:0 0 1em}'
+			'div.E', '{font-size:120%;margin:0 0 1em}'
 		].join(rand)
 
 		div.classList.add(DIV)
@@ -211,10 +211,9 @@
 				JSON.parse(str)
 
 			} catch(e) {
-				tmp = document.createElement("h3")
+				tmp = box.insertBefore(document.createElement("div"), box.firstChild)
 				tmp.className = ERR
 				tmp.textContent = e
-				box.insertBefore(tmp, box.firstChild)
 			}
 		}
 	}
