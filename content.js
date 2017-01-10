@@ -77,7 +77,7 @@
 	function init() {
 		tag = document.createElement("style")
 		tag.textContent = [
-			'.R', '{background:#fff}' +
+			'.R', '{background:#fff;white-space:pre-wrap}' +
 			'.R', ',.D', '{font:13px Menlo,monospace}' +
 			'.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;}' +
 			'.X', '{border:1px solid #ccc;padding:1em}' +
