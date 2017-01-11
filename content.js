@@ -78,16 +78,16 @@
 		tag.textContent = [
 			'.R', '{background:#fff;white-space:pre-wrap}' +
 			'.R', ',.D', '{font:13px Menlo,monospace}' +
-			'.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;}' +
+			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;}' +
 			'.X', '{border:1px solid #ccc;padding:1em}' +
 			'a.L', '{text-decoration:none}' +
 			'a.L', ':hover,a.L', ':focus{text-decoration:underline}' +
-			'i.I', '{cursor:pointer;color:#ccc}' +
-			'i.H', ',i.I', ':hover{text-shadow: 1px 1px 3px #999;color:#333}'+
+			'i.I', ',i.M', '{cursor:pointer;color:#ccc}' +
+			'i.H', ',i.M', ':hover,i.I', ':hover{text-shadow: 1px 1px 3px #999;color:#333}'+
 			'i.I', ':before{content:" ▼ "}' +
 			'i.C', ':before{content:" ▶ "}' +
-			'i.I', ':after{content:attr(data-c)}' +
-			'i.C', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden}' +
+			'i.I', ':after,i.M', ':after{content:attr(data-c)}' +
+			'i.C', '+.D', ',i.M', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden}' +
 			'.S', '{color:#293}' +
 			'.K', '{color:#66d}' +
 			'.E', '{color:#f12}' +
@@ -139,7 +139,11 @@
 			var target = e.target
 			, open = target.classList.contains(COLL)
 			if (target.tagName == "I") {
-				if (e.altKey) {
+				if (target.classList.contains("M" + rand)) {
+					target.previousSibling.appendChild(target.nextSibling.firstChild)
+					target.parentNode.removeChild(target.nextSibling)
+					target.parentNode.removeChild(target)
+				} else if (e.altKey) {
 					changeSiblings(target, COLL, !open)
 				} else if (e[mod]) {
 					open = target.nextSibling.querySelector("i")
@@ -193,8 +197,21 @@
 						} else {
 							tmp = span.cloneNode()
 						}
-						tmp.textContent = match[1] || val
 						tmp.classList.add(match[3] ? KEY : match[1] ? STR : match[4] ? ERR : BOOL)
+						val = match[1] || val
+						len = match[3] ? 140 : 1400
+						if (val.length > len) {
+							len >>= 1
+							tmp.textContent = val.slice(0, len)
+							node.appendChild(tmp)
+							val = val.slice(len)
+							tmp = node.appendChild(document.createElement("i"))
+							tmp.classList.add("M" + rand)
+							tmp.dataset.c = " +" + val.length + " more"
+							tmp = span.cloneNode()
+							tmp.classList.add("D" + rand)
+						}
+						tmp.textContent = val
 						node.appendChild(tmp)
 						if (match[3]) {
 							node.appendChild(colon.cloneNode())
