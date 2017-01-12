@@ -258,7 +258,11 @@
 		draw(str, body, first)
 	}
 
-	chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+	if (chrome) chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+		runCmd(req.op)
+	})
+
+	function runCmd(cmd) {
 		var node
 		, sel = window.getSelection()
 		, range = sel.rangeCount && sel.getRangeAt(0)
@@ -266,13 +270,13 @@
 
 		if (!str) return
 
-		if (req.op === "formatSelection") {
+		if (cmd === "formatSelection") {
 			node = document.createElement("div")
 			range.deleteContents()
 			range.insertNode(node)
 			sel.removeAllRanges()
 			draw(str, node.parentNode, node, "X" + rand)
 		}
-	})
+	}
 }()
 
