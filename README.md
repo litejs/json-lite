@@ -10,7 +10,7 @@ Features
 
  - Format JSON and JSONP responses
  - Select and format JSON on every page
- - Collapsible arrays and objects
+ - Collapsible arrays, objects and long values
  - Collapse all childs with Ctrl(Command) + Click
  - Collapse property also on all sibling items with Alt(Option) + Click
  - Counts items and properties in a collection
@@ -34,6 +34,6 @@ Links
 
 ### Licence
 
-Copyright (c) 2016 Lauri Rooden  
+Copyright (c) 2016-2017 Lauri Rooden  
 The MIT License
 
