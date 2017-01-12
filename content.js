@@ -7,9 +7,8 @@
 	, body = document.body
 	, first = body && body.firstChild
 	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? "metaKey" : "ctrlKey"
-	, rand = Math.random().toString(36).slice(2)
+	, rand = Math.random().toString(36).slice(2, 9)
 	, HOV  = "H" + rand
-	, DIV  = "D" + rand
 	, KEY  = "K" + rand
 	, STR  = "S" + rand
 	, BOOL = "B" + rand
@@ -48,8 +47,8 @@
 
 		for (; node && node.tagName === "I"; ) {
 			tmp = node.previousElementSibling
-			if (tmp && tmp.className == KEY) {
-				query.unshift(".D" + rand + ">i.I" + rand + "[data-key='" + node.dataset.key + "']")
+			if (tmp && tmp.classList.contains(KEY)) {
+				query.unshift(".D" + rand + ">i.I" + rand + "[data-k='" + node.dataset.k + "']")
 			} else if (query[0]) {
 				query.unshift(".D" + rand + ">i.I" + rand)
 			} else {
@@ -87,7 +86,7 @@
 			'i.H', ',i.I', ':hover{text-shadow: 1px 1px 3px #999;color:#333}'+
 			'i.I', ':before{content:" ▼ "}' +
 			'i.C', ':before{content:" ▶ "}' +
-			'i.I', ':after{content:attr(data-content)}' +
+			'i.I', ':after{content:attr(data-c)}' +
 			'i.C', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden}' +
 			'.S', '{color:#293}' +
 			'.K', '{color:#66d}' +
@@ -97,7 +96,7 @@
 			'div.E', '{font-size:120%;margin:0 0 1em}'
 		].join(rand)
 
-		div.classList.add(DIV)
+		div.classList.add("D" + rand)
 		document.head.appendChild(tag)
 		document.addEventListener("keydown", keydown)
 		document.addEventListener("keyup", function(e) {
@@ -155,9 +154,8 @@
 		loop(str, re)
 
 		function loop(str, re) {
-			var match, val, tmp
+			var len, match, val, tmp
 			, i = 0
-			, len = str.length
 			try {
 				for (; match = re.exec(str); ) {
 					val = match[0]
@@ -170,14 +168,14 @@
 					} else if ((val == "}" || val == "]") && node.len) {
 						if (node.childNodes.length) {
 							tmp = node.previousElementSibling
-							tmp.dataset.content = node.len + (
+							tmp.dataset.c = node.len + (
 								node.len == 1 ?
 								(val == "]" ? " item, " : " property, ") :
 								(val == "]" ? " items, " : " properties, ")
 							) + units(re.lastIndex - node.start + 1)
 
-							if ((val = tmp.previousElementSibling) && val.className == KEY) {
-								tmp.dataset.key = val.textContent.slice(1, -1).replace(/'/, "\\'")
+							if ((val = tmp.previousElementSibling) && val.classList.contains(KEY)) {
+								tmp.dataset.k = val.textContent.slice(1, -1).replace(/'/, "\\'")
 							}
 							node.parentNode.insertBefore(tmp, node)
 						} else {
@@ -202,9 +200,10 @@
 							node.appendChild(colon.cloneNode())
 						}
 					}
-					if (++i > 1000) {
+					if (++i > 9000) {
+						len = str.length
 						document.title = (0|(100*re.lastIndex/len)) + "% of " + units(len)
-						return setTimeout(function() { loop(str, re) })
+						return setTimeout(function() { loop(str, re) }, 0)
 					}
 				}
 				document.title = ""
