@@ -24,13 +24,9 @@
 	function fragment(a, b) {
 		var frag = document.createDocumentFragment()
 		frag.appendChild(document.createTextNode(a))
-		if (b) {
-			frag.appendChild(document.createElement("i")).classList.add("I" + rand)
-			frag.appendChild(div.cloneNode())
-			frag.appendChild(document.createTextNode(b))
-		} else {
-			frag.appendChild(document.createElement("br"))
-		}
+		frag.appendChild(document.createElement("i")).classList.add("I" + rand)
+		frag.appendChild(div.cloneNode())
+		frag.appendChild(document.createTextNode(b))
 		return frag
 	}
 
@@ -42,22 +38,16 @@
 
 	function changeSiblings(node, name, set) {
 		var tmp
-		, i = 0
 		, query = []
 
 		for (; node && node.tagName === "I"; ) {
 			tmp = node.previousElementSibling
-			if (tmp && tmp.classList.contains(KEY)) {
-				query.unshift(".D" + rand + ">i.I" + rand + "[data-k='" + node.dataset.k + "']")
-			} else if (query[0]) {
-				query.unshift(".D" + rand + ">i.I" + rand)
-			} else {
-				for (; tmp; tmp = tmp.previousElementSibling) if (tmp.tagName === "BR") i++
-				query.unshift(".D" + rand + ">" + (i ? "br:nth-of-type(" + i + ")+i.I" + rand : "i.I" + rand + ":first-child"))
-			}
+			query.unshift(
+				".D" + rand + ">i.I" + rand +
+				(tmp && tmp.classList.contains(KEY) || !query[0] ? "[data-k='" + node.dataset.k + "']" : "")
+			)
 			node = node.parentNode && node.parentNode.previousElementSibling
 		}
-		if (!query[1]) return
 		query[0] = ".R" + rand + ">i.I" + rand
 		change(document, query.join("+"), name, set)
 	}
@@ -124,7 +114,7 @@
 		, link = document.createElement("a")
 		, span = document.createElement("span")
 		, colon = document.createTextNode(": ")
-		, comma = fragment(",")
+		, comma = document.createTextNode(",\n")
 		, path = []
 		, cache = {
 			"{": fragment("{", "}"),
@@ -178,10 +168,9 @@
 								(val == "]" ? " items, " : " properties, ")
 							) + units(re.lastIndex - node.start + 1)
 
-							if ((val = tmp.previousElementSibling) && val.classList.contains(KEY)) {
-								tmp.dataset.k = val.textContent.slice(1, -1).replace(/'/, "\\'")
-							}
-							node.parentNode.insertBefore(tmp, node)
+							tmp.dataset.k = (val = tmp.previousElementSibling) && val.classList.contains(KEY) ?
+							val.textContent.replace(/'/, "\\'") :
+							node.parentNode.len
 						} else {
 							node.parentNode.removeChild(node.previousSibling)
 							node.parentNode.removeChild(node)
