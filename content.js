@@ -68,16 +68,18 @@
 		tag.textContent = [
 			'.R', '{background:#fff;white-space:pre-wrap}' +
 			'.R', ',.D', '{font:13px Menlo,monospace}' +
-			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;}' +
+			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted #ccc;vertical-align:bottom}' +
 			'.X', '{border:1px solid #ccc;padding:1em}' +
 			'a.L', '{text-decoration:none}' +
 			'a.L', ':hover,a.L', ':focus{text-decoration:underline}' +
 			'i.I', ',i.M', '{cursor:pointer;color:#ccc}' +
 			'i.H', ',i.M', ':hover,i.I', ':hover{text-shadow: 1px 1px 3px #999;color:#333}'+
-			'i.I', ':before{content:" ▼ "}' +
-			'i.C', ':before{content:" ▶ "}' +
-			'i.I', ':after,i.M', ':after{content:attr(data-c)}' +
-			'i.C', '+.D', ',i.M', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden}' +
+			'i.I', ':before{content:" ▼"}' +
+			'i.C', ':before{content:" ▶"}' +
+			'i.I', ':after,i.M', ':after{content:" " attr(data-c)}' +
+			'i.C', '+.D', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
+			'i.C', '+.D', ' :before{display:none}' +
+			'i.C', '+.D', ' div,i.M', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +
 			'.S', '{color:#293}' +
 			'.K', '{color:#66d}' +
 			'.E', '{color:#f12}' +
@@ -196,7 +198,7 @@
 							val = val.slice(len)
 							tmp = node.appendChild(document.createElement("i"))
 							tmp.classList.add("M" + rand)
-							tmp.dataset.c = " +" + val.length + " more"
+							tmp.dataset.c = "+" + val.length + " more"
 							tmp = span.cloneNode()
 							tmp.classList.add("D" + rand)
 						}
