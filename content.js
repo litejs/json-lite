@@ -162,7 +162,7 @@
 					} else {
 						if (match[2]) {
 							tmp = link.cloneNode()
-							tmp.href = match[2].replace(/\\"/g, '"')
+							tmp.href = JSON.parse(match[1])
 						} else {
 							tmp = span.cloneNode()
 						}
