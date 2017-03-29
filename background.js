@@ -180,7 +180,7 @@ function onMessage(message, sender) {
 		frameId: sender.frameId
 	})
 	chrome.tabs.executeScript(sender.tab.id, {
-		code: "!" + init.toString() + "(this,'" + rand + "');" + message.op + "()",
+		code: "!" + init.toString() + "(this,'" + rand + "');this." + message.op + "()",
 		frameId: sender.frameId
 	})
 }

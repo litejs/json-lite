@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html><head><title>global page</title><meta charset="UTF-8">
+<script type="text/javascript">
+
+this.chrome = this.chrome || {
+	contextMenus: {
+		create: function() {},
+		onClicked: {
+			addListener: function() {}
+		}
+	},
+	runtime: {
+		onMessage: {
+			addListener: function(cb) {
+				safari.application.addEventListener("message", function(e) {
+					cb(e.message, { tab: { id: e.target.page }})
+				})
+			}
+		}
+	},
+	tabs: {
+		executeScript: function(tab, obj) {
+			tab.dispatchMessage("executeScript", obj.code)
+		},
+		insertCSS: function(tab, obj) {
+			tab.dispatchMessage("insertCSS", obj.code)
+		}
+	}
+}
+
+</script>
+<script type="text/javascript" src="background.js"></script>
+</head><body></body></html>
