@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JSON Lite Options</title>
+	<style>
+label {
+	display: block;
+	overflow: auto;
+	height: 2em;
+	line-height: 2em;
+	padding: 2px;
+}
+input[type=text], select {
+	width: 60%;
+	float: right;
+	line-height: normal;
+}
+	</style>
+</head>
+
+<body>
+	<form id=form1>
+		<label>Theme<select id="theme">
+			<option value="">default</option>
+			<option value="custom">custom</option>
+		</select></label>
+		<div id="custom">
+			<label>Font<input type="text" id="font"></label>
+			<label>Background color<input type="text" id="bg"></label>
+			<label>Info color<input type="text" id="info"></label>
+			<label>Info hover color<input type="text" id="infoHover"></label>
+			<label>String color<input type="text" id="string"></label>
+			<label>Number color<input type="text" id="number"></label>
+			<label>Propertie name color<input type="text" id="property"></label>
+			<label>Error color<input type="text" id="error"></label>
+		</div>
+		<button type="submit">Save</button>
+	</form>
+	<script src="options.js"></script>
+</body>
+</html>
+

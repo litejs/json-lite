@@ -30,7 +30,6 @@
 				body.insertBefore(document.createTextNode(jsonpMatch[1]), body.firstChild)
 				body.appendChild(document.createTextNode(jsonpMatch[4]))
 			}
-			document.body.style.display = ""
 		})
 	}
 }()
