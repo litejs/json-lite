@@ -26,7 +26,7 @@ Features
 Notes
 -----
 
- - Disable Firefox built in JSON viewer
+ - Disable Firefox built in JSON viewer  
    Go to [about:config](about:config) and set 'devtools.jsonview.enabled' to false
 
 
