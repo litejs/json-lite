@@ -37,5 +37,10 @@
       ],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "applications": {
+    "gecko": {
+      "id": "{16a49f65-1369-4839-a5ef-db2581e08b16}"
+    }
+  }
 }

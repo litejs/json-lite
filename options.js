@@ -17,10 +17,16 @@ var chrome = this.chrome || this.browser
 }
 
 function loadOptions() {
-	storage.get(themes[""], function(items) {
+	var got
+	, promise = storage.get(themes[""], onGot)
+	if (promise && promise.then) promise.then(onGot)
+
+	function onGot(items) {
+		if (got) return
+		got = 1
 		theme.value = items.theme || ""
 		updateForm(items)
-	})
+	}
 }
 
 function updateForm(items) {

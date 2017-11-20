@@ -154,7 +154,10 @@ chrome.runtime.onMessage.addListener(onMessage)
 
 function onMessage(message, sender) {
 	if (!message) return
-	storage.get({
+	// Chrome uses storage.get(def, cb)
+	// Firefox uses storage.get(def).then(cb)
+	var css
+	, promise = storage.get({
 		font: "13px Menlo,monospace",
 		bg: "#fff",
 		color: "#000",
@@ -164,8 +167,12 @@ function onMessage(message, sender) {
 		number: "#10c",
 		property: "#66d",
 		error: "#f12"
-	}, function(items) {
-		var css = [
+	}, onGot)
+	if (promise && promise.then) promise.then(onGot)
+	function onGot(items) {
+		console.log("items", items)
+		if (css) return
+		css = [
 			(message.op == 'formatBody' ? 'body,' : '') +
 			'.R', '{background:' + items.bg + ';white-space:pre-wrap}' +
 			'.R', ',.D', '{font:' + items.font + ';color:' + items.color + '}' +
@@ -196,7 +203,7 @@ function onMessage(message, sender) {
 			code: "!" + init.toString() + "(this,'" + rand + "');this." + message.op + "()",
 			frameId: sender.frameId
 		})
-	})
+	}
 }
 
 

@@ -23,6 +23,14 @@ Features
  - Select and copy a working JSON from the formatted JSON
 
 
+Notes
+-----
+
+ - Disable Firefox built in JSON viewer
+   Go to [about:config](about:config) and set 'devtools.jsonview.enabled' to false
+
+
+
 Links
 -----
 
