@@ -5,6 +5,7 @@ var chrome = this.chrome || this.browser
 	"": {
 		theme: "",
 		font: "13px Menlo,monospace",
+		color: "#000",
 		bg: "#fff",
 		info: "#ccc",
 		infoHover: "#333;text-shadow: 1px 1px 3px #999",

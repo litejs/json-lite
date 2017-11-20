@@ -157,6 +157,7 @@ function onMessage(message, sender) {
 	storage.get({
 		font: "13px Menlo,monospace",
 		bg: "#fff",
+		color: "#000",
 		info: "#ccc",
 		infoHover: "#333;text-shadow: 1px 1px 3px #999",
 		string: "#293",
@@ -167,7 +168,7 @@ function onMessage(message, sender) {
 		var css = [
 			(message.op == 'formatBody' ? 'body,' : '') +
 			'.R', '{background:' + items.bg + ';white-space:pre-wrap}' +
-			'.R', ',.D', '{font:' + items.font + '}' +
+			'.R', ',.D', '{font:' + items.font + ';color:' + items.color + '}' +
 			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted ' + items.info + ';vertical-align:bottom}' +
 			'.X', '{border:1px solid ' + items.info + ';padding:1em}' +
 			'a.L', '{text-decoration:none}' +
