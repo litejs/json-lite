@@ -12,7 +12,8 @@ var chrome = this.chrome || this.browser
 		string: "#293",
 		number: "#10c",
 		property: "#66d",
-		error: "#f12"
+		error: "#f12",
+		menus: true
 	}
 }
 
@@ -30,17 +31,22 @@ function loadOptions() {
 }
 
 function updateForm(items) {
+	var el
 	custom.style.display = theme.value === "custom" ? "block" : "none"
 
 	if (items) Object.keys(themes[""]).forEach(function(key) {
-		if (key !== theme) form1[key].value = items[key]
+		if (key !== "theme") {
+			console.log(key, form1[key].type, items[key])
+			if (form1[key].type === "checkbox") form1[key].checked = items[key]
+			else form1[key].value = items[key]
+		}
 	})
 }
 
 function saveOptions(e) {
 	e.preventDefault()
 	storage.set(Object.keys(themes[""]).reduce(function(map, key) {
-		map[key] = form1[key].value
+		map[key] = form1[key][form1[key].type === "checkbox" ? "checked" : "value"]
 		return map
 	}, {}))
 	window.close()

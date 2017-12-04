@@ -5,6 +5,7 @@
 	<style>
 label {
 	display: block;
+	position: relative;
 	overflow: auto;
 	height: 2em;
 	line-height: 2em;
@@ -14,6 +15,11 @@ input[type=text], select {
 	width: 60%;
 	float: right;
 	line-height: normal;
+}
+input[type=checkbox] {
+	position: absolute;
+	left: 40%;
+	top: 7px;
 }
 	</style>
 </head>
@@ -35,6 +41,8 @@ input[type=text], select {
 			<label>Propertie name color<input type="text" id="property"></label>
 			<label>Error color<input type="text" id="error"></label>
 		</div>
+		<hr>
+		<label>Show menus<input type="checkbox" id="menus"></label>
 		<button type="submit">Save</button>
 	</form>
 	<script src="options.js"></script>
