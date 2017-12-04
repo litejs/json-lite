@@ -40,18 +40,9 @@ var css, opts
 	}
 }
 
-if (chrome.runtime.onInstalled) {
-	chrome.runtime.onInstalled.addListener(initBackground)
-} else {
-	initBackground()
-}
-
-function initBackground() {
-	chrome.storage.onChanged.addListener(readConf)
-	chrome.runtime.onMessage.addListener(onMessage)
-
-	readConf()
-}
+readConf()
+chrome.storage.onChanged.addListener(readConf)
+chrome.runtime.onMessage.addListener(onMessage)
 
 function readConf() {
 	var got
