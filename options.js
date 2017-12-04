@@ -13,7 +13,8 @@ var chrome = this.chrome || this.browser
 		number: "#10c",
 		property: "#66d",
 		error: "#f12",
-		menus: true
+		menus: true,
+		unescape: false
 	}
 }
 
@@ -36,7 +37,6 @@ function updateForm(items) {
 
 	if (items) Object.keys(themes[""]).forEach(function(key) {
 		if (key !== "theme") {
-			console.log(key, form1[key].type, items[key])
 			if (form1[key].type === "checkbox") form1[key].checked = items[key]
 			else form1[key].value = items[key]
 		}

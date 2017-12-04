@@ -1,6 +1,6 @@
 
 
-var css
+var css, opts
 , chrome = this.chrome || this.browser
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
 , rand = Math.random().toString(36).slice(2, 9)
@@ -65,13 +65,15 @@ function readConf() {
 		number: "#10c",
 		property: "#66d",
 		error: "#f12",
-		menus: true
+		menus: true,
+		unescape: false
 	}, onGot)
 	// Chrome uses storage.get(def, cb)
 	// Firefox uses storage.get(def).then(cb)
 	if (promise && promise.then) promise.then(onGot)
 	function onGot(items) {
 		if (got) return
+		opts = items
 		got = true
 		css = [
 			'.R', '{background:' + items.bg + ';white-space:pre-wrap}' +
@@ -96,10 +98,9 @@ function readConf() {
 			'div.E', '{font-size:120%;margin:0 0 1em}'
 		].join(rand)
 
+		chrome.contextMenus.removeAll()
 		if (items.menus) {
 			initMenu()
-		} else {
-			chrome.contextMenus.removeAll()
 		}
 	}
 }
@@ -216,7 +217,7 @@ function onMessage(message, sender) {
 		frameId: sender.frameId
 	})
 	chrome.tabs.executeScript(sender.tab.id, {
-		code: "!" + init.toString() + "(this,'" + rand + "');this." + message.op + "()",
+		code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + message.op + "()",
 		frameId: sender.frameId
 	})
 }
@@ -240,9 +241,10 @@ function repaceSelection(fn) {
 	}
 }
 
-function init(exports, rand) {
+function init(exports, rand, opts) {
 	if (exports.formatBody) return
 	var hovered
+	, re = /("(?:((?:(?:https?|file):\/\/|data:[-+.=;\/\w]*,)(?:\\?\S)+?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 	, div = document.createElement("div")
 	, body = document.body
 	, first = body && body.firstChild
@@ -324,8 +326,7 @@ function init(exports, rand) {
 	}
 
 	function draw(str, to, first, box) {
-		var re = /("(?:((?:(?:https?|file):\/\/|data:[-+.=;\/\w]*,)(?:\\?\S)+?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
-		, node = div.cloneNode()
+		var node = div.cloneNode()
 		, link = document.createElement("a")
 		, span = document.createElement("span")
 		, colon = document.createTextNode(": ")
@@ -365,6 +366,7 @@ function init(exports, rand) {
 		function loop(str, re) {
 			var len, match, val, tmp
 			, i = 0
+			, unesc = opts.unescape
 			try {
 				for (; match = re.exec(str); ) {
 					val = match[0]
@@ -402,7 +404,7 @@ function init(exports, rand) {
 							tmp = span.cloneNode()
 						}
 						tmp.classList.add(match[3] ? KEY : match[1] ? STR : match[4] ? ERR : BOOL)
-						val = match[1] || val
+						val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
 						len = match[3] ? 140 : 1400
 						if (val.length > len) {
 							len >>= 1
