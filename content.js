@@ -25,10 +25,13 @@
 		if (jsonpMatch) {
 			body.textContent = jsonpMatch[3]
 		}
-		chrome.runtime.sendMessage({op: "formatBody"}, function() {
+		chrome.runtime.sendMessage({op: "formatBody", len: body.textContent.length}, function(response) {
 			if (jsonpMatch) {
 				body.insertBefore(document.createTextNode(jsonpMatch[1]), body.firstChild)
 				body.appendChild(document.createTextNode(jsonpMatch[4]))
+			}
+			if (response && response.op === "abort") {
+				document.body.style.display = ""
 			}
 		})
 	}

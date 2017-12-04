@@ -66,7 +66,8 @@ function readConf() {
 		property: "#66d",
 		error: "#f12",
 		menus: true,
-		unescape: false
+		unescape: false,
+		sizeLimit: 1048576000
 	}, onGot)
 	// Chrome uses storage.get(def, cb)
 	// Firefox uses storage.get(def).then(cb)
@@ -210,8 +211,8 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 })
 
 
-function onMessage(message, sender) {
-	if (!message) return
+function onMessage(message, sender, sendResponse) {
+	if (!message || message.len > opts.sizeLimit) return sendResponse({op:"abort"})
 	chrome.tabs.insertCSS(sender.tab.id, {
 		code: (message.op == 'formatBody' ? 'body,' : '') + css,
 		frameId: sender.frameId

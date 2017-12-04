@@ -14,7 +14,8 @@ var chrome = this.chrome || this.browser
 		property: "#66d",
 		error: "#f12",
 		menus: true,
-		unescape: false
+		unescape: false,
+		sizeLimit: 1048576000
 	}
 }
 

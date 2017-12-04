@@ -44,6 +44,13 @@ input[type=checkbox] {
 		<hr>
 		<label>Show menus<input type="checkbox" id="menus"></label>
 		<label>Auto-unescape strings<input type="checkbox" id="unescape"></label>
+		<label>Auto-format documents<select id="sizeLimit">
+			<option value="0">Off</option>
+			<option value="102400">under 100KB</option>
+			<option value="104857600">under 1MB</option>
+			<option value="1048576000">under 10MB</option>
+			<option value="10485760000">under 100MB</option>
+		</select></label>
 		<button type="submit">Save</button>
 	</form>
 	<script src="options.js"></script>
