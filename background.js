@@ -326,6 +326,25 @@ function init(exports, rand, opts) {
 		}
 	}
 
+	function onClick(e) {
+		var target = e.target
+		, isCollapsed = target.classList.contains(COLL)
+		if (target.tagName == "I") {
+			if (target.classList.contains("M" + rand)) {
+				target.previousSibling.appendChild(target.nextSibling.firstChild)
+				target.parentNode.removeChild(target.nextSibling)
+				target.parentNode.removeChild(target)
+			} else if (e.altKey) {
+				changeSiblings(target, COLL, !isCollapsed)
+			} else if (e[mod]) {
+				isCollapsed = target.nextSibling.querySelector("i")
+				if (isCollapsed) change(target.nextSibling, "i", COLL, !isCollapsed.classList.contains(COLL))
+			} else {
+				target.classList[isCollapsed ? "remove" : "add"](COLL)
+			}
+		}
+	}
+
 	function draw(str, to, first, box) {
 		var node = div.cloneNode()
 		, link = document.createElement("a")
@@ -342,24 +361,8 @@ function init(exports, rand, opts) {
 
 		link.classList.add("L" + rand)
 
-		to.addEventListener("click", function(e) {
-			var target = e.target
-			, open = target.classList.contains(COLL)
-			if (target.tagName == "I") {
-				if (target.classList.contains("M" + rand)) {
-					target.previousSibling.appendChild(target.nextSibling.firstChild)
-					target.parentNode.removeChild(target.nextSibling)
-					target.parentNode.removeChild(target)
-				} else if (e.altKey) {
-					changeSiblings(target, COLL, !open)
-				} else if (e[mod]) {
-					open = target.nextSibling.querySelector("i")
-					if (open) change(target.nextSibling, "i", COLL, !open.classList.contains(COLL))
-				} else {
-					target.classList[open ? "remove" : "add"](COLL)
-				}
-			}
-		}, true)
+		to.removeEventListener("click", onClick, true)
+		to.addEventListener("click", onClick, true)
 
 		to.replaceChild(box = node, first)
 		loop(str, re)
