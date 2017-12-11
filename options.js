@@ -11,6 +11,8 @@ var chrome = this.chrome || this.browser
 		infoHover: "#333;text-shadow: 1px 1px 3px #999",
 		string: "#293",
 		number: "#10c",
+		bool: "#10c",
+		null: "#10c",
 		property: "#66d",
 		error: "#f12",
 		menus: true,
