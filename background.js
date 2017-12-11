@@ -53,9 +53,11 @@ function readConf() {
 		info: "#ccc",
 		infoHover: "#333;text-shadow: 1px 1px 3px #999",
 		string: "#293",
-		number: "#10c",
+		number: "#f0f",
+		bool: "#10c",
+		null: "#f00",
 		property: "#66d",
-		error: "#f12",
+		error: "#f00",
 		menus: true,
 		unescape: false,
 		sizeLimit: 1048576000
@@ -83,9 +85,11 @@ function readConf() {
 			'i.C', '+.D', ' :before{display:none}' +
 			'i.C', '+.D', ' div,i.M', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +
 			'.S', '{color:' + items.string + '}' +
-			'.B', '{color:' + items.number + '}' +
+			'.N', '{color:' + items.number + '}' +
+			'.B', '{color:' + items.bool + '}' +
 			'.K', '{color:' + items.property + '}' +
 			'.E', '{color:' + items.error + '}' +
+			'.O', '{color:' + items.null + '}' +
 			'.E', ',.B', '{font-weight:bold}' +
 			'div.E', '{font-size:120%;margin:0 0 1em}'
 		].join(rand)
@@ -245,6 +249,8 @@ function init(exports, rand, opts) {
 	, KEY  = "K" + rand
 	, STR  = "S" + rand
 	, BOOL = "B" + rand
+	, NUM  = "N" + rand
+	, NULL = "O" + rand
 	, ERR  = "E" + rand
 	, COLL = "C" + rand
 
@@ -398,7 +404,19 @@ function init(exports, rand, opts) {
 						} else {
 							tmp = span.cloneNode()
 						}
-						tmp.classList.add(match[3] ? KEY : match[1] ? STR : match[4] ? ERR : BOOL)
+						if (match[3]) {
+							tmp.classList.add(KEY)
+						} else if (match[1]) {
+							tmp.classList.add(STR)
+						} else if (match[4]) {
+							tmp.classList.add(ERR)
+						} else if (match[0] === "true" || match[0] === "false") {
+							tmp.classList.add(BOOL)
+						} else if (match[0] === "null") {
+							tmp.classList.add(NULL)
+						} else {
+							tmp.classList.add(NUM)
+						}
 						val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
 						len = match[3] ? 140 : 1400
 						if (val.length > len) {
