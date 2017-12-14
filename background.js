@@ -60,7 +60,8 @@ function readConf() {
 		error: "#f12",
 		menus: true,
 		unescape: false,
-		sizeLimit: 1048576000
+		sizeLimit: 1048576000,
+		newtab: false
 	}, onGot)
 	// Chrome uses storage.get(def, cb)
 	// Firefox uses storage.get(def).then(cb)
@@ -368,6 +369,7 @@ function init(exports, rand, opts) {
 			var len, match, val, tmp
 			, i = 0
 			, unesc = opts.unescape
+			, newtab = opts.newtab
 			try {
 				for (; match = re.exec(str); ) {
 					val = match[0]
@@ -401,6 +403,9 @@ function init(exports, rand, opts) {
 						if (match[2]) {
 							tmp = link.cloneNode()
 							tmp.href = JSON.parse(match[1])
+							if (newtab) {
+								tmp.target = "_blank"
+							}
 						} else {
 							tmp = span.cloneNode()
 						}
