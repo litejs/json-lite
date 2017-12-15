@@ -358,6 +358,9 @@ function init(exports, rand, opts) {
 		node.className = "R" + rand + (box ? " " + box : "")
 
 		link.classList.add("L" + rand)
+		if (opts.newtab) {
+			link.target = "_blank"
+		}
 
 		to.removeEventListener("click", onClick, true)
 		to.addEventListener("click", onClick, true)
@@ -369,7 +372,6 @@ function init(exports, rand, opts) {
 			var len, match, val, tmp
 			, i = 0
 			, unesc = opts.unescape
-			, newtab = opts.newtab
 			try {
 				for (; match = re.exec(str); ) {
 					val = match[0]
@@ -403,9 +405,6 @@ function init(exports, rand, opts) {
 						if (match[2]) {
 							tmp = link.cloneNode()
 							tmp.href = JSON.parse(match[1])
-							if (newtab) {
-								tmp.target = "_blank"
-							}
 						} else {
 							tmp = span.cloneNode()
 						}
