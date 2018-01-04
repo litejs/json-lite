@@ -13,12 +13,12 @@ Features
  - Collapsible arrays, objects and long values
  - Collapse all childs with Ctrl(Command) + Click
  - Collapse property also on all sibling items with Alt(Option) + Click
- - Counts items and properties in a collection
- - Shows collection sizes
- - Does it's best to show large (10MB+) JSON files
- - Does it's best to show invalid JSON files
- - Does not sort objects with numeric keys
- - Does not round large numbers
+ - Count items and properties in a collection
+ - Show collection sizes
+ - Do its best to show large (10MB+) JSON files
+ - Do its best to show invalid JSON files
+ - Do not sort objects with numeric keys
+ - Do not round large numbers
  - "Save as..." saves the original JSON document
  - Select and copy a working JSON from the formatted JSON
 
@@ -26,7 +26,7 @@ Features
 Notes
 -----
 
- - Disable Firefox built in JSON viewer  
+ - Disable Firefox built-in JSON viewer  
    Go to [about:config](about:config) and set 'devtools.jsonview.enabled' to false
 
 
