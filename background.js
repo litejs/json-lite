@@ -45,11 +45,10 @@ var css, opts
 	}
 }
 
-readConf()
 chrome.storage.onChanged.addListener(readConf)
 chrome.runtime.onMessage.addListener(onMessage)
 
-function readConf() {
+function readConf(next) {
 	var got
 	, promise = storage.get({
 		font: "13px Menlo,monospace",
@@ -104,6 +103,7 @@ function readConf() {
 		if (items.menus) {
 			initMenu()
 		}
+		if (next) next()
 	}
 }
 
@@ -213,6 +213,9 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 
 
 function onMessage(message, sender, sendResponse) {
+	if (!opts) return readConf(function() {
+		onMessage(message, sender, sendResponse)
+	})
 	if (!message || message.len > opts.sizeLimit) return sendResponse({op:"abort"})
 	chrome.tabs.insertCSS(sender.tab.id, {
 		code: (message.op == 'formatBody' ? 'body,' : '') + css,
