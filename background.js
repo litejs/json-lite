@@ -1,4 +1,9 @@
 
+/*!
+ * Copyright (c) 2016-2018 Lauri Rooden
+ * https://www.litejs.com/MIT-LICENSE.txt
+ */
+
 
 var css, opts
 , chrome = this.chrome || this.browser

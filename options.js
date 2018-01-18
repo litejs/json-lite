@@ -1,4 +1,10 @@
 
+/*!
+ * Copyright (c) 2016-2018 Lauri Rooden
+ * https://www.litejs.com/MIT-LICENSE.txt
+ */
+
+
 var chrome = this.chrome || this.browser
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
 , themes = {

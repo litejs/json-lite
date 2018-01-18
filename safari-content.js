@@ -1,4 +1,10 @@
 
+/*!
+ * Copyright (c) 2016-2018 Lauri Rooden
+ * https://www.litejs.com/MIT-LICENSE.txt
+ */
+
+
 if (!this.chrome) {
 	this.chrome = {
 		runtime: {
@@ -18,3 +24,4 @@ if (!this.chrome) {
 		}
 	}, false)
 }
+

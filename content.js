@@ -1,4 +1,10 @@
 
+/*!
+ * Copyright (c) 2016-2018 Lauri Rooden
+ * https://www.litejs.com/MIT-LICENSE.txt
+ */
+
+
 !function() {
 	var str, jsonpMatch
 	, chrome = this.chrome || this.browser
