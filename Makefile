@@ -14,7 +14,7 @@
 # Install Hosted Web Apps (HWA) Command Line Interface (CLI)
 # npm i -g hwa-cli
 
-FILES=background.js content.js manifest.json options.html options.js icon-128.png icon-48.png icon-32.png
+FILES=background.js content.js manifest.json options.html options.js img/icon-128.png img/icon-48.png img/icon-32.png
 SAFARI_BUILD=json-lite.safariextension
 
 .PHONY: safari

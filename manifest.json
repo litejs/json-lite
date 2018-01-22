@@ -5,9 +5,9 @@
   "author" : "Lauri Rooden",
   "description": "Fast JSON viewer - highlights, shows items count/size, handles large files",
   "icons": {
-    "128": "icon-128.png",
-    "48": "icon-48.png",
-    "32": "icon-32.png"
+    "128": "img/icon-128.png",
+    "48": "img/icon-48.png",
+    "32": "img/icon-32.png"
   },
   "permissions": [
     "contextMenus",
@@ -42,7 +42,7 @@
   ],
   "page_action": {
     "default_icon": {
-      "48": "icon-48.png"
+      "48": "img/icon-48.png"
     },
     "default_title": "Format JSON"
   },
