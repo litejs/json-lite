@@ -494,4 +494,26 @@ function init(exports, rand, opts) {
 	}
 }
 
+/* Firefox
+ if (chrome.webRequest) chrome.webRequest.onHeadersReceived.addListener(
+	rewriteHeader,
+	{ urls: ["<all_urls>"] },
+	["blocking", "responseHeaders"]
+)
+
+function rewriteHeader(e) {
+	var h
+	, headers = e.responseHeaders
+	, len = headers && headers.length
+	if (len) for (; len--; ) {
+		h = headers[len]
+		if (h.name.toLowerCase() === "content-type" && h.value.indexOf("+json") > -1) {
+			h.value = "application/json"
+			break;
+		}
+	}
+	return {responseHeaders: headers}
+}
+//*/
+
 

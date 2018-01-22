@@ -13,6 +13,8 @@
     "contextMenus",
     "storage",
     "tabs",
+    "webRequest",
+    "webRequestBlocking",
     "<all_urls>"
   ],
   "background": {
