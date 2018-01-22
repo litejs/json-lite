@@ -36,7 +36,7 @@
 				body.insertBefore(document.createTextNode(jsonpMatch[1]), body.firstChild)
 				body.appendChild(document.createTextNode(jsonpMatch[4]))
 			}
-			if (response && response.op === "abort") {
+			if (!response || response.op === "abort") {
 				document.body.style.display = ""
 			}
 		})

@@ -47,6 +47,10 @@ var css, opts
 
 chrome.storage.onChanged.addListener(readConf)
 chrome.runtime.onMessage.addListener(onMessage)
+chrome.pageAction.onClicked.addListener(function(tab) {
+	onMessage({op:"formatBody"}, {tab: tab})
+	chrome.pageAction.hide(tab.id)
+})
 
 function readConf(next) {
 	var got
@@ -103,7 +107,7 @@ function readConf(next) {
 		if (items.menus) {
 			initMenu()
 		}
-		if (next) next()
+		if (typeof next === "function") next()
 	}
 }
 
@@ -213,10 +217,15 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 
 
 function onMessage(message, sender, sendResponse) {
-	if (!opts) return readConf(function() {
-		onMessage(message, sender, sendResponse)
-	})
-	if (!message || message.len > opts.sizeLimit) return sendResponse({op:"abort"})
+	if (!opts) {
+		readConf(onMessage.bind(null, message, sender, sendResponse))
+		return true
+	}
+	if (!message || message.len > opts.sizeLimit) {
+		chrome.pageAction.show(sender.tab.id)
+		if (typeof sendResponse === "function") sendResponse({op:"abort"})
+		return
+	}
 	chrome.tabs.insertCSS(sender.tab.id, {
 		code: (message.op == 'formatBody' ? 'body,' : '') + css,
 		frameId: sender.frameId
