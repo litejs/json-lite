@@ -43,6 +43,6 @@ Links
 
 ### Licence
 
-Copyright (c) 2016-2017 Lauri Rooden  
+Copyright (c) 2016-2018 Lauri Rooden  
 The MIT License
 

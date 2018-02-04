@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "JSON Lite",
-  "version": "18.1.0",
+  "version": "18.2.0",
   "author" : "Lauri Rooden",
   "description": "Fast JSON viewer - highlights, shows items count/size, handles large files",
   "icons": {
@@ -22,6 +22,11 @@
     "scripts": [
       "background.js"
     ]
+  },
+  "applications": {
+    "gecko": {
+      "id": "{16a49f65-1369-4839-a5ef-db2581e08b16}"
+    }
   },
   "options_page": "options.html",
   "options_ui": {
@@ -45,10 +50,5 @@
       "48": "img/icon-48.png"
     },
     "default_title": "Format JSON"
-  },
-  "applications": {
-    "gecko": {
-      "id": "{16a49f65-1369-4839-a5ef-db2581e08b16}"
-    }
   }
 }
