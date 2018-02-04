@@ -8,6 +8,23 @@
 var css, opts
 , chrome = this.chrome || this.browser
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
+, defaultOpts = {
+	font: "13px Menlo,monospace",
+	bg: "#fff",
+	color: "#000",
+	info: "#ccc",
+	infoHover: "#333;text-shadow: 1px 1px 3px #999",
+	string: "#293",
+	number: "#10c",
+	bool: "#10c",
+	null: "#10c",
+	property: "#66d",
+	error: "#f12",
+	menus: true,
+	unescape: false,
+	sizeLimit: 1048576000,
+	newtab: false
+}
 , rand = Math.random().toString(36).slice(2, 9)
 , fns = {
 	btoa: function(str) {
@@ -54,57 +71,41 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 
 function readConf(next) {
 	var got
-	, promise = storage.get({
-		font: "13px Menlo,monospace",
-		bg: "#fff",
-		color: "#000",
-		info: "#ccc",
-		infoHover: "#333;text-shadow: 1px 1px 3px #999",
-		string: "#293",
-		number: "#10c",
-		bool: "#10c",
-		null: "#10c",
-		property: "#66d",
-		error: "#f12",
-		menus: true,
-		unescape: false,
-		sizeLimit: 1048576000,
-		newtab: false
-	}, onGot)
+	, promise = storage.get(defaultOpts, onGot)
 	// Chrome uses storage.get(def, cb)
 	// Firefox uses storage.get(def).then(cb)
 	if (promise && promise.then) promise.then(onGot)
 	function onGot(items) {
 		if (got) return
-		opts = items
+		opts = items || defaultOpts
 		got = true
 		css = [
-			'.R', '{background:' + items.bg + ';white-space:pre-wrap}' +
-			'.R', ',.D', '{font:' + items.font + ';color:' + items.color + '}' +
-			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted ' + items.info + ';vertical-align:bottom}' +
-			'.X', '{border:1px solid ' + items.info + ';padding:1em}' +
+			'.R', '{background:' + opts.bg + ';white-space:pre-wrap}' +
+			'.R', ',.D', '{font:' + opts.font + ';color:' + opts.color + '}' +
+			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted ' + opts.info + ';vertical-align:bottom}' +
+			'.X', '{border:1px solid ' + opts.info + ';padding:1em}' +
 			'a.L', '{text-decoration:none}' +
 			'a.L', ':hover,a.L', ':focus{text-decoration:underline}' +
-			'i.I', ',i.M', '{cursor:pointer;color:' + items.info + '}' +
-			'i.H', ',i.M', ':hover,i.I', ':hover{color:' + items.infoHover + '}'+
+			'i.I', ',i.M', '{cursor:pointer;color:' + opts.info + '}' +
+			'i.H', ',i.M', ':hover,i.I', ':hover{color:' + opts.infoHover + '}'+
 			'i.I', ':before{content:" ▼"}' +
 			'i.C', ':before{content:" ▶"}' +
 			'i.I', ':after,i.M', ':after{content:" " attr(data-c)}' +
 			'i.C', '+.D', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
 			'i.C', '+.D', ' :before{display:none}' +
 			'i.C', '+.D', ' div,i.M', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +
-			'.S', '{color:' + items.string + '}' +
-			'.N', '{color:' + items.number + '}' +
-			'.B', '{color:' + items.bool + '}' +
-			'.K', '{color:' + items.property + '}' +
-			'.E', '{color:' + items.error + '}' +
-			'.O', '{color:' + items.null + '}' +
+			'.S', '{color:' + opts.string + '}' +
+			'.N', '{color:' + opts.number + '}' +
+			'.B', '{color:' + opts.bool + '}' +
+			'.K', '{color:' + opts.property + '}' +
+			'.E', '{color:' + opts.error + '}' +
+			'.O', '{color:' + opts.null + '}' +
 			'.E', ',.B', '{font-weight:bold}' +
 			'div.E', '{font-size:120%;margin:0 0 1em}'
 		].join(rand)
 
 		chrome.contextMenus.removeAll()
-		if (items.menus) {
+		if (opts.menus) {
 			initMenu()
 		}
 		if (typeof next === "function") next()
