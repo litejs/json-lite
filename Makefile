@@ -17,7 +17,7 @@
 FILES=background.js content.js manifest.json options.html options.js img/icon-128.png img/icon-48.png img/icon-32.png
 SAFARI_BUILD=json-lite.safariextension
 
-.PHONY: safari
+.PHONY: safari edge
 
 all: webextension safari
 
@@ -44,4 +44,13 @@ safari:
 
 ie: webextension
 	hwa convert app.zip
+
+edge:
+	# https://docs.microsoft.com/en-us/microsoft-edge/extensions/guides/packaging/creating-and-testing-extension-packages#app-identity-template-values
+	manifoldjs -d edge -l debug -p edgeextension -f edgeextension -m ./manifest.json
+	#  manifoldjs -l debug -p edgeextension package JSONLite/edgeextension/manifest/
+
+icons:
+	convert -background none -resize 128x128 icon2.svg icon2-128.png
+
 
