@@ -80,7 +80,7 @@ function readConf(next) {
 		opts = items || defaultOpts
 		got = true
 		css = [
-			'.R', '{background:' + opts.bg + ';white-space:pre-wrap}' +
+			'.R', '{background:' + opts.bg + ';white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;}' +
 			'.R', ',.D', '{font:' + opts.font + ';color:' + opts.color + '}' +
 			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted ' + opts.info + ';vertical-align:bottom}' +
 			'.X', '{border:1px solid ' + opts.info + ';padding:1em}' +

@@ -2,5 +2,7 @@
 	"note": "JSON does not require to escape unicode, so escaped version is not optimal",
 	"escaped": "\u5929\u6d25\u6743\u5065",
 	"unicode": "天津权健",
-	"note2": "You are allowed to escape any character, 'a' can be written as '\u0061'"
+	"note2": "You are allowed to escape any character, 'a' can be written as '\u0061'",
+	"longlongkey aoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdht": "ab",
+	"longvalue": "longvalue aoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdht"
 }
