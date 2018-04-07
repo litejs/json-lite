@@ -23,5 +23,14 @@ if (!this.chrome) {
 			eval(e.message)
 		}
 	}, false)
+
+	document.addEventListener("contextmenu", function(e) {
+		safari.self.tab.setContextMenuEventUserInfo(e, {
+			selection: window.getSelection() + "",
+			href: e.target.href,
+			tag: e.target.nodeName,
+			src: e.target.src
+		})
+	}, false)
 }
 

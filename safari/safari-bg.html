@@ -1,10 +1,64 @@
 <!DOCTYPE HTML>
 <html><head><title>global page</title><meta charset="UTF-8">
 <script type="text/javascript">
+var contextMenuItems = []
+, menuFilter = {
+	"formatSelection": "{",
+	"unicode_decode": "\\",
+	"unescape": "%"
+}
+, menus = {}
+
+safari.application.addEventListener("contextmenu", function(e) {
+	if (contextMenuItems.length) {
+		var m, title
+		, i = 0
+		for (; m = contextMenuItems[i++]; ) {
+			menus[m.id] = m
+			if (menuFilter[m.id]) {
+				title = m.title
+				if (m.parentId) {
+					title = m.parentId.title + " " + title
+				}
+				e.contextMenu.appendContextMenuItem(m.id, title)
+			}
+		}
+	}
+}, false)
+
+safari.application.addEventListener("validate", function(e) {
+	var m = menus[e.command]
+	if (m) {
+		e.target.disabled = (
+			m.disabled ||
+			m.contexts.indexOf("selection") > -1 && !e.userInfo.selection ||
+			e.userInfo.selection && e.userInfo.selection.indexOf(menuFilter[m.id]) === -1
+		)
+	}
+}, false)
 
 this.chrome = this.chrome || {
 	contextMenus: {
-		create: function() {},
+		create: function(menu) {
+			contextMenuItems.push(menu)
+			return menu
+		},
+		onClicked: {
+			addListener: function(fn) {
+				safari.application.addEventListener("command", function(e) {
+					fn({
+						menuItemId: e.command
+					}, {
+						id: safari.application.activeBrowserWindow.activeTab.page
+					})
+				}, false)
+			}
+		},
+		removeAll: function() {
+			contextMenuItems.length = 0
+		}
+	},
+	pageAction: {
 		onClicked: {
 			addListener: function() {}
 		}
@@ -15,6 +69,30 @@ this.chrome = this.chrome || {
 				safari.application.addEventListener("message", function(e) {
 					cb(e.message, { tab: { id: e.target.page }})
 				})
+			}
+		}
+	},
+	storage: {
+		local: {
+			get: function(defaults, next) {
+				var key, val
+				, res = Object.create(defaults)
+				for (key in defaults) {
+					val = safari.extension.settings[key]
+					if (val != null) res[key] = val
+				}
+				next(res)
+			},
+			set: function(opts) {
+				var key, val
+				for (key in opts) {
+					safari.extension.settings[key] = opts[key]
+				}
+			}
+		},
+		onChanged: {
+			addListener: function(fn) {
+				safari.extension.settings.addEventListener("change", fn, false)
 			}
 		}
 	},

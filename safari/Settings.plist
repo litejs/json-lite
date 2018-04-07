@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>DefaultValue</key>
+		<string>1048576000</string>
+		<key>Key</key>
+		<string>sizeLimit</string>
+		<key>Title</key>
+		<string>Auto-format documents</string>
+		<key>Titles</key>
+		<array>
+			<string>OFF</string>
+			<string>under 100KB</string>
+			<string>under 1MB</string>
+			<string>under 10MB</string>
+			<string>under 100MB</string>
+		</array>
+		<key>Type</key>
+		<string>PopUpButton</string>
+		<key>Values</key>
+		<array>
+			<string>0</string>
+			<string>102400</string>
+			<string>104857600</string>
+			<string>1048576000</string>
+			<string>10485760000</string>
+		</array>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string></string>
+		<key>TrueValue</key>
+		<string>true</string>
+		<key>FalseValue</key>
+		<string></string>
+		<key>Key</key>
+		<string>unescape</string>
+		<key>Title</key>
+		<string>Auto-unescape strings</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>true</string>
+		<key>TrueValue</key>
+		<string>true</string>
+		<key>FalseValue</key>
+		<string></string>
+		<key>Key</key>
+		<string>menus</string>
+		<key>Title</key>
+		<string>Show menus</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string></string>
+		<key>TrueValue</key>
+		<string>true</string>
+		<key>FalseValue</key>
+		<string></string>
+		<key>Key</key>
+		<string>newtab</string>
+		<key>Title</key>
+		<string>Open links in new tab</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+</array>
+</plist>

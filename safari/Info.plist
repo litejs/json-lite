@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>Lauri Rooden</string>
 	<key>Builder Version</key>
-	<string>12603.1.30.0.34</string>
+	<string>13605.1.33.1.2</string>
 	<key>CFBundleDisplayName</key>
 	<string>json-lite</string>
 	<key>CFBundleIdentifier</key>
@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.20</string>
+	<string>18.2.0</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -35,7 +35,7 @@
 	<key>Description</key>
 	<string>Fast JSON highlighter - shows items count/size, handles large files, collapse items</string>
 	<key>DeveloperIdentifier</key>
-	<string>0000000000</string>
+	<string>YVKYWJZ9CZ</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
