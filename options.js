@@ -23,7 +23,7 @@ var chrome = this.chrome || this.browser
 		error: "#f12",
 		menus: true,
 		unescape: false,
-		sizeLimit: 1048576000,
+		sizeLimit: 10485760,
 		newtab: false
 	}
 }

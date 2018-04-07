@@ -4,7 +4,7 @@
 <array>
 	<dict>
 		<key>DefaultValue</key>
-		<string>1048576000</string>
+		<string>10485760</string>
 		<key>Key</key>
 		<string>sizeLimit</string>
 		<key>Title</key>
@@ -23,9 +23,9 @@
 		<array>
 			<string>0</string>
 			<string>102400</string>
+			<string>1048576</string>
+			<string>10485760</string>
 			<string>104857600</string>
-			<string>1048576000</string>
-			<string>10485760000</string>
 		</array>
 	</dict>
 	<dict>

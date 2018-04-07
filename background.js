@@ -22,7 +22,7 @@ var css, opts
 	error: "#f12",
 	menus: true,
 	unescape: false,
-	sizeLimit: 1048576000,
+	sizeLimit: 10485760,
 	newtab: false
 }
 , rand = Math.random().toString(36).slice(2, 9)
