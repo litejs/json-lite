@@ -7,9 +7,15 @@
 
 var chrome = this.chrome || this.browser
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
+, defaultOpts = {
+	theme: "",
+	menus: true,
+	unescape: false,
+	sizeLimit: 10485760,
+	newtab: false
+}
 , themes = {
 	"": {
-		theme: "",
 		font: "13px Menlo,monospace",
 		color: "#000",
 		bg: "#fff",
@@ -20,14 +26,9 @@ var chrome = this.chrome || this.browser
 		bool: "#10c",
 		null: "#10c",
 		property: "#66d",
-		error: "#f12",
-		menus: true,
-		unescape: false,
-		sizeLimit: 10485760,
-		newtab: false
+		error: "#f12"
 	},
 	"firefox-dark": {
-		theme: "firefox-dark",
 		font: "13px Menlo,monospace",
 		color: "#fff",
 		bg: "#181d20",
@@ -44,13 +45,13 @@ var chrome = this.chrome || this.browser
 
 function loadOptions() {
 	var got
-	, promise = storage.get(themes[""], onGot)
+	, promise = storage.get(Object.assign(defaultOpts, themes[""]), onGot)
 	if (promise && promise.then) promise.then(onGot)
 
 	function onGot(items) {
 		if (got) return
 		got = 1
-		theme.value = items.theme || ""
+		theme.value = themes[items.theme] ? items.theme : "custom"
 		updateForm(items)
 	}
 }
@@ -59,8 +60,8 @@ function updateForm(items) {
 	var el
 	custom.style.display = theme.value === "custom" ? "block" : "none"
 
-	if (items) Object.keys(themes[""]).forEach(function(key) {
-		if (key !== "theme") {
+	if (items) Object.keys(defaultOpts).forEach(function(key) {
+		if (key !== "theme" && items[key] != null) {
 			if (form1[key].type === "checkbox") form1[key].checked = items[key]
 			else form1[key].value = items[key]
 		}
@@ -69,7 +70,7 @@ function updateForm(items) {
 
 function saveOptions(e) {
 	e.preventDefault()
-	storage.set(Object.keys(themes[""]).reduce(function(map, key) {
+	storage.set(Object.keys(defaultOpts).reduce(function(map, key) {
 		map[key] = form1[key][form1[key].type === "checkbox" ? "checked" : "value"]
 		return map
 	}, {}))
@@ -79,7 +80,6 @@ function saveOptions(e) {
 document.addEventListener("DOMContentLoaded", loadOptions)
 form1.addEventListener("submit", saveOptions)
 theme.addEventListener("change", function() {
-	var items = themes[theme.value]
-	updateForm(items)
+	updateForm(themes[theme.value])
 })
 
