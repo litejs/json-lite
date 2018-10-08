@@ -25,6 +25,20 @@ var chrome = this.chrome || this.browser
 		unescape: false,
 		sizeLimit: 10485760,
 		newtab: false
+	},
+	"firefox-dark": {
+		theme: "firefox-dark",
+		font: "13px Menlo,monospace",
+		color: "#fff",
+		bg: "#181d20",
+		info: "#888",
+		infoHover: "#aaa;text-shadow: 1px 1px 3px #ccc",
+		string: "#df80ff",
+		number: "#70bf53",
+		bool: "#70bf53",
+		null: "#747573",
+		property: "#46afe3",
+		error: "#ed2655"
 	}
 }
 
