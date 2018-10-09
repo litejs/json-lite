@@ -3,6 +3,9 @@
 	"escaped": "\u5929\u6d25\u6743\u5065",
 	"unicode": "天津权健",
 	"note2": "You are allowed to escape any character, 'a' can be written as '\u0061'",
+	"map": {
+		"arr": [123, "123", true, false, null, {"abc": "bcd"}]
+	},
 	"longlongkey aoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdht": "ab",
 	"longvalue": "longvalue aoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdhtaoeuidhtnsaoeuidthsssaontdht"
 }

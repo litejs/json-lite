@@ -92,10 +92,10 @@ function readConf(next) {
 			'.X', '{border:1px solid ' + opts.info + ';padding:1em}' +
 			'a.L', '{text-decoration:none}' +
 			'a.L', ':hover,a.L', ':focus{text-decoration:underline}' +
-			'i.I', ',i.M', '{cursor:pointer;color:' + opts.info + '}' +
+			'i.I', ',i.M', '{cursor:pointer;font-style:normal;color:' + opts.info + '}' +
 			'i.H', ',i.M', ':hover,i.I', ':hover{color:' + opts.infoHover + '}'+
-			'i.I', ':before{content:" ▼ "}' +
-			'i.C', ':before{content:" ▶ "}' +
+			'i.I', ':before{content:"▼";display:inline-block;padding:1px 5px;margin:-1px;transition:transform .2s}' +
+			'i.C', ':before{transform:rotate(-90deg)}' +
 			(cssVar[opts.showSize] || 'i.C'), ':after,i.M', ':after{content:attr(data-c)}' +
 			'i.C', '+.D', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
 			'i.C', '+.D', ' :before{display:none}' +
