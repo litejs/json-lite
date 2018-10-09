@@ -23,7 +23,13 @@ var css, opts
 	menus: true,
 	unescape: false,
 	sizeLimit: 10485760,
+	showSize: "collapsed",
 	newtab: false
+}
+, cssVar = {
+	"always": "i.I",
+	"hover": "i:hover.I",
+	"never": "i.M"
 }
 , rand = Math.random().toString(36).slice(2, 9)
 , fns = {
@@ -88,9 +94,9 @@ function readConf(next) {
 			'a.L', ':hover,a.L', ':focus{text-decoration:underline}' +
 			'i.I', ',i.M', '{cursor:pointer;color:' + opts.info + '}' +
 			'i.H', ',i.M', ':hover,i.I', ':hover{color:' + opts.infoHover + '}'+
-			'i.I', ':before{content:" ▼"}' +
-			'i.C', ':before{content:" ▶"}' +
-			'i.I', ':after,i.M', ':after{content:" " attr(data-c)}' +
+			'i.I', ':before{content:" ▼ "}' +
+			'i.C', ':before{content:" ▶ "}' +
+			(cssVar[opts.showSize] || 'i.C'), ':after,i.M', ':after{content:attr(data-c)}' +
 			'i.C', '+.D', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
 			'i.C', '+.D', ' :before{display:none}' +
 			'i.C', '+.D', ' div,i.M', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +

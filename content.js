@@ -27,7 +27,7 @@
 			jsonRe.test(str)
 		)
 	) {
-		document.body.style.display = "none"
+		body.style.display = "none"
 		if (jsonpMatch) {
 			body.textContent = jsonpMatch[3]
 		}
@@ -37,7 +37,8 @@
 				body.appendChild(document.createTextNode(jsonpMatch[4]))
 			}
 			if (!response || response.op === "abort") {
-				document.body.style.display = ""
+				body.style.display = ""
+				// body.appendChild(document.createElement("script")).textContent = "window.data=" + str
 			}
 		})
 	}

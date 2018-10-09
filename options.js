@@ -12,6 +12,7 @@ var chrome = this.chrome || this.browser
 	menus: true,
 	unescape: false,
 	sizeLimit: 10485760,
+	showSize: "collapsed",
 	newtab: false
 }
 , themes = {
