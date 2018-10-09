@@ -19,22 +19,24 @@ SAFARI_BUILD=json-lite.safariextension
 
 .PHONY: safari edge
 
-all: webextension safari
+help:
+	# Usage:
+	@sed -n '/^\([a-z][^:]*\).*/s//    make \1/p' $(MAKEFILE_LIST)
 
 firefox:
 	-rm firefox.zip
 	git reset --hard
 	#sed -nie '/<!-- Firefox/{n;p;n;d;};p' options.html
-	sed -ie '/\/\* Firefox/d' options.js background.js
-	sed -ie '/options_page/d' manifest.json
+	sed -i '/\/\* Firefox/d' options.js background.js
+	sed -i '/options_page/d' manifest.json
 	zip firefox.zip $(FILES)
 
 webextension:
 	-rm app.zip
 	git reset --hard
 	#sed -i '/<!-- Firefox/,/-->/d' options.html
-	sed -ie '/\/\* Firefox/,/\*\//d' options.js background.js
-	sed -ie '/webRequest/d;/applications/,/^  }/d' manifest.json
+	sed -i '/\/\* Firefox/,/\*\//d' options.js background.js
+	sed -i '/webRequest/d;/applications/,/^  }/d' manifest.json
 	zip app.zip $(FILES)
 
 safari:
