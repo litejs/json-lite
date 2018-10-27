@@ -238,9 +238,10 @@ function onMessage(message, sender, sendResponse) {
 		frameId: sender.frameId
 	})
 	chrome.tabs.executeScript(sender.tab.id, {
-		code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + message.op + "()",
+		code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + message.op + "(" + JSON.stringify(message) + ")",
 		frameId: sender.frameId
 	})
+	sendResponse({op:"ok"})
 }
 
 
@@ -480,8 +481,12 @@ function init(exports, rand, opts) {
 			}
 		}
 	}
-	function formatBody() {
+	function formatBody(message) {
 		draw(first.textContent, body, first)
+		if (message.add) {
+			body.insertBefore(document.createTextNode(message.add[0]), body.firstChild)
+			body.appendChild(document.createTextNode(message.add[1]))
+		}
 		document.body.style.display = ""
 	}
 	function formatSelection() {

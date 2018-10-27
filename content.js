@@ -6,7 +6,7 @@
 
 
 !function() {
-	var str, jsonpMatch
+	var str, jsonpMatch, add
 	, chrome = this.chrome || this.browser
 	, jsonRe = /^\s*(?:\[\s*(?=-?\d|true|false|null|["[{])[^]*\]|\{\s*"[^]+\})\s*$/
 	, body = document.body
@@ -27,12 +27,9 @@
 		body.style.display = "none"
 		if (jsonpMatch) {
 			body.textContent = jsonpMatch[3]
+			add = [jsonpMatch[1], jsonpMatch[4]]
 		}
-		chrome.runtime.sendMessage({op: "formatBody", len: body.textContent.length}, function(response) {
-			if (jsonpMatch) {
-				body.insertBefore(document.createTextNode(jsonpMatch[1]), body.firstChild)
-				body.appendChild(document.createTextNode(jsonpMatch[4]))
-			}
+		chrome.runtime.sendMessage({op: "formatBody", len: body.textContent.length, add: add}, function(response) {
 			if (!response || response.op === "abort") {
 				body.style.display = ""
 				// body.appendChild(document.createElement("script")).textContent = "window.data=" + str
