@@ -13,16 +13,13 @@
 	, first = body && body.firstChild
 
 	if (
-		first &&
-		(
+		first && (
 			// pure json put inside PRE by browser
-			first.tagName == "PRE" && first == body.lastElementChild ||
-			// HTML page contains only json
-			first == body.lastChild && first.nodeType == 3
-		) &&
-		(str = first.textContent) &&
-		(
-			/[+\/]json$/i.test(document.contentType) ||
+			first.tagName === "PRE" ||
+			// HTML page contains only one textNode
+			first === body.lastChild && first.nodeType === 3
+		) && (str = first.textContent) && (
+			/\bjson\b/i.test(document.contentType) ||
 			(jsonpMatch = /^\s*((?:\/\*\*\/\s*)?([$a-z_][$\w]*)\s*(?:&&\s*\2\s*)?\()([^]+)(\)[\s;]*)$/i.exec(str)) && jsonRe.test(jsonpMatch[3]) ||
 			jsonRe.test(str)
 		)
