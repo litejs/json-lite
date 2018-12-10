@@ -32,7 +32,6 @@
 		chrome.runtime.sendMessage({op: "formatBody", len: body.textContent.length, add: add}, function(response) {
 			if (!response || response.op === "abort") {
 				body.style.display = ""
-				// body.appendChild(document.createElement("script")).textContent = "window.data=" + str
 			}
 		})
 	}
