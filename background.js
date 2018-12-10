@@ -514,11 +514,12 @@ function init(exports, rand, opts) {
 
 function rewriteHeader(e) {
 	var h
+	, re = /\bjson\b/i
 	, headers = e.responseHeaders
 	, len = headers && headers.length
 	if (len) for (; len--; ) {
 		h = headers[len]
-		if (h.name.toLowerCase() === "content-type" && h.value.indexOf("+json") > -1) {
+		if (h.name.toLowerCase() === "content-type" && re.test(h.value)) {
 			h.value = "application/json"
 			break;
 		}
