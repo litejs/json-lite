@@ -47,6 +47,17 @@ input[type=checkbox] {
 		</div>
 		<label>Show menus<input type="checkbox" id="menus"></label>
 		<label>Auto-unescape strings<input type="checkbox" id="unescape"></label>
+		<label>Show formatted dates<select id="showDate">
+			<option>never</option>
+			<option>hover</option>
+			<option>always</option>
+		</select></label>
+		<label id="dateOpt">Date format<select id="showDateFn">
+			<option>toString</option>
+			<option>toUTCString</option>
+			<option>toISOString</option>
+			<option>toLocaleString</option>
+		</select></label>
 		<label>Auto-format documents<select id="sizeLimit">
 			<option value="0">Off</option>
 			<option value="102400">under 100KB</option>

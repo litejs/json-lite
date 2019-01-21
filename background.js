@@ -23,6 +23,8 @@ var css, opts
 	menus: true,
 	unescape: false,
 	sizeLimit: 10485760,
+	showDate: "hover",
+	showDateFn: "toString",
 	showSize: "collapsed",
 	newtab: false
 }
@@ -101,7 +103,14 @@ function readConf(next) {
 			'i.C', '+.D', ' :before{display:none}' +
 			'i.C', '+.D', ' div,i.M', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +
 			'.S', '{color:' + opts.string + '}' +
-			'.N', '{color:' + opts.number + '}' +
+			'.N', '{position:relative;color:' + opts.number + '}' +
+			(
+				opts.showDate !== "never" ?
+				'.N' + rand + '[data-c]' + (opts.showDate === 'hover' ? ':hover':'') +
+				':after{position:absolute;left:100%;top:0;margin-left:1em;padding:0 .6em;white-space:nowrap;background:' + opts.bg +
+				';color:' + opts.infoHover + ';content:" // " attr(data-c)}' :
+				''
+			) +
 			'.B', '{color:' + opts.bool + '}' +
 			'.K', '{color:' + opts.property + '}' +
 			'.E', '{color:' + opts.error + '}' +
@@ -396,6 +405,7 @@ function init(exports, rand, opts) {
 		function loop(str, re) {
 			var len, match, val, tmp
 			, i = 0
+			, d = new Date
 			, unesc = opts.unescape
 			try {
 				for (; match = re.exec(str); ) {
@@ -445,6 +455,10 @@ function init(exports, rand, opts) {
 							tmp.classList.add(NULL)
 						} else {
 							tmp.classList.add(NUM)
+							if (opts.showDate !== "never" && val > 1e9) {
+								d.setTime(val < 4294967296 ? val * 1000 : val)
+								tmp.dataset.c = d[opts.showDateFn]()
+							}
 						}
 						val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
 						len = match[3] ? 140 : 1400

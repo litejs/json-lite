@@ -12,6 +12,8 @@ var chrome = this.chrome || this.browser
 	menus: true,
 	unescape: false,
 	sizeLimit: 10485760,
+	showDate: "hover",
+	showDateFn: "toString",
 	showSize: "collapsed",
 	newtab: false
 }
@@ -58,15 +60,15 @@ function loadOptions() {
 }
 
 function updateForm(items) {
-	var el
-	custom.style.display = theme.value === "custom" ? "block" : "none"
-
 	if (items) Object.keys(defaultOpts).forEach(function(key) {
 		if (key !== "theme" && items[key] != null) {
 			if (form1[key].type === "checkbox") form1[key].checked = items[key]
 			else form1[key].value = items[key]
 		}
 	})
+
+	custom.style.display = theme.value === "custom" ? "block" : "none"
+	dateOpt.style.display = showDate.value !== "never" ? "block" : "none"
 }
 
 function saveOptions(e) {
@@ -82,5 +84,8 @@ document.addEventListener("DOMContentLoaded", loadOptions)
 form1.addEventListener("submit", saveOptions)
 theme.addEventListener("change", function() {
 	updateForm(themes[theme.value])
+})
+showDate.addEventListener("change", function() {
+	updateForm()
 })
 
