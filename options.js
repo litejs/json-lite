@@ -36,7 +36,7 @@ var chrome = this.chrome || this.browser
 		color: "#fff",
 		bg: "#181d20",
 		info: "#888",
-		infoHover: "#aaa;text-shadow: 1px 1px 3px #ccc",
+		infoHover: "#ccc",
 		string: "#df80ff",
 		number: "#70bf53",
 		bool: "#70bf53",
