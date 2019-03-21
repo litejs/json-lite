@@ -26,6 +26,7 @@ var css, opts
 	showDate: "hover",
 	showDateFn: "toString",
 	showSize: "collapsed",
+	showIndex: true,
 	newtab: false
 }
 , cssVar = {
@@ -111,9 +112,13 @@ function readConf(next) {
 				';color:' + opts.infoHover + ';content:" // " attr(data-c)}' :
 				''
 			) +
-			':not(i).Y', ':before{content:attr(data-i);margin-left:-1em;font-style:normal;color:' + opts.info + '}' +
-			'i.Y', '{font-style:normal}' +
-			'i.Y', ':after{content:attr(data-i);color:' + opts.info + '}' +
+			'i.Y' + rand + '{font-style:normal}' +
+			(
+				opts.showIndex ?
+				':not(i).Y' + rand + ':before{content:attr(data-i);margin-left:-1em;font-style:normal;color:' + opts.info + '}' +
+				'i.Y' + rand + ':after{content:attr(data-i);color:' + opts.info + '}' :
+				''
+			) +
 			'.B', '{color:' + opts.bool + '}' +
 			'.K', '{color:' + opts.property + '}' +
 			'.E', '{color:' + opts.error + '}' +

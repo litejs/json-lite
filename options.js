@@ -15,6 +15,7 @@ var chrome = this.chrome || this.browser
 	showDate: "hover",
 	showDateFn: "toString",
 	showSize: "collapsed",
+	showIndex: true,
 	newtab: false
 }
 , themes = {
@@ -88,4 +89,3 @@ theme.addEventListener("change", function() {
 showDate.addEventListener("change", function() {
 	updateForm()
 })
-
