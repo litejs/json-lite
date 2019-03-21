@@ -111,6 +111,9 @@ function readConf(next) {
 				';color:' + opts.infoHover + ';content:" // " attr(data-c)}' :
 				''
 			) +
+			':not(i).Y', ':before{content:attr(data-i);margin-left:-1em;font-style:normal;color:' + opts.info + '}' +
+			'i.Y', '{font-style:normal}' +
+			'i.Y', ':after{content:attr(data-i);color:' + opts.info + '}' +
 			'.B', '{color:' + opts.bool + '}' +
 			'.K', '{color:' + opts.property + '}' +
 			'.E', '{color:' + opts.error + '}' +
@@ -285,6 +288,7 @@ function init(exports, rand, opts) {
 	, STR  = "S" + rand
 	, BOOL = "B" + rand
 	, NUM  = "N" + rand
+	, INDEX= "Y" + rand
 	, NULL = "O" + rand
 	, ERR  = "E" + rand
 	, COLL = "C" + rand
@@ -318,7 +322,10 @@ function init(exports, rand, opts) {
 
 	function fragment(a, b) {
 		var frag = document.createDocumentFragment()
-		frag.appendChild(document.createTextNode(a))
+		var aElement = document.createElement("i")
+		aElement.classList.add("Y" + rand)
+		aElement.appendChild(document.createTextNode(a))
+		frag.appendChild(aElement)
 		frag.appendChild(document.createElement("i")).classList.add("I" + rand)
 		frag.appendChild(div.cloneNode())
 		frag.appendChild(document.createTextNode(b))
@@ -416,6 +423,7 @@ function init(exports, rand, opts) {
 						node = node.lastChild.previousSibling
 						node.len = 1
 						node.start = re.lastIndex
+						node.isArray = val == "["
 					} else if ((val == "}" || val == "]") && node.len) {
 						if (node.childNodes.length) {
 							tmp = node.previousElementSibling
@@ -428,6 +436,10 @@ function init(exports, rand, opts) {
 							tmp.dataset.k = (val = tmp.previousElementSibling) && val.classList.contains(KEY) ?
 							val.textContent.replace(/'/, "\\'") :
 							node.parentNode.len
+
+							if (tmp.previousElementSibling && node.parentNode.len && node.parentNode.isArray) {
+								tmp.previousElementSibling.dataset.i= "[" + (node.parentNode.len - 1) + "]"
+							}
 						} else {
 							node.parentNode.removeChild(node.previousSibling)
 							node.parentNode.removeChild(node)
@@ -460,6 +472,12 @@ function init(exports, rand, opts) {
 								tmp.dataset.c = d[opts.showDateFn]()
 							}
 						}
+						if (node.isArray) {
+							tmp.dataset.i = "[" + (node.len - 1) + "]"
+							tmp.classList.add(INDEX)
+						}
+
+
 						val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
 						len = match[3] ? 140 : 1400
 						if (val.length > len) {
@@ -474,6 +492,7 @@ function init(exports, rand, opts) {
 							tmp.classList.add("D" + rand)
 						}
 						tmp.textContent = val
+
 						node.appendChild(tmp)
 						if (match[3]) {
 							node.appendChild(colon.cloneNode())
@@ -541,5 +560,3 @@ function rewriteHeader(e) {
 	return {responseHeaders: headers}
 }
 //*/
-
-
