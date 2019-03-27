@@ -5,7 +5,7 @@
  */
 
 
-var css, opts
+var css, next, opts
 , chrome = this.chrome || this.browser
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
 , defaultOpts = {
@@ -70,6 +70,7 @@ var css, opts
 	}
 }
 
+readConf()
 chrome.storage.onChanged.addListener(readConf)
 chrome.runtime.onMessage.addListener(onMessage)
 chrome.pageAction.onClicked.addListener(function(tab) {
@@ -77,7 +78,7 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 	chrome.pageAction.hide(tab.id)
 })
 
-function readConf(next) {
+function readConf() {
 	var got
 	, promise = storage.get(defaultOpts, onGot)
 	// Chrome uses storage.get(def, cb)
@@ -123,7 +124,10 @@ function readConf(next) {
 		if (opts.menus) {
 			initMenu()
 		}
-		if (typeof next === "function") next()
+		if (typeof next === "function") {
+			next()
+			next = null
+		}
 	}
 }
 
@@ -234,7 +238,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 
 function onMessage(message, sender, sendResponse) {
 	if (!opts) {
-		readConf(onMessage.bind(null, message, sender, sendResponse))
+		next = onMessage.bind(null, message, sender, sendResponse)
 		return true
 	}
 	if (!message || message.len > opts.sizeLimit) {
@@ -250,7 +254,7 @@ function onMessage(message, sender, sendResponse) {
 		code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + message.op + "(" + JSON.stringify(message) + ")",
 		frameId: sender.frameId
 	})
-	sendResponse({op:"ok"})
+	if (typeof sendResponse === "function") sendResponse({op:"ok"})
 }
 
 
