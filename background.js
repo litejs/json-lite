@@ -8,7 +8,7 @@
 var css, next, opts
 , chrome = this.chrome || this.browser
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
-, defaultOpts = {
+, defOpts = {
 	font: "13px Menlo,monospace",
 	bg: "#fff",
 	color: "#000",
@@ -46,36 +46,36 @@ var css, next, opts
 		if (isNaN(num)) throw new Error("NaN")
 		return new Date(num < 4294967296 ? num * 1000 : num).toISOString()
 	},
-	toUnixTimestamp: function(str) {
+	toUnix: function(str) {
 		var num = new Date(str)/1000
 		if (isNaN(num)) throw new Error("NaN")
 		return num
 	},
-	toTimestamp: function(str) {
+	toMs: function(str) {
 		var num = +new Date(str)
 		if (isNaN(num)) throw new Error("NaN")
 		return num
 	},
-	unicode_encode: function(str) {
+	uniEnc: function(str) {
 		return unescape(escape(str).replace(/%u/g, "\\u"))
 	},
-	unicode_decode: function(str) {
+	uniDec: function(str) {
 		return unescape(str.replace(/\\u/g, "%u"))
 	},
-	escape: function(str) {
+	esc: function(str) {
 		return escape(str)
 	},
-	unescape: function(str) {
+	unesc: function(str) {
 		return unescape(str)
 	}
 }
 
 if (typeof pre === "undefined") {
 	chrome.storage.onChanged.addListener(readConf)
-	chrome.runtime.onMessage.addListener(onMessage)
+	chrome.runtime.onMessage.addListener(onMsg)
 	chrome.contextMenus.onClicked.addListener(function(info, tab) {
 		if (info.menuItemId === "formatSelection") {
-			onMessage({op: info.menuItemId}, {tab:tab, frameId: info.frameId})
+			onMsg({op: info.menuItemId}, {tab:tab, frameId: info.frameId})
 		} else {
 			chrome.tabs.executeScript(tab.id, {
 				code: repaceSelection.toString()+";repaceSelection(" + fns[info.menuItemId].toString() + ")",
@@ -88,13 +88,13 @@ readConf()
 
 function readConf() {
 	var got
-	, promise = storage.get(defaultOpts, onGot)
+	, prom = storage.get(defOpts, onGot)
 	// Chrome uses storage.get(def, cb)
 	// Firefox uses storage.get(def).then(cb)
-	if (promise && promise.then) promise.then(onGot)
+	if (prom && prom.then) prom.then(onGot)
 	function onGot(items) {
 		if (got) return
-		opts = items || defaultOpts
+		opts = items || defOpts
 		got = true
 		css = [
 			'.R', '{background:' + opts.bg + ';white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;}' +
@@ -181,26 +181,26 @@ function initMenu() {
 
 	chrome.contextMenus.create({
 		title: "Unicode",
-		id: "unicode_encode",
+		id: "uniEnc",
 		contexts: [ "selection" ],
 		parentId: encMenu
 	})
 	chrome.contextMenus.create({
 		title: "Unicode",
-		id: "unicode_decode",
+		id: "uniDec",
 		contexts: [ "selection" ],
 		parentId: decMenu
 	})
 
 	chrome.contextMenus.create({
 		title: "Percent-encoding",
-		id: "escape",
+		id: "esc",
 		contexts: [ "selection" ],
 		parentId: encMenu
 	})
 	chrome.contextMenus.create({
 		title: "Percent-encoding",
-		id: "unescape",
+		id: "unesc",
 		contexts: [ "selection" ],
 		parentId: decMenu
 	})
@@ -219,43 +219,43 @@ function initMenu() {
 
 	chrome.contextMenus.create({
 		title: "String to Timestamp",
-		id: "toUnixTimestamp",
+		id: "toUnix",
 		contexts: [ "selection" ],
 		parentId: dateMenu
 	})
 
 	chrome.contextMenus.create({
 		title: "String to Timestamp (ms)",
-		id: "toTimestamp",
+		id: "toMs",
 		contexts: [ "selection" ],
 		parentId: dateMenu
 	})
 }
 
-function onMessage(message, sender, sendResponse) {
+function onMsg(msg, from, res) {
 	if (!opts) {
-		next = onMessage.bind(null, message, sender, sendResponse)
+		next = onMsg.bind(null, msg, from, res)
 		return true
 	}
-	if (!message || message.len > opts.sizeLimit) {
-		if (typeof sendResponse === "function") sendResponse({op:"abort"})
+	if (!msg || msg.len > opts.sizeLimit) {
+		if (typeof res === "function") res({op:"abort"})
 		return
 	}
-	if (sender.tab) {
-		chrome.tabs.insertCSS(sender.tab.id, {
-			code: (message.op == 'formatBody' ? 'body,' : '') + css,
-			frameId: sender.frameId
+	if (from.tab) {
+		chrome.tabs.insertCSS(from.tab.id, {
+			code: (msg.op == 'formatBody' ? 'body,' : '') + css,
+			frameId: from.frameId
 		})
-		chrome.tabs.executeScript(sender.tab.id, {
-			code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + message.op + "(" + JSON.stringify(message) + ")",
-			frameId: sender.frameId
+		chrome.tabs.executeScript(from.tab.id, {
+			code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + msg.op + "(" + JSON.stringify(msg) + ")",
+			frameId: from.frameId
 		})
 	} else {
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-			if (tabs[0]) onMessage(message, { tab: tabs[0] })
+			if (tabs[0]) onMsg(msg, { tab: tabs[0] })
 		})
 	}
-	if (typeof sendResponse === "function") sendResponse({op:"ok"})
+	if (typeof res === "function") res({op:"ok"})
 }
 
 
@@ -281,7 +281,7 @@ function init(exports, rand, opts) {
 	if (exports.formatBody) return
 	var hovered
 	, re = /("(?:((?:(?:https?|file):\/\/|data:[-+.=;\/\w]*,)(?:\\?\S)*?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
-	, div = document.createElement("div")
+	, div = el("div")
 	, body = document.body
 	, first = body && body.firstChild
 	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? "metaKey" : "ctrlKey"
@@ -322,12 +322,24 @@ function init(exports, rand, opts) {
 		size + " bytes "
 	}
 
+	function el(tag, to) {
+		var el = document.createElement(tag)
+		if (to) to.appendChild(el)
+		return el
+	}
+
+	function txt(str, to) {
+		var el = document.createTextNode(str)
+		if (to) to.appendChild(el)
+		return el
+	}
+
 	function fragment(a, b) {
 		var frag = document.createDocumentFragment()
-		frag.appendChild(document.createTextNode(a))
-		frag.appendChild(document.createElement("i")).classList.add("I" + rand)
+		txt(a, frag)
+		el("i", frag).classList.add("I" + rand)
 		frag.appendChild(div.cloneNode())
-		frag.appendChild(document.createTextNode(b))
+		txt(b, frag)
 		return frag
 	}
 
@@ -386,10 +398,10 @@ function init(exports, rand, opts) {
 
 	function draw(str, to, first, box) {
 		var node = div.cloneNode()
-		, link = document.createElement("a")
-		, span = document.createElement("span")
-		, colon = document.createTextNode(": ")
-		, comma = document.createTextNode(",\n")
+		, link = el("a")
+		, span = el("span")
+		, colon = txt(": ")
+		, comma = txt(",\n")
 		, path = []
 		, cache = {
 			"{": fragment("{", "}"),
@@ -473,7 +485,7 @@ function init(exports, rand, opts) {
 							tmp.textContent = val.slice(0, len)
 							node.appendChild(tmp)
 							val = val.slice(len)
-							tmp = node.appendChild(document.createElement("i"))
+							tmp = el("i", node)
 							tmp.classList.add("M" + rand)
 							tmp.dataset.c = "+" + val.length + " more"
 							tmp = span.cloneNode()
@@ -495,19 +507,19 @@ function init(exports, rand, opts) {
 				JSON.parse(str)
 
 			} catch(e) {
-				tmp = box.insertBefore(document.createElement("div"), box.firstChild)
+				tmp = box.insertBefore(el("div"), box.firstChild)
 				tmp.className = ERR
 				tmp.textContent = e
 			}
 		}
 	}
-	function formatBody(message) {
+	function formatBody(msg) {
 		draw(first.textContent, body, first)
-		if (message.add) {
-			body.insertBefore(document.createTextNode(message.add[0]), body.firstChild)
-			body.appendChild(document.createTextNode(message.add[1]))
+		if (msg.add) {
+			body.insertBefore(txt(msg.add[0]), body.firstChild)
+			txt(msg.add[1], body)
 		}
-		document.body.style.display = ""
+		body.style.display = ""
 	}
 	function formatSelection() {
 		var node
@@ -517,7 +529,7 @@ function init(exports, rand, opts) {
 
 		if (!str) return
 
-		node = document.createElement("div")
+		node = el("div")
 		range.deleteContents()
 		range.insertNode(node)
 		sel.removeAllRanges()
