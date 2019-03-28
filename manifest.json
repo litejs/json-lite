@@ -45,10 +45,10 @@
       "run_at": "document_end"
     }
   ],
-  "page_action": {
+  "browser_action": {
     "default_icon": {
       "48": "img/icon-48.png"
     },
-    "default_title": "Format JSON"
+    "default_popup": "options.html?p"
   }
 }

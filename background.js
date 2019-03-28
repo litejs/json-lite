@@ -70,13 +70,21 @@ var css, next, opts
 	}
 }
 
+if (typeof pre === "undefined") {
+	chrome.storage.onChanged.addListener(readConf)
+	chrome.runtime.onMessage.addListener(onMessage)
+	chrome.contextMenus.onClicked.addListener(function(info, tab) {
+		if (info.menuItemId === "formatSelection") {
+			onMessage({op: info.menuItemId}, {tab:tab, frameId: info.frameId})
+		} else {
+			chrome.tabs.executeScript(tab.id, {
+				code: repaceSelection.toString()+";repaceSelection(" + fns[info.menuItemId].toString() + ")",
+				frameId: info.frameId
+			})
+		}
+	})
+}
 readConf()
-chrome.storage.onChanged.addListener(readConf)
-chrome.runtime.onMessage.addListener(onMessage)
-chrome.pageAction.onClicked.addListener(function(tab) {
-	onMessage({op:"formatBody"}, {tab: tab})
-	chrome.pageAction.hide(tab.id)
-})
 
 function readConf() {
 	var got
@@ -120,9 +128,8 @@ function readConf() {
 			'div.E', '{font-size:120%;margin:0 0 1em}'
 		].join(rand)
 
-		chrome.contextMenus.removeAll()
-		if (opts.menus) {
-			initMenu()
+		if (typeof pre === "undefined") {
+			chrome.contextMenus.removeAll(initMenu)
 		}
 		if (typeof next === "function") {
 			next()
@@ -132,6 +139,8 @@ function readConf() {
 }
 
 function initMenu() {
+	if (!opts.menus) return
+
 	chrome.contextMenus.create({
 		title: "Format selection",
 		id: "formatSelection",
@@ -223,37 +232,29 @@ function initMenu() {
 	})
 }
 
-
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
-	if (info.menuItemId === "formatSelection") {
-		onMessage({op: "formatSelection"}, {tab:tab, frameId: info.frameId})
-	} else {
-		chrome.tabs.executeScript(tab.id, {
-			code: repaceSelection.toString()+";repaceSelection(" + fns[info.menuItemId].toString() + ")",
-			frameId: info.frameId
-		})
-	}
-})
-
-
 function onMessage(message, sender, sendResponse) {
 	if (!opts) {
 		next = onMessage.bind(null, message, sender, sendResponse)
 		return true
 	}
 	if (!message || message.len > opts.sizeLimit) {
-		chrome.pageAction.show(sender.tab.id)
 		if (typeof sendResponse === "function") sendResponse({op:"abort"})
 		return
 	}
-	chrome.tabs.insertCSS(sender.tab.id, {
-		code: (message.op == 'formatBody' ? 'body,' : '') + css,
-		frameId: sender.frameId
-	})
-	chrome.tabs.executeScript(sender.tab.id, {
-		code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + message.op + "(" + JSON.stringify(message) + ")",
-		frameId: sender.frameId
-	})
+	if (sender.tab) {
+		chrome.tabs.insertCSS(sender.tab.id, {
+			code: (message.op == 'formatBody' ? 'body,' : '') + css,
+			frameId: sender.frameId
+		})
+		chrome.tabs.executeScript(sender.tab.id, {
+			code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + message.op + "(" + JSON.stringify(message) + ")",
+			frameId: sender.frameId
+		})
+	} else {
+		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			if (tabs[0]) onMessage(message, { tab: tabs[0] })
+		})
+	}
 	if (typeof sendResponse === "function") sendResponse({op:"ok"})
 }
 
