@@ -314,6 +314,7 @@ function init(exports, rand, opts) {
 
 	exports.formatBody = formatBody
 	exports.formatSelection = formatSelection
+	exports.formatPlain = formatPlain
 
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
@@ -521,6 +522,10 @@ function init(exports, rand, opts) {
 		range.insertNode(node)
 		sel.removeAllRanges()
 		draw(str, node.parentNode, node, "X" + rand)
+	}
+	function formatPlain() {
+		body.textContent = ""
+		body.appendChild(first)
 	}
 }
 
