@@ -93,8 +93,8 @@ if (location.search !== "?p") inPopup.style.display = "none"
 inPopup.addEventListener("click", function(e) {
 	var el = e.target || e.srcElement
 	if (el.nodeType == 3) el = el.parentNode
-	chrome.runtime.sendMessage({op: el.name})
-	window.close()
+	var prom = chrome.runtime.sendMessage({op: el.name}, close)
+	if (prom) prom.then(close, close)
 })
 
 

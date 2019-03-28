@@ -8,6 +8,7 @@
 var css, next, opts
 , chrome = this.chrome || this.browser
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
+, editor = !!this.pre
 , defOpts = {
 	font: "13px Menlo,monospace",
 	bg: "#fff",
@@ -70,7 +71,7 @@ var css, next, opts
 	}
 }
 
-if (typeof pre === "undefined") {
+if (!editor) {
 	chrome.storage.onChanged.addListener(readConf)
 	chrome.runtime.onMessage.addListener(onMsg)
 	chrome.contextMenus.onClicked.addListener(function(info, tab) {
@@ -97,7 +98,7 @@ function readConf() {
 		opts = items || defOpts
 		got = true
 		css = [
-			'.R', '{background:' + opts.bg + ';white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;}' +
+			'.R', '{background:' + opts.bg + ';white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;outline:0 none}' +
 			'.R', ',.D', '{font:' + opts.font + ';color:' + opts.color + '}' +
 			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted ' + opts.info + ';vertical-align:bottom}' +
 			'.X', '{border:1px solid ' + opts.info + ';padding:1em}' +
@@ -128,7 +129,7 @@ function readConf() {
 			'div.E', '{font-size:120%;margin:0 0 1em}'
 		].join(rand)
 
-		if (typeof pre === "undefined") {
+		if (!editor) {
 			chrome.contextMenus.removeAll(initMenu)
 		}
 		if (typeof next === "function") {
@@ -241,7 +242,10 @@ function onMsg(msg, from, res) {
 		if (typeof res === "function") res({op:"abort"})
 		return
 	}
-	if (from.tab) {
+	if (msg.op === "formatClipboard") {
+		chrome.tabs.create({url:chrome.extension.getURL("edit.html")})
+	} else if (from.tab) {
+		if (from.tab.url.split(/[-:]/)[1] == "extension") return
 		chrome.tabs.insertCSS(from.tab.id, {
 			code: (msg.op == 'formatBody' ? 'body,' : '') + css,
 			frameId: from.frameId

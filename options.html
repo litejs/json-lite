@@ -5,27 +5,35 @@
 	<title>JSON Lite Options</title>
 	<style>
 body {
-	min-width: 350px;
+	background: #fff;
+	font: 14px/1.8
+		system-ui, -apple-system, BlinkMacSystemFont,
+		"Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
+		"Helvetica Neue", sans-serif;
 }
 #inPopup {
 	text-align: center;
+	white-space: nowrap;
 }
 label {
 	display: block;
 	position: relative;
 	overflow: auto;
-	line-height: 2.3em;
+	display: flex;
+	align-items: center;
 	padding: 2px;
 }
+label>:last-child {
+	margin-left: auto;
+}
 input[type=text], select {
-	width: 60%;
+	width: 50%;
 	float: right;
-	line-height: normal;
 }
 input[type=checkbox] {
 	position: absolute;
-	left: 40%;
-	top: 7px;
+	left: 50%;
+	top: 5px;
 }
 	</style>
 </head>
@@ -34,7 +42,8 @@ input[type=checkbox] {
 	<div id=inPopup>
 		<a name=formatBody href=#>Format page</a> |
 		<a name=formatPlain href=#>Show source</a> |
-		<a name=formatEdit href=#>Toggle editable</a>
+		<a name=formatEdit href=#>Toggle editable</a> |
+		<a name=formatClipboard href=#>Format clipboard</a>
 		<hr>
 	</div>
 	<form id=form1>

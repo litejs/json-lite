@@ -8,8 +8,8 @@ Browser extension for viewing JSON files.
 Features
 --------
 
- - Format JSON and JSONP responses
- - Select and format JSON on every page
+ - Format JSON/JSONP responses and clipboard
+ - Select and format/encode/decode text on every page
  - Collapsible arrays, objects and long values
  - Collapse all childs with Ctrl(Command) + Click
  - Collapse property also on all sibling items with Alt(Option) + Click
@@ -43,6 +43,6 @@ Links
 
 ### Licence
 
-Copyright (c) 2016-2018 Lauri Rooden  
+Copyright (c) 2016-2019 Lauri Rooden  
 The MIT License
 

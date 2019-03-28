@@ -10,6 +10,7 @@
     "32": "img/icon-32.png"
   },
   "permissions": [
+    "clipboardRead",
     "contextMenus",
     "storage",
     "tabs",
