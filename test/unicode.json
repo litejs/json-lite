@@ -4,7 +4,7 @@
 	"unicode": "天津权健",
 	"note2": "You are allowed to escape any character, 'a' can be written as '\u0061'",
 	"map": {
-		"arr": [123, 123456789012, "123", true, false, null, {"abc": "bcd"}]
+		"arr": [123, 123456789012, 9007199254740991, 9007199254740992, "123", true, false, null, {"abc": "bcd"}]
 	},
 	"link":"http://","name_cn":"中文 ",
 	"link2":"http://a",

@@ -472,7 +472,7 @@ function init(exports, rand, opts) {
 						} else if (match[0] === "null") {
 							tmp.classList.add(NULL)
 						} else {
-							tmp.classList.add(NUM)
+							tmp.classList.add(val <= Number.MAX_SAFE_INTEGER ? NUM : ERR)
 							if (opts.showDate !== "never" && val > 1e9) {
 								d.setTime(val < 4294967296 ? val * 1000 : val)
 								tmp.dataset.c = d[opts.showDateFn]()
