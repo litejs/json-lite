@@ -315,6 +315,7 @@ function init(exports, rand, opts) {
 	exports.formatBody = formatBody
 	exports.formatSelection = formatSelection
 	exports.formatPlain = formatPlain
+	exports.formatEdit = formatEdit
 
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
@@ -534,6 +535,15 @@ function init(exports, rand, opts) {
 		range.insertNode(node)
 		sel.removeAllRanges()
 		draw(str, node.parentNode, node, "X" + rand)
+	}
+	function formatEdit() {
+		var state
+		document.querySelectorAll(".R" + rand)
+		.forEach(function(el, i) {
+			if (i === 0) state = "" + el.contentEditable != "true"
+			el.contentEditable = state
+			el.spellcheck = false
+		})
 	}
 	function formatPlain() {
 		body.removeEventListener("click", onClick, true)
