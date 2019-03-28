@@ -35,54 +35,12 @@ var css, next, opts
 	"never": "i.M"
 }
 , rand = Math.random().toString(36).slice(2, 9)
-, fns = {
-	btoa: function(str) {
-		return btoa(str)
-	},
-	atob: function(str) {
-		return atob(str)
-	},
-	toIso: function(str) {
-		var num = +str
-		if (isNaN(num)) throw new Error("NaN")
-		return new Date(num < 4294967296 ? num * 1000 : num).toISOString()
-	},
-	toUnix: function(str) {
-		var num = new Date(str)/1000
-		if (isNaN(num)) throw new Error("NaN")
-		return num
-	},
-	toMs: function(str) {
-		var num = +new Date(str)
-		if (isNaN(num)) throw new Error("NaN")
-		return num
-	},
-	uniEnc: function(str) {
-		return unescape(escape(str).replace(/%u/g, "\\u"))
-	},
-	uniDec: function(str) {
-		return unescape(str.replace(/\\u/g, "%u"))
-	},
-	esc: function(str) {
-		return escape(str)
-	},
-	unesc: function(str) {
-		return unescape(str)
-	}
-}
 
 if (!editor) {
 	chrome.storage.onChanged.addListener(readConf)
 	chrome.runtime.onMessage.addListener(onMsg)
 	chrome.contextMenus.onClicked.addListener(function(info, tab) {
-		if (info.menuItemId === "formatSelection") {
-			onMsg({op: info.menuItemId}, {tab:tab, frameId: info.frameId})
-		} else {
-			chrome.tabs.executeScript(tab.id, {
-				code: repaceSelection.toString()+";repaceSelection(" + fns[info.menuItemId].toString() + ")",
-				frameId: info.frameId
-			})
-		}
+		onMsg({op: info.menuItemId}, {tab:tab, frameId: info.frameId})
 	})
 }
 readConf()
@@ -246,12 +204,17 @@ function onMsg(msg, from, res) {
 		chrome.tabs.create({url:chrome.extension.getURL("edit.html")})
 	} else if (from.tab) {
 		if (from.tab.url.split(/[-:]/)[1] == "extension") return
-		chrome.tabs.insertCSS(from.tab.id, {
-			code: (msg.op == 'formatBody' ? 'body,' : '') + css,
-			frameId: from.frameId
-		})
+		var op = msg.op
+		if (op.length > 9) {
+			chrome.tabs.insertCSS(from.tab.id, {
+				code: (msg.op == 'formatBody' ? 'body,' : '') + css,
+				frameId: from.frameId
+			})
+		} else {
+			op = "conv"
+		}
 		chrome.tabs.executeScript(from.tab.id, {
-			code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + msg.op + "(" + JSON.stringify(msg) + ")",
+			code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + op + "(" + JSON.stringify(msg) + ")",
 			frameId: from.frameId
 		})
 	} else {
@@ -262,24 +225,6 @@ function onMsg(msg, from, res) {
 	if (typeof res === "function") res({op:"ok"})
 }
 
-
-// var c=getSelection().getRangeAt(0).cloneContents(); c.querySelectorAll('*')
-function repaceSelection(fn) {
-	var node
-	, sel = window.getSelection()
-	, range = sel.rangeCount && sel.getRangeAt(0)
-	, str = range && range.toString()
-
-	if (!str) return
-
-	try {
-		node = document.createTextNode(fn(str))
-		range.deleteContents()
-		range.insertNode(node)
-	} catch(e) {
-		alert(e)
-	}
-}
 
 function init(exports, rand, opts) {
 	if (exports.formatBody) return
@@ -297,6 +242,41 @@ function init(exports, rand, opts) {
 	, NULL = "O" + rand
 	, ERR  = "E" + rand
 	, COLL = "C" + rand
+	, fns = {
+		btoa: function(str) {
+			return btoa(str)
+		},
+		atob: function(str) {
+			return atob(str)
+		},
+		toIso: function(str) {
+			var num = +str
+			if (isNaN(num)) throw new Error("NaN")
+			return new Date(num < 4294967296 ? num * 1000 : num).toISOString()
+		},
+		toUnix: function(str) {
+			var num = new Date(str)/1000
+			if (isNaN(num)) throw new Error("NaN")
+			return num
+		},
+		toMs: function(str) {
+			var num = +new Date(str)
+			if (isNaN(num)) throw new Error("NaN")
+			return num
+		},
+		uniEnc: function(str) {
+			return unescape(escape(str).replace(/%u/g, "\\u"))
+		},
+		uniDec: function(str) {
+			return unescape(str.replace(/\\u/g, "%u"))
+		},
+		esc: function(str) {
+			return escape(str)
+		},
+		unesc: function(str) {
+			return unescape(str)
+		}
+	}
 
 	div.classList.add("D" + rand)
 	document.addEventListener("keydown", keydown)
@@ -320,6 +300,7 @@ function init(exports, rand, opts) {
 	exports.formatSelection = formatSelection
 	exports.formatPlain = formatPlain
 	exports.formatEdit = formatEdit
+	exports.conv = conv
 
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
@@ -368,6 +349,23 @@ function init(exports, rand, opts) {
 		}
 		query[0] = ".R" + rand + ">i.I" + rand
 		change(document, query.join("+"), name, set)
+	}
+	// var c=getSelection().getRangeAt(0).cloneContents(); c.querySelectorAll('*')
+	function conv(msg) {
+		var node
+		, sel = window.getSelection()
+		, range = sel.rangeCount && sel.getRangeAt(0)
+		, str = range && range.toString()
+
+		if (!str) return
+
+		try {
+			node = txt(fns[msg.op](str))
+			range.deleteContents()
+			range.insertNode(node)
+		} catch(e) {
+			alert(e)
+		}
 	}
 
 	function keydown(e) {
