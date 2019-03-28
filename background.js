@@ -367,6 +367,7 @@ function init(exports, rand, opts) {
 	function onClick(e) {
 		var target = e.target
 		, isCollapsed = target.classList.contains(COLL)
+		e.stopPropagation()
 		if (target.tagName == "I") {
 			if (target.classList.contains("M" + rand)) {
 				target.previousSibling.appendChild(target.nextSibling.firstChild)
@@ -402,7 +403,6 @@ function init(exports, rand, opts) {
 			link.target = "_blank"
 		}
 
-		to.removeEventListener("click", onClick, true)
 		to.addEventListener("click", onClick, true)
 
 		to.replaceChild(box = node, first)
@@ -524,6 +524,7 @@ function init(exports, rand, opts) {
 		draw(str, node.parentNode, node, "X" + rand)
 	}
 	function formatPlain() {
+		body.removeEventListener("click", onClick, true)
 		body.textContent = ""
 		body.appendChild(first)
 	}
