@@ -5,19 +5,7 @@
  */
 
 
-var chrome = this.chrome || this.browser
-, storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
-, defaultOpts = {
-	theme: "",
-	menus: true,
-	unescape: false,
-	sizeLimit: 10485760,
-	showDate: "hover",
-	showDateFn: "toString",
-	showSize: "collapsed",
-	newtab: false
-}
-, themes = {
+var themes = {
 	"": {
 		font: "13px Menlo,monospace",
 		color: "#000",
@@ -46,21 +34,13 @@ var chrome = this.chrome || this.browser
 	}
 }
 
-function loadOptions() {
-	var got
-	, promise = storage.get(Object.assign(defaultOpts, themes[""]), onGot)
-	if (promise && promise.then) promise.then(onGot)
-
-	function onGot(items) {
-		if (got) return
-		got = 1
-		theme.value = themes[items.theme] ? items.theme : "custom"
-		updateForm(items)
-	}
+function next() {
+	theme.value = themes[opts.theme] ? opts.theme : "custom"
+	updateForm(opts)
 }
 
 function updateForm(items) {
-	if (items) Object.keys(defaultOpts).forEach(function(key) {
+	if (items) Object.keys(defOpts).forEach(function(key) {
 		if (key !== "theme" && items[key] != null) {
 			if (form1[key].type === "checkbox") form1[key].checked = items[key]
 			else form1[key].value = items[key]
@@ -73,14 +53,13 @@ function updateForm(items) {
 
 function saveOptions(e) {
 	e.preventDefault()
-	storage.set(Object.keys(defaultOpts).reduce(function(map, key) {
+	storage.set(Object.keys(defOpts).reduce(function(map, key) {
 		map[key] = form1[key][form1[key].type === "checkbox" ? "checked" : "value"]
 		return map
 	}, {}))
 	window.close()
 }
 
-document.addEventListener("DOMContentLoaded", loadOptions)
 form1.addEventListener("submit", saveOptions)
 theme.addEventListener("change", function() {
 	updateForm(themes[theme.value])
@@ -89,8 +68,8 @@ showDate.addEventListener("change", function() {
 	updateForm()
 })
 
-if (location.search !== "?p") inPopup.style.display = "none"
-inPopup.addEventListener("click", function(e) {
+if (location.search !== "?p") pre.style.display = "none"
+pre.addEventListener("click", function(e) {
 	var el = e.target || e.srcElement
 	if (el.nodeType == 3) el = el.parentNode
 	var prom = chrome.runtime.sendMessage({op: el.name}, close)

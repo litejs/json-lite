@@ -4,14 +4,14 @@
 	<meta charset="UTF-8">
 	<title>JSON Lite Options</title>
 	<style>
-body {
+body, #pre {
 	background: #fff;
 	font: 14px/1.8
 		system-ui, -apple-system, BlinkMacSystemFont,
 		"Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
 		"Helvetica Neue", sans-serif;
 }
-#inPopup {
+#pre {
 	text-align: center;
 	white-space: nowrap;
 }
@@ -39,13 +39,13 @@ input[type=checkbox] {
 </head>
 
 <body>
-	<div id=inPopup>
+	<pre id=pre>
 		<a name=formatBody href=#>Format page</a> |
 		<a name=formatPlain href=#>Show source</a> |
 		<a name=formatEdit href=#>Toggle editable</a> |
 		<a name=formatClipboard href=#>Format clipboard</a>
 		<hr>
-	</div>
+	</pre>
 	<form id=form1>
 		<label>Theme<select id="theme">
 			<option value="">default</option>
@@ -95,6 +95,7 @@ input[type=checkbox] {
 		<label>Open links in new tab<input type="checkbox" id="newtab"></label>
 		<button type="submit">Save</button>
 	</form>
+	<script src="background.js"></script>
 	<script src="options.js"></script>
 </body>
 </html>

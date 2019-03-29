@@ -10,6 +10,7 @@ var css, next, opts
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
 , editor = !!this.pre
 , defOpts = {
+	theme: "",
 	font: "13px Menlo,monospace",
 	bg: "#fff",
 	color: "#000",
