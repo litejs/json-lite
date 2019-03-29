@@ -518,6 +518,10 @@ function init(exports, rand, opts) {
 		}
 	}
 	function formatBody(msg) {
+		if (first.parentNode !== body) {
+			first.textContent = body.textContent
+			formatPlain()
+		}
 		draw(first.textContent, body, first)
 		if (msg.add) {
 			body.insertBefore(txt(msg.add[0]), body.firstChild)
