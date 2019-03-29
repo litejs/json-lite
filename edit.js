@@ -1,14 +1,18 @@
 
 pre.focus()
-document.execCommand("paste")
 pre.textContent = pre.textContent
 pre.className = "R" + rand
+
+pre.addEventListener("paste", function(ev) {
+	setTimeout(function() {
+		formatBody({})
+		formatEdit()
+	}, 10)
+})
 
 function next() {
 	init(window, rand, opts)
 	st.appendChild(document.createTextNode("body," + css))
-	formatBody({})
-	formatEdit()
 	// listen events directly as in chrome
 	// background can not access to "chrome-extension:" uris
 	chrome.runtime.onMessage.addListener(function(msg, from) {

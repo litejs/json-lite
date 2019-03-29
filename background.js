@@ -201,7 +201,7 @@ function onMsg(msg, from, res) {
 		if (typeof res === "function") res({op:"abort"})
 		return
 	}
-	if (msg.op === "formatClipboard") {
+	if (msg.op === "openEditor") {
 		chrome.tabs.create({url:chrome.extension.getURL("edit.html")})
 	} else if (from.tab) {
 		if (from.tab.url.split(/[-:]/)[1] == "extension") return
