@@ -208,7 +208,7 @@ function onMsg(msg, from, res) {
 		var op = msg.op
 		if (op.length > 9) {
 			chrome.tabs.insertCSS(from.tab.id, {
-				code: (msg.op == 'formatBody' ? 'body,' : '') + css,
+				code: css,
 				frameId: from.frameId
 			})
 		} else {
@@ -529,6 +529,7 @@ function init(exports, rand, opts) {
 			body.insertBefore(txt(msg.add[0]), body.firstChild)
 			txt(msg.add[1], body)
 		}
+		body.className = "R" + rand
 		body.style.display = ""
 	}
 	function formatSelection() {
