@@ -371,7 +371,6 @@ function init(exports, rand, opts) {
 
 	function keydown(e) {
 		if (hovered) {
-			e.preventDefault()
 			if (e.altKey) {
 				changeSiblings(hovered, HOV, 1)
 			} else if (e[mod]) {
