@@ -441,11 +441,13 @@ function init(exports, rand, opts) {
 					} else if ((val == "}" || val == "]") && node.len) {
 						if (node.childNodes.length) {
 							tmp = node.previousElementSibling
-							tmp.dataset.c = node.len + (
+							val = node.len + (
 								node.len == 1 ?
 								(val == "]" ? " item, " : " property, ") :
 								(val == "]" ? " items, " : " properties, ")
 							) + units(re.lastIndex - node.start + 1)
+							if (opts.showSize == "title") tmp.title = val
+							else tmp.dataset.c = val
 
 							tmp.dataset.k = (val = tmp.previousElementSibling) && val.classList.contains(KEY) ?
 							val.textContent.replace(/'/, "\\'") :
@@ -479,7 +481,8 @@ function init(exports, rand, opts) {
 							tmp.classList.add(val <= Number.MAX_SAFE_INTEGER ? NUM : ERR)
 							if (opts.showDate !== "never" && val > 1e9 && val < 1e14) {
 								d.setTime(val < 4294967296 ? val * 1000 : val)
-								tmp.dataset.c = d[opts.showDateFn]()
+								if (opts.showDate == "title") tmp.title = d[opts.showDateFn]()
+								else tmp.dataset.c = d[opts.showDateFn]()
 							}
 						}
 						val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
