@@ -445,7 +445,7 @@ function init(exports, rand, opts) {
 								(val == "]" ? " item, " : " property, ") :
 								(val == "]" ? " items, " : " properties, ")
 							) + units(re.lastIndex - node.start + 1)
-							if (opts.showSize == "title") tmp.title = val
+							if (opts.showSize == "tooltip") tmp.title = val
 							else tmp.dataset.c = val
 
 							tmp.dataset.k = (val = tmp.previousElementSibling) && val.classList.contains(KEY) ?
@@ -480,7 +480,7 @@ function init(exports, rand, opts) {
 							tmp.classList.add(val <= Number.MAX_SAFE_INTEGER ? NUM : ERR)
 							if (opts.showDate !== "never" && val > 1e9 && val < 1e14) {
 								d.setTime(val < 4294967296 ? val * 1000 : val)
-								if (opts.showDate == "title") tmp.title = d[opts.showDateFn]()
+								if (opts.showDate == "tooltip") tmp.title = d[opts.showDateFn]()
 								else tmp.dataset.c = d[opts.showDateFn]()
 							}
 						}
