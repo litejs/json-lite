@@ -29,6 +29,7 @@ firefox:
 	#sed -nie '/<!-- Firefox/{n;p;n;d;};p' options.html
 	sed -i '/\/\* Firefox/d' options.js background.js
 	sed -i '/options_page/d' manifest.json
+	sed -i '/persistent/d' manifest.json
 	zip firefox.zip $(FILES)
 
 webextension:
