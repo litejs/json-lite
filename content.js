@@ -1,6 +1,6 @@
 
 /*!
- * Copyright (c) 2016-2018 Lauri Rooden
+ * Copyright (c) 2016-2020 Lauri Rooden
  * https://www.litejs.com/MIT-LICENSE.txt
  */
 
@@ -19,7 +19,7 @@
 			// HTML page contains only one textNode
 			first === body.lastChild && first.nodeType === 3
 		) && (str = first.textContent) && (
-			/\bjson\b/i.test(document.contentType) ||
+			/\bjson\b/i.test(document.contentType) && /^\s*[[{]|[\]}]\s*$/.test(str) ||
 			(jsonpMatch = /^\s*((?:\/\*\*\/\s*)?([$a-z_][$\w]*)\s*(?:&&\s*\2\s*)?\()([^]+)(\)[\s;]*)$/i.exec(str)) && jsonRe.test(jsonpMatch[3]) ||
 			jsonRe.test(str)
 		)
