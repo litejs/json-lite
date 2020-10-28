@@ -31,9 +31,9 @@ var css, next, opts
 	newtab: false
 }
 , cssVar = {
-	"always": "i.I",
-	"hover": "i:hover.I",
-	"never": "i.M"
+	"always": "i.i",
+	"hover": "i:hover.i",
+	"never": "i.m"
 }
 , rand = Math.random().toString(36).slice(2, 9)
 
@@ -57,35 +57,35 @@ function readConf() {
 		opts = items || defOpts
 		got = true
 		css = [
-			'.R', '{background:' + opts.bg + ';white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;outline:0 none}' +
-			'.R', ',.D', '{font:' + opts.font + ';color:' + opts.color + '}' +
-			'div.D', '{margin-left:4px;padding-left:1em;border-left:1px dotted ' + opts.info + ';vertical-align:bottom}' +
-			'.X', '{border:1px solid ' + opts.info + ';padding:1em}' +
-			'a.L', '{text-decoration:none}' +
-			'a.L', ':hover,a.L', ':focus{text-decoration:underline}' +
-			'i.I', ',i.M', '{cursor:pointer;font-style:normal;color:' + opts.info + '}' +
-			'i.H', ',i.M', ':hover,i.I', ':hover{color:' + opts.infoHover + '}'+
-			'i.I', ':before{content:"▼";display:inline-block;padding:1px 5px;margin:-1px;transition:transform .2s}' +
-			'i.C', ':before{transform:rotate(-90deg)}' +
-			(cssVar[opts.showSize] || 'i.C'), ':after,i.M', ':after{content:attr(data-c)}' +
-			'i.C', '+.D', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
-			'i.C', '+.D', ' :before{display:none}' +
-			'i.C', '+.D', ' div,i.M', '+.D', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +
-			'.S', '{color:' + opts.string + '}' +
-			'.N', '{position:relative;color:' + opts.number + '}' +
+			'.r', '{background:' + opts.bg + ';white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;outline:0 none}' +
+			'.r', ',.d', '{font:' + opts.font + ';color:' + opts.color + '}' +
+			'div.d', '{margin-left:4px;padding-left:1em;border-left:1px dotted ' + opts.info + ';vertical-align:bottom}' +
+			'.x', '{border:1px solid ' + opts.info + ';padding:1em}' +
+			'a.l', '{text-decoration:none}' +
+			'a.l', ':hover,a.l', ':focus{text-decoration:underline}' +
+			'i.i', ',i.m', '{cursor:pointer;font-style:normal;color:' + opts.info + '}' +
+			'i.h', ',i.m', ':hover,i.i', ':hover{color:' + opts.infoHover + '}'+
+			'i.i', ':before{content:"▼";display:inline-block;padding:1px 5px;margin:-1px;transition:transform .2s}' +
+			'i.c', ':before{transform:rotate(-90deg)}' +
+			(cssVar[opts.showSize] || 'i.c'), ':after,i.m', ':after{content:attr(data-c)}' +
+			'i.c', '+.d', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
+			'i.c', '+.d', ' :before{display:none}' +
+			'i.c', '+.d', ' div,i.m', '+.d', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +
+			'.s', '{color:' + opts.string + '}' +
+			'.n', '{position:relative;color:' + opts.number + '}' +
 			(
 				opts.showDate !== "never" ?
-				'.N' + rand + '[data-c]' + (opts.showDate === 'hover' ? ':hover':'') +
+				'.n' + rand + '[data-c]' + (opts.showDate === 'hover' ? ':hover':'') +
 				':after{position:absolute;left:100%;top:0;margin-left:1em;padding:0 .6em;white-space:nowrap;background:' + opts.bg +
 				';color:' + opts.infoHover + ';content:" // " attr(data-c)}' :
 				''
 			) +
-			'.B', '{color:' + opts.bool + '}' +
-			'.K', '{color:' + opts.property + '}' +
-			'.E', '{color:' + opts.error + '}' +
-			'.O', '{color:' + opts.null + '}' +
-			'.E', ',.B', '{font-weight:bold}' +
-			'div.E', '{font-size:120%;margin:0 0 1em}'
+			'.b', '{color:' + opts.bool + '}' +
+			'.k', '{color:' + opts.property + '}' +
+			'.e', '{color:' + opts.error + '}' +
+			'.o', '{color:' + opts.null + '}' +
+			'.e', ',.b', '{font-weight:bold}' +
+			'div.e', '{font-size:120%;margin:0 0 1em}'
 		].join(rand)
 
 		if (!editor) {
@@ -235,14 +235,14 @@ function init(exports, rand, opts) {
 	, body = document.body
 	, first = body && body.firstChild
 	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? "metaKey" : "ctrlKey"
-	, HOV  = "H" + rand
-	, KEY  = "K" + rand
-	, STR  = "S" + rand
-	, BOOL = "B" + rand
-	, NUM  = "N" + rand
-	, NULL = "O" + rand
-	, ERR  = "E" + rand
-	, COLL = "C" + rand
+	, HOV  = "h" + rand
+	, KEY  = "k" + rand
+	, STR  = "s" + rand
+	, BOOL = "b" + rand
+	, NUM  = "n" + rand
+	, NULL = "o" + rand
+	, ERR  = "e" + rand
+	, COLL = "c" + rand
 	, fns = {
 		btoa: function(str) {
 			return btoa(str)
@@ -279,13 +279,13 @@ function init(exports, rand, opts) {
 		}
 	}
 
-	div.classList.add("D" + rand)
+	div.classList.add("d" + rand)
 	document.addEventListener("keydown", keydown)
 	document.addEventListener("keyup", function(e) {
 		if (hovered) change(document, "." + HOV, HOV)
 	})
 	document.addEventListener("mouseover", function(e) {
-		if (e.target.tagName === "I") {
+		if (e.target.tagName === "i") {
 			hovered = e.target
 			keydown(e)
 		}
@@ -324,7 +324,7 @@ function init(exports, rand, opts) {
 	function fragment(a, b) {
 		var frag = document.createDocumentFragment()
 		txt(a, frag)
-		el("i", frag).classList.add("I" + rand)
+		el("i", frag).classList.add("i" + rand)
 		frag.appendChild(div.cloneNode())
 		txt(b, frag)
 		return frag
@@ -343,12 +343,12 @@ function init(exports, rand, opts) {
 		for (; node && node.tagName === "I"; ) {
 			tmp = node.previousElementSibling
 			query.unshift(
-				".D" + rand + ">i.I" + rand +
+				".d" + rand + ">i.i" + rand +
 				(tmp && tmp.classList.contains(KEY) || !query[0] ? "[data-k='" + node.dataset.k + "']" : "")
 			)
 			node = node.parentNode && node.parentNode.previousElementSibling
 		}
-		query[0] = ".R" + rand + ">i.I" + rand
+		query[0] = ".r" + rand + ">i.i" + rand
 		change(document, query.join("+"), name, set)
 	}
 	// var c=getSelection().getRangeAt(0).cloneContents(); c.querySelectorAll('*')
@@ -374,7 +374,7 @@ function init(exports, rand, opts) {
 			if (e.altKey) {
 				changeSiblings(hovered, HOV, 1)
 			} else if (e[mod]) {
-				change(hovered.nextSibling, "i.I" + rand, HOV, 1)
+				change(hovered.nextSibling, "i.i" + rand, HOV, 1)
 			}
 		}
 	}
@@ -384,7 +384,7 @@ function init(exports, rand, opts) {
 		, isCollapsed = target.classList.contains(COLL)
 		e.stopPropagation()
 		if (target.tagName == "I") {
-			if (target.classList.contains("M" + rand)) {
+			if (target.classList.contains("m" + rand)) {
 				target.previousSibling.appendChild(target.nextSibling.firstChild)
 				target.parentNode.removeChild(target.nextSibling)
 				target.parentNode.removeChild(target)
@@ -411,9 +411,9 @@ function init(exports, rand, opts) {
 			"[": fragment("[", "]")
 		}
 
-		node.className = "R" + rand + (box ? " " + box : "")
+		node.className = "r" + rand + (box ? " " + box : "")
 
-		link.classList.add("L" + rand)
+		link.classList.add("l" + rand)
 		if (opts.newtab) {
 			link.target = "_blank"
 		}
@@ -492,10 +492,10 @@ function init(exports, rand, opts) {
 							node.appendChild(tmp)
 							val = val.slice(len)
 							tmp = el("i", node)
-							tmp.classList.add("M" + rand)
+							tmp.classList.add("m" + rand)
 							tmp.dataset.c = "+" + val.length + " more"
 							tmp = span.cloneNode()
-							tmp.classList.add("D" + rand)
+							tmp.classList.add("d" + rand)
 						}
 						tmp.textContent = val
 						node.appendChild(tmp)
@@ -529,7 +529,7 @@ function init(exports, rand, opts) {
 			body.insertBefore(txt(msg.add[0]), body.firstChild)
 			txt(msg.add[1], body)
 		}
-		body.className = "R" + rand
+		body.className = "r" + rand
 		body.style.display = ""
 	}
 	function formatSelection() {
@@ -544,11 +544,11 @@ function init(exports, rand, opts) {
 		range.deleteContents()
 		range.insertNode(node)
 		sel.removeAllRanges()
-		draw(str, node.parentNode, node, "X" + rand)
+		draw(str, node.parentNode, node, "x" + rand)
 	}
 	function formatEdit() {
 		var state
-		document.querySelectorAll(".R" + rand)
+		document.querySelectorAll(".r" + rand)
 		.forEach(function(el, i) {
 			if (i === 0) state = "" + el.contentEditable != "true"
 			el.contentEditable = state
