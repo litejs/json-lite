@@ -285,7 +285,7 @@ function init(exports, rand, opts) {
 		if (hovered) change(document, "." + HOV, HOV)
 	})
 	document.addEventListener("mouseover", function(e) {
-		if (e.target.tagName === "i") {
+		if (e.target.tagName === "I") {
 			hovered = e.target
 			keydown(e)
 		}
