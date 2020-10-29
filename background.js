@@ -59,7 +59,7 @@ function readConf() {
 		css = [
 			'.r', '{background:' + opts.bg + ';white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;outline:0 none}' +
 			'.r', ',.d', '{font:' + opts.font + ';color:' + opts.color + '}' +
-			'div.d', '{margin-left:4px;padding-left:1em;border-left:1px dotted ' + opts.info + ';vertical-align:bottom}' +
+			'div.d', '{margin-left:4px;vertical-align:bottom}' +
 			'.x', '{border:1px solid ' + opts.info + ';padding:1em}' +
 			'a.l', '{text-decoration:none}' +
 			'a.l', ':hover,a.l', ':focus{text-decoration:underline}' +
@@ -69,6 +69,7 @@ function readConf() {
 			'i.c', ':before{transform:rotate(-90deg)}' +
 			(cssVar[opts.showSize] || 'i.c'), ':after,i.m', ':after{content:attr(data-c)}' +
 			'i.c', '+.d', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
+			'i.c', '+.d', '+.q', '{white-space:nowrap}' +
 			'i.c', '+.d', ' :before{display:none}' +
 			'i.c', '+.d', ' div,i.m', '+.d', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +
 			'.s', '{color:' + opts.string + '}' +
@@ -231,7 +232,7 @@ function init(exports, rand, opts) {
 	if (exports.formatBody) return
 	var hovered
 	, re = /("(?:((?:(?:https?|file):\/\/|data:[-+.=;\/\w]*,)(?:\\?\S)*?)|(?:\\?.)*?)")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
-	, div = el("div")
+	, div = el("div", 0, "d")
 	, body = document.body
 	, first = body && body.firstChild
 	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? "metaKey" : "ctrlKey"
@@ -279,7 +280,6 @@ function init(exports, rand, opts) {
 		}
 	}
 
-	div.classList.add("d" + rand)
 	document.addEventListener("keydown", keydown)
 	document.addEventListener("keyup", function(e) {
 		if (hovered) change(document, "." + HOV, HOV)
@@ -309,9 +309,10 @@ function init(exports, rand, opts) {
 		size + " bytes "
 	}
 
-	function el(tag, to) {
+	function el(tag, to, addClass) {
 		var el = document.createElement(tag)
 		if (to) to.appendChild(el)
+		if (addClass) el.classList.add(addClass + rand)
 		return el
 	}
 
@@ -319,15 +320,6 @@ function init(exports, rand, opts) {
 		var el = document.createTextNode(str)
 		if (to) to.appendChild(el)
 		return el
-	}
-
-	function fragment(a, b) {
-		var frag = document.createDocumentFragment()
-		txt(a, frag)
-		el("i", frag).classList.add("i" + rand)
-		frag.appendChild(div.cloneNode())
-		txt(b, frag)
-		return frag
 	}
 
 	function change(node, query, name, set) {
@@ -400,20 +392,17 @@ function init(exports, rand, opts) {
 	}
 
 	function draw(str, to, first, box) {
-		var node = div.cloneNode()
-		, link = el("a")
+		var afterColon
+		, spaces = ""
+		, node = div.cloneNode()
+		, link = el("a", 0, "l")
 		, span = el("span")
 		, colon = txt(": ")
 		, comma = txt(",\n")
 		, path = []
-		, cache = {
-			"{": fragment("{", "}"),
-			"[": fragment("[", "]")
-		}
 
 		node.className = "r" + rand + (box ? " " + box : "")
 
-		link.classList.add("l" + rand)
 		if (opts.newtab) {
 			link.target = "_blank"
 		}
@@ -422,6 +411,15 @@ function init(exports, rand, opts) {
 
 		to.replaceChild(box = node, first)
 		loop(str, re)
+
+		function fragment(a) {
+			var frag = document.createDocumentFragment()
+			txt((afterColon ? ": " : spaces) + a, frag)
+			el("i", frag, "i")
+			frag.appendChild(div.cloneNode())
+			el("span", frag, "q").textContent = spaces + (a === "{" ? "}" : "]")
+			return frag
+		}
 
 		function loop(str, re) {
 			var len, match, val, tmp
@@ -433,11 +431,13 @@ function init(exports, rand, opts) {
 					val = match[0]
 					if (val == "{" || val == "[") {
 						path.push(node)
-						node.appendChild(cache[val].cloneNode(true))
+						node.appendChild(fragment(val))
 						node = node.lastChild.previousSibling
 						node.len = 1
 						node.start = re.lastIndex
+						spaces += "  "
 					} else if ((val == "}" || val == "]") && node.len) {
+						spaces = spaces.slice(2)
 						if (node.childNodes.length) {
 							tmp = node.previousElementSibling
 							val = node.len + (
@@ -486,23 +486,25 @@ function init(exports, rand, opts) {
 						}
 						val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
 						len = match[3] ? 140 : 1400
+						if (afterColon) {
+							node.appendChild(colon.cloneNode())
+						} else {
+							val = spaces + val
+						}
 						if (val.length > len) {
 							len >>= 1
 							tmp.textContent = val.slice(0, len)
 							node.appendChild(tmp)
 							val = val.slice(len)
-							tmp = el("i", node)
-							tmp.classList.add("m" + rand)
+							tmp = el("i", node, "m")
 							tmp.dataset.c = "+" + val.length + " more"
 							tmp = span.cloneNode()
 							tmp.classList.add("d" + rand)
 						}
 						tmp.textContent = val
 						node.appendChild(tmp)
-						if (match[3]) {
-							node.appendChild(colon.cloneNode())
-						}
 					}
+					afterColon = match[3]
 					if (++i > 9000) {
 						len = str.length
 						document.title = (0|(100*re.lastIndex/len)) + "% of " + units(len)
