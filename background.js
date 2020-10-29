@@ -76,7 +76,7 @@ function readConf() {
 			(
 				opts.showDate !== "never" ?
 				'.n' + rand + '[data-c]' + (opts.showDate === 'hover' ? ':hover':'') +
-				':after{position:absolute;left:100%;top:0;margin-left:1em;padding:0 .6em;white-space:nowrap;background:' + opts.bg +
+				':after{z-index:1;position:absolute;left:100%;top:0;margin-left:1em;padding:0 .6em;white-space:nowrap;background:' + opts.bg +
 				';color:' + opts.infoHover + ';content:" // " attr(data-c)}' :
 				''
 			) +
