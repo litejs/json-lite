@@ -58,17 +58,17 @@ function readConf() {
 		opts = items || defOpts
 		got = true
 		css = [
-			'.r', '{background:' + opts.bg + ';white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;outline:0 none}' +
+			'.r', '{position:relative;margin-left:20px;white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;outline:0 none;background:' + opts.bg + '}' +
 			'.r', ',.d', '{font:' + opts.font + ';color:' + opts.color + '}' +
-			'div.d', '{margin-left:4px;vertical-align:bottom}' +
+			'div.d', '{vertical-align:bottom}' +
 			'.x', '{border:1px solid ' + opts.info + ';padding:1em}' +
 			'a.l', '{text-decoration:none}' +
 			'a.l', ':hover,a.l', ':focus{text-decoration:underline}' +
 			'i.i', ',i.m', '{cursor:pointer;font-style:normal;color:' + opts.info + '}' +
 			'i.h', ',i.m', ':hover,i.i', ':hover{color:' + opts.infoHover + '}'+
-			'i.i', ':before{content:"▼";display:inline-block;padding:1px 5px;margin:-1px;transition:transform .2s}' +
+			'i.i', ':before{position:absolute;left:-20px;content:"▼";display:inline-block;padding:2px 6px;margin:-2px;transition:transform .2s}' +
 			'i.c', ':before{transform:rotate(-90deg)}' +
-			(cssVar[opts.showSize] || 'i.c'), ':after,i.m', ':after{content:attr(data-c)}' +
+			(cssVar[opts.showSize] || 'i.c'), ':after,i.m', ':after{margin-left:8px;content:attr(data-c)}' +
 			'i.c', '+.d', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
 			'i.c', '+.d', '+.q', '{white-space:nowrap}' +
 			'i.c', '+.d', ' :before{display:none}' +
