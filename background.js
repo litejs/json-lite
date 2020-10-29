@@ -25,6 +25,7 @@ var css, next, opts
 	menus: true,
 	unescape: false,
 	sizeLimit: 10485760,
+	indent: "  ",
 	showDate: "hover",
 	showDateFn: "toString",
 	showSize: "collapsed",
@@ -435,9 +436,9 @@ function init(exports, rand, opts) {
 						node = node.lastChild.previousSibling
 						node.len = 1
 						node.start = re.lastIndex
-						spaces += "  "
+						spaces += opts.indent
 					} else if ((val == "}" || val == "]") && node.len) {
-						spaces = spaces.slice(2)
+						spaces = spaces.slice(opts.indent.length)
 						if (node.childNodes.length) {
 							tmp = node.previousElementSibling
 							val = node.len + (
