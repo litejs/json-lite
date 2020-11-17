@@ -35,6 +35,7 @@ Links
 -----
 
  - [Chrome Web Store](https://chrome.google.com/webstore/detail/json-lite/acacmjcicejlmjcheoklfdchempahoag)
+ - [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/json-lite/icjhnncodhmhckcdhhnbbhkhlbfggnnf)
  - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/json-lite/)
  - [Opera add-ons](https://addons.opera.com/en/extensions/details/json-lite/)
  - [Safari Extensions](https://safari-extensions.apple.com/details/?id=com.litejs.json-lite-YVKYWJZ9CZ)
