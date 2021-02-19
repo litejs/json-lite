@@ -16,6 +16,8 @@ var css, next, opts
 	color: "#000",
 	info: "#ccc",
 	infoHover: "#333;text-shadow: 1px 1px 3px #999",
+	numCol: "#333",
+	numBg: "#ccc",
 	string: "#293",
 	number: "#10c",
 	bool: "#10c",
@@ -65,8 +67,8 @@ function readConf() {
 			'div.d', '{vertical-align:bottom}' +
 			(
 				opts.lineNo ?
-				'div.r' + rand + '{min-height:100%;border-left:60px solid ' + opts.info + '}' +
-				'[data-line-no]:before{font-weight:normal;text-align:right;width:60px;content:attr(data-line-no);position:absolute;left:-68px;color:' + opts.infoHover + '}' :
+				'div.r' + rand + '{min-height:100%;border-left:60px solid ' + opts.numBg + '}' +
+				'[data-line-no]:before{font-weight:normal;text-align:right;width:60px;content:attr(data-line-no);position:absolute;left:-68px;color:' + opts.numCol + '}' :
 				'div.r' + rand + '{margin-left:8px}'
 			) +
 			'i.c', '+.d', '+[data-line-no]:before{display:none}' +
