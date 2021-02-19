@@ -68,16 +68,16 @@ function readConf() {
 			(
 				opts.lineNo ?
 				'div.r' + rand + '{min-height:100%;border-left:60px solid ' + opts.numBg + '}' +
-				'[data-line-no]:before{font-weight:normal;text-align:right;width:60px;content:attr(data-line-no);position:absolute;left:-68px;color:' + opts.numCol + '}' :
+				'[data-l]:before{font-weight:normal;text-align:right;width:60px;content:attr(data-l);position:absolute;left:-68px;color:' + opts.numCol + '}' :
 				'div.r' + rand + '{margin-left:8px}'
 			) +
-			'i.c', '+.d', '+[data-line-no]:before{display:none}' +
+			'i.c', '+.d', '+[data-l]:before{display:none}' +
 			'.x', '{border:1px solid ' + opts.info + ';padding:1em}' +
 			'a.l', '{text-decoration:none}' +
 			'a.l', ':hover,a.l', ':focus{text-decoration:underline}' +
 			'i.i', ',i.m', '{cursor:pointer;font-style:normal;color:' + opts.info + '}' +
 			'i.h', ',i.m', ':hover,i.i', ':hover{color:' + opts.infoHover + '}'+
-			'i.i', ':before{position:absolute;left:2px;content:"▼";display:inline-block;padding:2px 7px;margin:-2px;transition:transform .2s}' +
+			'i.i', ':before{position:absolute;left:0;content:"▼";display:inline-block;padding:2px 9px;margin:-2px;transition:transform .2s}' +
 			'i.c', ':before{transform:rotate(-90deg)}' +
 			(cssVar[opts.showSize] || 'i.c'), ':after,i.m', ':after{margin-left:8px;content:attr(data-c)}' +
 			'i.c', '+.d', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
@@ -112,111 +112,38 @@ function readConf() {
 }
 
 function initMenu() {
+	var parent
 	if (!opts.menus) return
 
-	chrome.contextMenus.create({
-		title: "Format selection",
-		id: "formatSelection",
-		contexts: [ "selection" ]
-	})
+	menu("formatSelection", "Format selection")
+	menu("s1")
 
-	chrome.contextMenus.create({
-		type: "separator",
-		id: "s1",
-		contexts: [ "selection" ],
-	})
+	parent = menu("e", "Encode")
+	menu("stringify", "JSON.stringify()")
+	menu("btoa", "Base64")
+	menu("uniEnc", "Unicode")
+	menu("esc", "Percent-encoding")
 
-	var encMenu = chrome.contextMenus.create({
-		title: "Encode",
-		id: "e",
-		contexts: [ "selection" ]
-	})
+	parent = menu("d", "Decode", 1)
+	menu("parse", "JSON.parse()")
+	menu("atob", "Base64")
+	menu("uniDec", "Unicode")
+	menu("unesc", "Percent-encoding")
 
-	var decMenu = chrome.contextMenus.create({
-		title: "Decode",
-		id: "d",
-		contexts: [ "selection" ]
-	})
+	parent = menu("t", "Convert Time", 1)
+	menu("toIso", "Timestamp to String")
+	menu("toUnix", "String to Timestamp")
+	menu("toMs", "String to Timestamp (ms)")
 
-	chrome.contextMenus.create({
-		title: "Base64",
-		id: "btoa",
-		contexts: [ "selection" ],
-		parentId: encMenu
-	})
-
-	chrome.contextMenus.create({
-		title: "JSON.stringify()",
-		id: "stringify",
-		contexts: [ "selection" ],
-		parentId: encMenu
-	})
-
-	chrome.contextMenus.create({
-		title: "JSON.parse()",
-		id: "parse",
-		contexts: [ "selection" ],
-		parentId: decMenu
-	})
-
-	chrome.contextMenus.create({
-		title: "Base64",
-		id: "atob",
-		contexts: [ "selection" ],
-		parentId: decMenu
-	})
-
-	chrome.contextMenus.create({
-		title: "Unicode",
-		id: "uniEnc",
-		contexts: [ "selection" ],
-		parentId: encMenu
-	})
-	chrome.contextMenus.create({
-		title: "Unicode",
-		id: "uniDec",
-		contexts: [ "selection" ],
-		parentId: decMenu
-	})
-
-	chrome.contextMenus.create({
-		title: "Percent-encoding",
-		id: "esc",
-		contexts: [ "selection" ],
-		parentId: encMenu
-	})
-	chrome.contextMenus.create({
-		title: "Percent-encoding",
-		id: "unesc",
-		contexts: [ "selection" ],
-		parentId: decMenu
-	})
-	var dateMenu = chrome.contextMenus.create({
-		title: "Convert Time",
-		id: "t",
-		contexts: [ "selection" ]
-	})
-
-	chrome.contextMenus.create({
-		title: "Timestamp to String",
-		id: "toIso",
-		contexts: [ "selection" ],
-		parentId: dateMenu
-	})
-
-	chrome.contextMenus.create({
-		title: "String to Timestamp",
-		id: "toUnix",
-		contexts: [ "selection" ],
-		parentId: dateMenu
-	})
-
-	chrome.contextMenus.create({
-		title: "String to Timestamp (ms)",
-		id: "toMs",
-		contexts: [ "selection" ],
-		parentId: dateMenu
-	})
+	function menu(id, title, toRoot) {
+		return chrome.contextMenus.create({
+			id: id,
+			title: title,
+			type: title ? "normal" : "separator",
+			contexts: [ "selection" ],
+			parentId: toRoot ? null : parent
+		})
+	}
 }
 
 function onMsg(msg, from, res) {
@@ -231,7 +158,7 @@ function onMsg(msg, from, res) {
 	if (msg.op === "openEditor") {
 		chrome.tabs.create({url:chrome.extension.getURL("edit.html")})
 	} else if (from.tab) {
-		if (from.tab.url.split(/[-:]/)[1] == "extension") return
+		if (from.tab.url.split(/[-:]/)[1] === "extension") return
 		var op = msg.op
 		if (op.length > 9) {
 			chrome.tabs.insertCSS(from.tab.id, {
@@ -285,17 +212,17 @@ function init(exports, rand, opts) {
 		},
 		toIso: function(str) {
 			var num = +str
-			if (isNaN(num)) throw new Error("NaN")
+			if (isNaN(num)) throw Error("NaN")
 			return new Date(num < 4294967296 ? num * 1000 : num).toISOString()
 		},
 		toUnix: function(str) {
 			var num = new Date(str)/1000
-			if (isNaN(num)) throw new Error("NaN")
+			if (isNaN(num)) throw Error("NaN")
 			return num
 		},
 		toMs: function(str) {
 			var num = +new Date(str)
-			if (isNaN(num)) throw new Error("NaN")
+			if (isNaN(num)) throw Error("NaN")
 			return num
 		},
 		uniEnc: function(str) {
@@ -407,7 +334,7 @@ function init(exports, rand, opts) {
 		var target = e.target
 		, isCollapsed = target.classList.contains(COLL)
 		e.stopPropagation()
-		if (target.tagName == "I") {
+		if (target.tagName === "I") {
 			if (target.classList.contains("m" + rand)) {
 				target.previousSibling.appendChild(target.nextSibling.firstChild)
 				target.parentNode.removeChild(target.nextSibling)
@@ -448,7 +375,7 @@ function init(exports, rand, opts) {
 		function fragment(a) {
 			var frag = document.createDocumentFragment()
 			el("span", frag).textContent = (afterColon ? ": " : spaces) + a
-			if (!afterColon) frag.lastChild.dataset.lineNo = lineNo++
+			if (!afterColon) frag.lastChild.dataset.l = lineNo++
 			el("i", frag, "i")
 			frag.appendChild(div.cloneNode())
 			el("span", frag, "q").textContent = spaces + (a === "{" ? "}" : "]")
@@ -463,35 +390,35 @@ function init(exports, rand, opts) {
 			try {
 				for (; match = re.exec(str); ) {
 					val = match[0]
-					if (val == "{" || val == "[") {
+					if (val === "{" || val === "[") {
 						path.push(node)
 						node.appendChild(fragment(val))
 						node = node.lastChild.previousSibling
 						node.len = 1
 						node.start = re.lastIndex
 						spaces += opts.indent
-					} else if ((val == "}" || val == "]") && node.len) {
+					} else if ((val === "}" || val === "]") && node.len) {
 						spaces = spaces.slice(opts.indent.length)
 						if (node.childNodes.length) {
-							node.nextSibling.dataset.lineNo = lineNo++
+							node.nextSibling.dataset.l = lineNo++
 							tmp = node.previousElementSibling
 							val = node.len + (
-								node.len == 1 ?
-								(val == "]" ? " item, " : " property, ") :
-								(val == "]" ? " items, " : " properties, ")
+								node.len === 1 ?
+								(val === "]" ? " item, " : " property, ") :
+								(val === "]" ? " items, " : " properties, ")
 							) + units(re.lastIndex - node.start + 1)
-							if (opts.showSize == "tooltip") tmp.title = val
+							if (opts.showSize === "tooltip") tmp.title = val
 							else tmp.dataset.c = val
 
 							tmp.dataset.k = (val = tmp.previousElementSibling) && val.classList.contains(KEY) ?
-							val.textContent.replace(/'/, "\\'") :
+							val.textContent.replace(/'/g, "\\'") :
 							node.parentNode.len
 						} else {
 							node.parentNode.removeChild(node.previousSibling)
 							node.parentNode.removeChild(node)
 						}
 						node = path.pop()
-					} else if (val == ",") {
+					} else if (val === ",") {
 						node.len += 1
 						node.appendChild(comma.cloneNode(true))
 					} else {
@@ -515,7 +442,7 @@ function init(exports, rand, opts) {
 							tmp.classList.add(val <= Number.MAX_SAFE_INTEGER ? NUM : ERR)
 							if (opts.showDate !== "never" && val > 1e9 && val < 1e14) {
 								d.setTime(val < 4294967296 ? val * 1000 : val)
-								if (opts.showDate == "tooltip") tmp.title = d[opts.showDateFn]()
+								if (opts.showDate === "tooltip") tmp.title = d[opts.showDateFn]()
 								else tmp.dataset.c = d[opts.showDateFn]()
 							}
 						}
@@ -524,7 +451,7 @@ function init(exports, rand, opts) {
 						if (afterColon) {
 							node.appendChild(colon.cloneNode())
 						} else {
-							tmp.dataset.lineNo = lineNo++
+							tmp.dataset.l = lineNo++
 							val = spaces + val
 						}
 						if (val.length > len) {
@@ -532,8 +459,7 @@ function init(exports, rand, opts) {
 							tmp.textContent = val.slice(0, len)
 							node.appendChild(tmp)
 							val = val.slice(len)
-							tmp = el("i", node, "m")
-							tmp.dataset.c = "+" + val.length + " more"
+							el("i", node, "m").dataset.c = "+" + val.length + " more"
 							tmp = span.cloneNode()
 							tmp.classList.add("d" + rand)
 						}
@@ -585,13 +511,10 @@ function init(exports, rand, opts) {
 		draw(str, node.parentNode, node, "x" + rand)
 	}
 	function formatEdit() {
-		var state
-		document.querySelectorAll(".r" + rand)
-		.forEach(function(el, i) {
-			if (i === 0) state = "" + el.contentEditable != "true"
-			el.contentEditable = state
-			el.spellcheck = false
-		})
+		for (var a = body.querySelectorAll(".r" + rand), i = a.length; i--; ) {
+			a[i].contentEditable = "" + a[0].contentEditable != "true"
+			a[i].spellcheck = false
+		}
 	}
 	function formatPlain() {
 		body.removeEventListener("click", onClick, true)
