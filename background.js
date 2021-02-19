@@ -144,6 +144,20 @@ function initMenu() {
 	})
 
 	chrome.contextMenus.create({
+		title: "JSON.stringify()",
+		id: "stringify",
+		contexts: [ "selection" ],
+		parentId: encMenu
+	})
+
+	chrome.contextMenus.create({
+		title: "JSON.parse()",
+		id: "parse",
+		contexts: [ "selection" ],
+		parentId: decMenu
+	})
+
+	chrome.contextMenus.create({
 		title: "Base64",
 		id: "atob",
 		contexts: [ "selection" ],
@@ -260,6 +274,12 @@ function init(exports, rand, opts) {
 		},
 		atob: function(str) {
 			return atob(str)
+		},
+		parse: function(str) {
+			return JSON.parse(str)
+		},
+		stringify: function(str) {
+			return JSON.stringify(str)
 		},
 		toIso: function(str) {
 			var num = +str
