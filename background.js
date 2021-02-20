@@ -414,6 +414,7 @@ function init(exports, rand, opts) {
 							val.textContent.replace(/'/g, "\\'") :
 							node.parentNode.len
 						} else {
+							node.nextSibling.textContent = val
 							node.parentNode.removeChild(node.previousSibling)
 							node.parentNode.removeChild(node)
 						}
@@ -452,7 +453,8 @@ function init(exports, rand, opts) {
 							node.appendChild(colon.cloneNode())
 						} else {
 							tmp.dataset.l = lineNo++
-							val = spaces + val
+							if (node.lastChild) node.lastChild.textContent += spaces
+							else val = spaces + val
 						}
 						if (val.length > len) {
 							len >>= 1
