@@ -28,7 +28,7 @@ var css, next, opts
 	menus: true,
 	unescape: false,
 	sizeLimit: 10485760,
-	indent: "  ",
+	indent: "  ",
 	showDate: "hover",
 	showDateFn: "toString",
 	showSize: "collapsed",

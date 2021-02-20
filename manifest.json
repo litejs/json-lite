@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "JSON Lite",
-  "version": "20.10.1",
+  "version": "21.2.0",
   "author" : "Lauri Rooden",
   "description": "Fast JSON viewer - highlights, shows items count/size, handles large files",
   "icons": {
