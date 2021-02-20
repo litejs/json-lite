@@ -24,6 +24,7 @@ var css, next, opts
 	null: "#10c",
 	property: "#66d",
 	error: "#f12",
+	wrap: true,
 	menus: true,
 	unescape: false,
 	sizeLimit: 10485760,
@@ -61,8 +62,9 @@ function readConf() {
 		opts = items || defOpts
 		got = true
 		css = [
-			'.r', '{margin:0;white-space:pre-wrap;overflow-wrap:break-word;word-wrap:break-word;outline:0 none;background:' + opts.bg + '}' +
+			'.r', '{margin:0;white-space:pre;overflow-wrap:break-word;word-wrap:break-word;outline:0 none;background:' + opts.bg + '}' +
 			'.r', ',.d', '{font:' + opts.font + ';color:' + opts.color + '}' +
+			'.r', '.w', '{white-space:pre-wrap}' +
 			'div.r', '{position:relative;padding:10px 0 10px 20px}' +
 			'div.d', '{vertical-align:bottom}' +
 			(
@@ -361,7 +363,7 @@ function init(exports, rand, opts) {
 		, path = []
 		, lineNo = 1
 
-		node.className = "r" + rand + (box ? " " + box : "")
+		node.className = "r" + rand + (box ? " " + box : "") + (opts.wrap ? " w" + rand : "")
 
 		if (opts.newtab) {
 			link.target = "_blank"
