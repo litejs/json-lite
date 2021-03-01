@@ -38,7 +38,12 @@ var themes = {
 	}
 }
 
-function next() {
+// In Safari async storage.get in previous script completes before this script get executed
+// In Chrome and Firefox this script executes before storage.get completes
+if (opts) init()
+else next = init
+
+function init() {
 	theme.value = themes[opts.theme] ? opts.theme : "custom"
 	updateForm(opts)
 }

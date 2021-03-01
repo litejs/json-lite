@@ -28,7 +28,7 @@ var css, next, opts
 	menus: true,
 	unescape: false,
 	sizeLimit: 10485760,
-	indent: "  ",
+	indent: "  ",
 	showDate: "hover",
 	showDateFn: "toString",
 	showSize: "collapsed",
@@ -79,7 +79,7 @@ function readConf() {
 			'a.l', ':hover,a.l', ':focus{text-decoration:underline}' +
 			'i.i', ',i.m', '{cursor:pointer;font-style:normal;color:' + opts.info + '}' +
 			'i.h', ',i.m', ':hover,i.i', ':hover{color:' + opts.infoHover + '}'+
-			'i.i', ':before{position:absolute;left:0;content:"▼";display:inline-block;padding:2px 9px;margin:-2px;transition:transform .2s}' +
+			'i.i', ':before{position:absolute;left:0;content:"\u25BC";display:inline-block;padding:2px 9px;margin:-2px;transition:transform .2s}' +
 			'i.c', ':before{transform:rotate(-90deg)}' +
 			(cssVar[opts.showSize] || 'i.c'), ':after,i.m', ':after{margin-left:8px;content:attr(data-c)}' +
 			'i.c', '+.d', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
