@@ -28,7 +28,7 @@ var themes = {
 		info: "#888",
 		infoHover: "#ccc",
 		numCol: "#ccc",
-		numBg: "#888",
+		numBg: "#333",
 		string: "#df80ff",
 		number: "#70bf53",
 		bool: "#70bf53",
