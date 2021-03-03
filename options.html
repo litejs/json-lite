@@ -68,27 +68,30 @@ input[type=checkbox] {
 			<label>Error color<input type="text" id="error"></label>
 			<hr>
 		</div>
-		<label>Wrap lines<input type="checkbox" id="wrap"></label>
-		<label>Show menus<input type="checkbox" id="menus"></label>
-		<label>Auto-unescape strings<input type="checkbox" id="unescape"></label>
-		<label>Show formatted dates<select id="showDate">
-			<option>never</option>
-			<option>hover</option>
-			<option>tooltip</option>
-			<option>always</option>
-		</select></label>
-		<label id="dateOpt">Date format<select id="showDateFn">
-			<option>toString</option>
-			<option>toUTCString</option>
-			<option>toISOString</option>
-			<option>toLocaleString</option>
-		</select></label>
 		<label>Auto-format documents<select id="sizeLimit">
 			<option value="0">Off</option>
 			<option value="102400">under 100KB</option>
 			<option value="1048576">under 1MB</option>
 			<option value="10485760">under 10MB</option>
 			<option value="104857600">under 100MB</option>
+		</select></label>
+		<label>Indentation<select id="indent">
+			<option value="  ">2 spaces</option>
+			<option value="    ">4 spaces</option>
+			<option value="        ">8 spaces</option>
+			<option value="	">tab</option>
+		</select></label>
+		<label>Show formatted dates<select id="showDate">
+			<option>never</option>
+			<option>hover</option>
+			<option>tooltip</option>
+			<option>always</option>
+		</select></label>
+		<label id="dateOpt">&nbsp; &nbsp; Date format method<select id="showDateFn">
+			<option>toString</option>
+			<option>toUTCString</option>
+			<option>toISOString</option>
+			<option>toLocaleString</option>
 		</select></label>
 		<label>Show size<select id="showSize">
 			<option>never</option>
@@ -97,14 +100,11 @@ input[type=checkbox] {
 			<option>collapsed</option>
 			<option>always</option>
 		</select></label>
-		<label>Indentation<select id="indent">
-			<option value="  ">2 spaces</option>
-			<option value="    ">4 spaces</option>
-			<option value="        ">8 spaces</option>
-			<option value="	">tab</option>
-		</select></label>
+		<label>Auto-unescape strings<input type="checkbox" id="unescape"></label>
 		<label>Open links in new tab<input type="checkbox" id="newtab"></label>
 		<label>Show line numbers<input type="checkbox" id="lineNo"></label>
+		<label>Show menus<input type="checkbox" id="menus"></label>
+		<label>Wrap lines<input type="checkbox" id="wrap"></label>
 		<button type="submit">Save</button>
 	</form>
 	<script src="background.js"></script>
