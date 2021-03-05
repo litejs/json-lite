@@ -4,6 +4,7 @@ JSON Lite
 
 Browser extension for viewing JSON files.
 
+![Default theme](img/default.png)
 
 Features
 --------
