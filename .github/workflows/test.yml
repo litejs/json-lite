@@ -1,0 +1,16 @@
+name: Test
+on: [ push, pull_request, workflow_dispatch ]
+jobs:
+  CodeQL:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: github/codeql-action/init@v2
+      name: Initialize CodeQL
+      with:
+        languages: javascript
+    - uses: github/codeql-action/analyze@v2
+      name: Perform CodeQL Analysis
+      with:
+        category: /language:javascript
+
