@@ -186,7 +186,7 @@ function onMsg(msg, from, res) {
 function init(exports, rand, opts) {
 	if (exports.formatBody) return
 	var hovered
-	, re = /("(https?:\/\/|file:\/\/|data:[-+.=;\/\w]*,)?(?:\\?.)*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
+	, re = /("(https?:\/\/|file:\/\/|data:[-+.=;\/\w]*,)?(?:\\.|[^\\])*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 	, div = el("div", 0, "d")
 	, body = document.body
 	, first = body && body.firstChild
