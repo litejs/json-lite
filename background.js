@@ -413,7 +413,7 @@ function init(exports, rand, opts) {
 							else tmp.dataset.c = val
 
 							tmp.dataset.k = (val = tmp.previousElementSibling) && val.classList.contains(KEY) ?
-							val.textContent.replace(/'/g, "\\'") :
+							val.textContent.replace(/'|\\/g, "\\$&") :
 							node.parentNode.len
 						} else {
 							node.nextSibling.textContent = val
