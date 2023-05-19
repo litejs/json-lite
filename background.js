@@ -158,21 +158,22 @@ function onMsg(msg, from, res) {
 		return
 	}
 	if (msg.op === "openEditor") {
-		chrome.tabs.create({url:chrome.extension.getURL("edit.html")})
+		chrome.tabs.create({url:chrome.runtime.getURL("edit.html")})
 	} else if (from.tab) {
 		if (from.tab.url.split(/[-:]/)[1] === "extension") return
 		var op = msg.op
 		if (op.length > 9) {
-			chrome.tabs.insertCSS(from.tab.id, {
-				code: css,
-				frameId: from.frameId
+			chrome.scripting.insertCSS({
+				css,
+				target: { tabId: from.tab.id }
 			})
 		} else {
 			op = "conv"
 		}
-		chrome.tabs.executeScript(from.tab.id, {
-			code: "!" + init.toString() + "(this,'" + rand + "'," + JSON.stringify(opts) + ");this." + op + "(" + JSON.stringify(msg) + ")",
-			frameId: from.frameId
+		chrome.scripting.executeScript({
+			args: [{}, rand, opts, op, msg],
+			func: init,
+			target: { tabId: from.tab.id }
 		})
 	} else {
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -183,8 +184,11 @@ function onMsg(msg, from, res) {
 }
 
 
-function init(exports, rand, opts) {
-	if (exports.formatBody) return
+function init(exports, rand, opts, op, msg) {
+	function run() {
+		if (exports[op]) exports[op](msg)
+	}
+	if (exports.formatBody) return run()
 	var hovered
 	, re = /("(https?:\/\/|file:\/\/|data:[-+.=;\/\w]*,)?(?:\\.|[^\\])*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 	, div = el("div", 0, "d")
@@ -525,6 +529,7 @@ function init(exports, rand, opts) {
 		body.textContent = ""
 		body.appendChild(first)
 	}
+	run()
 }
 
 /* Firefox
