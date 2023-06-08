@@ -173,7 +173,8 @@ function onMsg(msg, from, res) {
 		chrome.scripting.executeScript({
 			args: [{}, rand, opts, op, msg],
 			func: init,
-			target: { tabId: from.tab.id }
+			target: { tabId: from.tab.id },
+			world: "MAIN"
 		})
 	} else {
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -482,7 +483,7 @@ function init(exports, rand, opts, op, msg) {
 					}
 				}
 				document.title = ""
-				JSON.parse(str)
+				window.data = JSON.parse(str)
 
 			} catch(e) {
 				tmp = box.insertBefore(el("div"), box.firstChild)
