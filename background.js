@@ -493,6 +493,7 @@ function init(exports, rand, opts, op, msg) {
 		}
 	}
 	function formatBody(msg) {
+		if (body.lastChild.className === "json-formatter-container") body.removeChild(body.lastChild)
 		if (first.parentNode !== body) {
 			first.textContent = body.textContent
 			formatPlain()
