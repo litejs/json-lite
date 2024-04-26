@@ -166,16 +166,13 @@ function onMsg(msg, from, res) {
 		, target = { tabId: from.tab.id }
 		if (from.frameId) target.frameIds = [ from.frameId ]
 		if (op.length > 9) {
-			chrome.scripting.insertCSS({
-				css,
-				target
-			})
+			chrome.scripting.insertCSS({ css, target })
 		} else {
 			op = "conv"
 		}
 		chrome.scripting.executeScript({
-			args: [{}, rand, opts, op, msg],
-			func: init,
+			args: [rand, opts, op, msg],
+			func,
 			target,
 			world: "MAIN"
 		})
@@ -188,11 +185,9 @@ function onMsg(msg, from, res) {
 }
 
 
-function init(exports, rand, opts, op, msg) {
-	function run() {
-		if (exports[op]) exports[op](msg)
-	}
-	if (exports.formatBody) return run()
+function func(rand, opts, op, msg) {
+	if (window[rand]) return run()
+	window[rand] = { formatBody, formatSelection, formatPlain, formatEdit, conv }
 	var hovered
 	, re = /("(https?:\/\/|file:\/\/|data:[-+.=;\/\w]*,)?(?:\\.|[^\\])*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 	, div = el("div", 0, "d")
@@ -266,13 +261,11 @@ function init(exports, rand, opts, op, msg) {
 			hovered = null
 		}
 	})
+	run()
 
-	exports.formatBody = formatBody
-	exports.formatSelection = formatSelection
-	exports.formatPlain = formatPlain
-	exports.formatEdit = formatEdit
-	exports.conv = conv
-
+	function run() {
+		window[rand][op](msg)
+	}
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
 		size > 1024 ? (0|(size / 1024)) + " KB " :
@@ -538,10 +531,13 @@ function init(exports, rand, opts, op, msg) {
 	}
 	function formatPlain() {
 		body.removeEventListener("click", onClick, true)
-		body.textContent = ""
-		body.appendChild(first)
+		if (first && first.tagName === "PRE") {
+			body.innerHTML = ""
+			body.appendChild(first)
+		} else {
+			body.innerHTML = textarea.innerHTML
+		}
 	}
-	run()
 }
 
 /* Firefox
