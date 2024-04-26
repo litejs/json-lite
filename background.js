@@ -62,7 +62,8 @@ function readConf() {
 		opts = items || defOpts
 		got = true
 		css = [
-			'.r', '{margin:0;white-space:pre;overflow-wrap:break-word;word-wrap:break-word;outline:0 none;background:' + opts.bg + '}' +
+			'html:has(>body.r', '),body.r', '{height:100%}' +
+			'.r', '{box-sizing:border-box;margin:0;white-space:pre;overflow-wrap:break-word;word-wrap:break-word;outline:0 none;background:' + opts.bg + '}' +
 			'.r', ',.d', '{font:' + opts.font + ';color:' + opts.color + '}' +
 			'.r', '.w', '{white-space:pre-wrap}' +
 			'div.r', '{position:relative;padding:10px 0 10px 20px}' +
