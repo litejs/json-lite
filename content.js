@@ -24,15 +24,14 @@
 			jsonRe.test(str)
 		)
 	) {
+		var display = body.style.display
 		body.style.display = "none"
 		if (jsonpMatch) {
 			body.textContent = jsonpMatch[3]
 			add = [jsonpMatch[1], jsonpMatch[4]]
 		}
 		chrome.runtime.sendMessage({op: "formatBody", len: body.textContent.length, add: add}, function(response) {
-			if (!response || response.op === "abort") {
-				body.style.display = ""
-			}
+			body.style.display = display
 		})
 	}
 }()
