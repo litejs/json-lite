@@ -162,10 +162,12 @@ function onMsg(msg, from, res) {
 	} else if (from.tab) {
 		if (from.tab.url.split(/[-:]/)[1] === "extension") return
 		var op = msg.op
+		, target = { tabId: from.tab.id }
+		if (from.frameId) target.frameIds = [ from.frameId ]
 		if (op.length > 9) {
 			chrome.scripting.insertCSS({
 				css,
-				target: { tabId: from.tab.id }
+				target
 			})
 		} else {
 			op = "conv"
@@ -173,7 +175,7 @@ function onMsg(msg, from, res) {
 		chrome.scripting.executeScript({
 			args: [{}, rand, opts, op, msg],
 			func: init,
-			target: { tabId: from.tab.id },
+			target,
 			world: "MAIN"
 		})
 	} else {
