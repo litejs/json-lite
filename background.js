@@ -1,6 +1,6 @@
 
 /*!
- * Copyright (c) 2016-2020 Lauri Rooden
+ * Copyright (c) 2016-2024 Lauri Rooden
  * https://www.litejs.com/MIT-LICENSE.txt
  */
 
@@ -66,7 +66,7 @@ function readConf() {
 			'.r', '{box-sizing:border-box;margin:0;white-space:pre;overflow-wrap:break-word;word-wrap:break-word;outline:0 none;background:' + opts.bg + '}' +
 			'.r', ',.d', '{font:' + opts.font + ';color:' + opts.color + '}' +
 			'.r', '.w', '{white-space:pre-wrap}' +
-			'div.r', '{position:relative;padding:10px 0 10px 20px}' +
+			'div.r', '{position:relative;padding:10px 20px}' +
 			'div.d', '{vertical-align:bottom}' +
 			(
 				opts.lineNo ?
@@ -196,6 +196,7 @@ function init(exports, rand, opts, op, msg) {
 	var hovered
 	, re = /("(https?:\/\/|file:\/\/|data:[-+.=;\/\w]*,)?(?:\\.|[^\\])*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
 	, div = el("div", 0, "d")
+	, textarea = el("textarea")
 	, body = document.body
 	, first = body && body.firstChild
 	, mod = /Mac|iPod|iPhone|iPad|Pike/.test(navigator.platform) ? "metaKey" : "ctrlKey"
@@ -370,6 +371,7 @@ function init(exports, rand, opts, op, msg) {
 		, comma = txt(",\n")
 		, path = []
 		, lineNo = 1
+		, jsonp = /^([\/*&;='"$\w\s]{0,99}\b[$a-z_][$\w]{0,99}\s*\()([^]+)(\)[\s;]*)$/i.exec(str)
 
 		node.className = "r" + rand + (box ? " " + box : "") + (opts.wrap ? " w" + rand : "")
 
@@ -378,9 +380,17 @@ function init(exports, rand, opts, op, msg) {
 		}
 
 		to.addEventListener("click", onClick, true)
-
-		to.replaceChild(box = node, first)
-		loop(str, re)
+		if (first) {
+			to.replaceChild(box = node, first)
+		} else {
+			to.innerHTML = ""
+			to.appendChild(box = node)
+		}
+		loop(jsonp ? jsonp[2] : str, re)
+		if (jsonp) {
+			body.lastChild.firstChild.firstChild.textContent = jsonp[1] + body.lastChild.firstChild.firstChild.textContent
+			body.lastChild.lastChild.textContent += jsonp[3]
+		}
 
 		function fragment(a) {
 			var frag = document.createDocumentFragment()
@@ -501,12 +511,9 @@ function init(exports, rand, opts, op, msg) {
 			first.textContent = body.textContent
 			formatPlain()
 		}
-		draw(first.textContent, body, first)
-		if (msg.add) {
-			body.insertBefore(txt(msg.add[0]), body.firstChild)
-			txt(msg.add[1], body)
-		}
+		textarea.innerHTML = (first && first.tagName === "PRE" ? first : body).innerHTML
 		body.className = "r" + rand
+		draw(textarea.value, body)
 		body.style.display = ""
 	}
 	function formatSelection() {

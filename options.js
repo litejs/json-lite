@@ -1,6 +1,6 @@
 
 /*!
- * Copyright (c) 2016-2018 Lauri Rooden
+ * Copyright (c) 2016-2024 Lauri Rooden
  * https://www.litejs.com/MIT-LICENSE.txt
  */
 
