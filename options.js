@@ -7,7 +7,7 @@
 
 var themes = {
 	"": {
-		font: "13px Menlo,monospace",
+		font: "13px/15px Menlo,monospace",
 		color: "#000",
 		bg: "#fff",
 		info: "#ccc",
@@ -22,7 +22,7 @@ var themes = {
 		error: "#f12"
 	},
 	"firefox-dark": {
-		font: "13px Menlo,monospace",
+		font: "13px/15px Menlo,monospace",
 		color: "#fff",
 		bg: "#181d20",
 		info: "#888",

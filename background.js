@@ -11,7 +11,7 @@ var css, next, opts
 , editor = !!this.pre
 , defOpts = {
 	theme: "",
-	font: "13px Menlo,monospace",
+	font: "13px/15px Menlo,monospace",
 	bg: "#fff",
 	color: "#000",
 	info: "#ccc",
