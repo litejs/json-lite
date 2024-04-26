@@ -8,7 +8,6 @@
 !function(body) {
 	var jsonp
 	, jsonRe = /^\s*(?:\[\s*(?=-?\d|true|false|null|["[{])[^]*\]|\{\s*"[^]+\})\s*$/
-	, body = document.body
 	, str = body && body.firstChild && (body.firstChild.tagName === "PRE" ? body.firstChild : body).innerHTML
 
 	if (str && (

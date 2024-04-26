@@ -485,7 +485,7 @@ function func(rand, opts, op, msg) {
 					if (++i > 9000) {
 						len = str.length
 						document.title = (0|(100*re.lastIndex/len)) + "% of " + units(len)
-						return setTimeout(function() { loop(str, re) }, 0)
+						return setTimeout(loop, 0, str, re)
 					}
 				}
 				document.title = ""
