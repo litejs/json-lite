@@ -1,18 +1,17 @@
 
-pre.focus()
-pre.textContent = pre.textContent
-pre.className = "R" + rand
-
-pre.addEventListener("paste", function(ev) {
+function reFormat() {
 	setTimeout(function() {
-		formatBody({})
-		formatEdit()
+		document.body.textContent = document.body.textContent.trim()
+		func(rand, opts, "formatBody")
 	}, 10)
-})
+}
 
 function next() {
-	init(window, rand, opts)
-	st.appendChild(document.createTextNode("body," + css))
+	reFormat()
+	document.body.focus()
+	document.body.addEventListener("cut", reFormat)
+	document.body.addEventListener("paste", reFormat)
+	editorStyle.appendChild(document.createTextNode('body>.r' + rand +':empty:after{display:"block";content:" Paste here";color:#bbb}body,' + css))
 	// listen events directly as in chrome
 	// background can not access to "chrome-extension:" uris
 	chrome.runtime.onMessage.addListener(function(msg, from) {
@@ -23,7 +22,7 @@ function next() {
 			if (prom) prom.then(onGot)
 			function onGot(cur) {
 				if (!tabs[0] || tabs[0].index != cur.index) return
-				if (window[msg.op]) window[msg.op](msg)
+				if (window[rand][msg.op]) window[rand][msg.op](msg)
 			}
 		}
 	})
@@ -32,7 +31,7 @@ function next() {
 		if (prom) prom.then(onGot)
 		function onGot(cur) {
 			if (tab.index != cur.index) return
-			window.conv({op:info.menuItemId})
+			window[rand].conv({op:info.menuItemId})
 		}
 	})
 }

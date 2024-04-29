@@ -8,7 +8,7 @@
 var css, next, opts
 , chrome = this.chrome || this.browser
 , storage = chrome.storage && (chrome.storage.sync || chrome.storage.local)
-, editor = !!this.pre
+, editor = !!this.editorStyle
 , defOpts = {
 	theme: "",
 	font: "13px/15px Menlo,monospace",
@@ -186,7 +186,7 @@ function onMsg(msg, from, res) {
 
 
 function func(rand, opts, op, msg) {
-	if (window[rand]) return run()
+	if (window[rand]) return op && window[rand][op](msg)
 	window[rand] = { formatBody, formatSelection, formatPlain, formatEdit, conv }
 	var hovered
 	, re = /("(https?:\/\/|file:\/\/|data:[-+.=;\/\w]*,)?(?:\\.|[^\\])*?")\s*(:?)|-?\d+\.?\d*(?:e[+-]?\d+)?|true|false|null|[[\]{},]|(\S[^-[\]{},"\d]*)/gi
@@ -261,11 +261,9 @@ function func(rand, opts, op, msg) {
 			hovered = null
 		}
 	})
-	run()
 
-	function run() {
-		window[rand][op](msg)
-	}
+	if (op) window[rand][op](msg)
+
 	function units(size) {
 		return size > 1048576 ? (0|(size / 1048576)) + " MB " :
 		size > 1024 ? (0|(size / 1024)) + " KB " :
@@ -489,7 +487,7 @@ function func(rand, opts, op, msg) {
 					}
 				}
 				document.title = ""
-				window.data = JSON.parse(str)
+				window.data = str ? JSON.parse(str) : Error("Empty JSON")
 
 			} catch(e) {
 				tmp = box.insertBefore(el("div"), box.firstChild)
@@ -498,9 +496,9 @@ function func(rand, opts, op, msg) {
 			}
 		}
 	}
-	function formatBody(msg) {
-		if (body.lastChild.className === "json-formatter-container") body.removeChild(body.lastChild)
-		if (first.parentNode !== body) {
+	function formatBody() {
+		if (first && body.lastChild.className === "json-formatter-container") body.removeChild(body.lastChild)
+		if (first && first.parentNode !== body) {
 			first.textContent = body.textContent
 			formatPlain()
 		}
