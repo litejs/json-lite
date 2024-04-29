@@ -33,6 +33,7 @@ var css, next, opts
 	showDateFn: "toString",
 	showSize: "collapsed",
 	lineNo: true,
+	usefulCollapse: true,
 	newtab: false
 }
 , cssVar = {
@@ -86,7 +87,9 @@ function readConf() {
 			'i.c', '+.d', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
 			'i.c', '+.d', '+.q', '{white-space:nowrap}' +
 			'i.c', '+.d', ' :before{display:none}' +
-			'i.c', '+.d', ' div,i.m', '+.d', '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;vertical-align:bottom}' +
+			'i.c', '+.d', ' div,i.m', '+.d', (
+				opts.usefulCollapse ? ',i.c' + rand + '+.d' + rand + '>span:has(~.u' + rand + '),i.c' + rand + '+.d' + rand + '>i:has(~.u' + rand + ')' : ''
+			) + '{width:1px;height:1px;margin:0;padding:0;border:0;display:inline-block;overflow:hidden}' +
 			'.s', '{color:' + opts.string + '}' +
 			'.n', '{color:' + opts.number + '}' +
 			(
@@ -203,6 +206,7 @@ function func(rand, opts, op, msg) {
 	, NULL = "o" + rand
 	, ERR  = "e" + rand
 	, COLL = "c" + rand
+	, USEFUL = "u" + rand
 	, fns = {
 		btoa: function(str) {
 			return btoa(str)
@@ -358,11 +362,13 @@ function func(rand, opts, op, msg) {
 		, node = div.cloneNode()
 		, link = el("a", 0, "l")
 		, span = el("span")
-		, colon = txt(": ")
-		, comma = txt(",\n")
+		, colon = el("span")
+		, comma = el("span")
 		, path = []
 		, lineNo = 1
 		, jsonp = /^([\/*&;='"$\w\s]{0,99}\b[$a-z_][$\w]{0,99}\s*\()([^]+)(\)[\s;]*)$/i.exec(str)
+		colon.textContent = ": "
+		comma.textContent = ",\n"
 
 		node.className = "r" + rand + (box ? " " + box : "") + (opts.wrap ? " w" + rand : "")
 
@@ -442,6 +448,7 @@ function func(rand, opts, op, msg) {
 						}
 						if (match[3]) {
 							tmp.classList.add(KEY)
+							if (match[1] === '"id"' || match[1] === '"name"') tmp.classList.add(USEFUL)
 						} else if (match[1]) {
 							tmp.classList.add(STR)
 						} else if (match[4]) {
@@ -461,7 +468,7 @@ function func(rand, opts, op, msg) {
 						val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
 						len = match[3] ? 140 : 1400
 						if (afterColon) {
-							node.appendChild(colon.cloneNode())
+							node.appendChild(colon.cloneNode(true))
 						} else {
 							tmp.dataset.l = lineNo++
 							if (node.lastChild) node.lastChild.textContent += spaces
