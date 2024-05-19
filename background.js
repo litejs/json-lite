@@ -212,7 +212,7 @@ function func(rand, opts, op, msg) {
 			return btoa(str)
 		},
 		atob: function(str) {
-			return atob(str)
+			return atob(str.replace(/\-/g, "+").replace(/_/g, "/"))
 		},
 		parse: function(str) {
 			return JSON.parse(str)
