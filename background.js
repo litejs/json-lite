@@ -248,6 +248,21 @@ function func(rand, opts, op, msg) {
 			return unescape(str)
 		}
 	}
+	document.addEventListener("dblclick", function(e) {
+		var txt, target = e.target.nodeType === 3 ? e.target.parentNode : e.target
+		if (target.matches("." + STR)) {
+			try {
+				txt = JSON.parse(target.textContent)
+				e.preventDefault()
+				JSON.parse(txt)
+				draw(txt, target)
+			} catch(e) {
+				try {
+					target.textContent = fns.atob(txt)
+				} catch(e) {}
+			}
+		}
+	})
 
 	document.addEventListener("keydown", keydown)
 	document.addEventListener("keyup", function(e) {
