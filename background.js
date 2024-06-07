@@ -393,6 +393,12 @@ function func(rand, opts, op, msg) {
 			link.target = "_blank"
 		}
 
+		try {
+			window.data = str ? JSON.parse(str) : Error("Empty JSON")
+		} catch(e) {
+			el("div", node, "e").textContent = e
+		}
+
 		to.addEventListener("click", onClick, true)
 		if (first) {
 			to.replaceChild(box = node, first)
@@ -411,106 +417,98 @@ function func(rand, opts, op, msg) {
 			, i = 0
 			, d = new Date
 			, unesc = opts.unescape
-			try {
-				for (; match = re.exec(str); ) {
-					val = match[0]
-					if (val === "{" || val === "[") {
-						path.push(node)
-						if (!afterColon) el("span", node).dataset.l = lineNo++
-						el("i", node, "i").textContent = (afterColon ? ": " : spaces) + val
-						node.appendChild(div.cloneNode())
-						el("span", node, "q").textContent = spaces + (val === "{" ? "}" : "]")
-						node = node.lastChild.previousSibling
-						node.len = 1
-						node.start = re.lastIndex
-						spaces += opts.indent
-					} else if ((val === "}" || val === "]") && node.len) {
-						spaces = spaces.slice(opts.indent.length)
-						if (node.childNodes.length) {
-							node.nextSibling.dataset.l = lineNo++
-							tmp = node.previousElementSibling
-							val = node.len + (
-								node.len === 1 ?
-								(val === "]" ? " item, " : " property, ") :
-								(val === "]" ? " items, " : " properties, ")
-							) + units(re.lastIndex - node.start + 1)
-							if (opts.showSize === "tooltip") tmp.title = val
-							else tmp.dataset.c = val
+			for (; match = re.exec(str); ) {
+				val = match[0]
+				if (val === "{" || val === "[") {
+					path.push(node)
+					if (!afterColon) el("span", node).dataset.l = lineNo++
+					el("i", node, "i").textContent = (afterColon ? ": " : spaces) + val
+					node.appendChild(div.cloneNode())
+					el("span", node, "q").textContent = spaces + (val === "{" ? "}" : "]")
+					node = node.lastChild.previousSibling
+					node.len = 1
+					node.start = re.lastIndex
+					spaces += opts.indent
+				} else if ((val === "}" || val === "]") && node.len) {
+					spaces = spaces.slice(opts.indent.length)
+					if (node.childNodes.length) {
+						node.nextSibling.dataset.l = lineNo++
+						tmp = node.previousElementSibling
+						val = node.len + (
+							node.len === 1 ?
+							(val === "]" ? " item, " : " property, ") :
+							(val === "]" ? " items, " : " properties, ")
+						) + units(re.lastIndex - node.start + 1)
+						if (opts.showSize === "tooltip") tmp.title = val
+						else tmp.dataset.c = val
 
-							tmp.dataset.k = (val = tmp.previousElementSibling) && val.classList.contains(KEY) ?
-							val.textContent.replace(/'|\\/g, "\\$&") :
-							node.parentNode.len
-						} else {
-							node.nextSibling.textContent = node.previousSibling.textContent + val
-							node.parentNode.removeChild(node.previousSibling)
-							node.parentNode.removeChild(node)
-						}
-						node = path.pop()
-					} else if (val === ",") {
-						node.len += 1
-						node.appendChild(comma.cloneNode(true))
+						tmp.dataset.k = (val = tmp.previousElementSibling) && val.classList.contains(KEY) ?
+						val.textContent.replace(/'|\\/g, "\\$&") :
+						node.parentNode.len
 					} else {
-						if (match[2]) {
-							tmp = link.cloneNode()
-							tmp.href = JSON.parse(match[1])
-						} else {
-							tmp = span.cloneNode()
+						node.nextSibling.textContent = node.previousSibling.textContent + val
+						node.parentNode.removeChild(node.previousSibling)
+						node.parentNode.removeChild(node)
+					}
+					node = path.pop()
+				} else if (val === ",") {
+					node.len += 1
+					node.appendChild(comma.cloneNode(true))
+				} else {
+					if (match[2]) {
+						tmp = link.cloneNode()
+						tmp.href = JSON.parse(match[1])
+					} else {
+						tmp = span.cloneNode()
+					}
+					if (match[3]) {
+						tmp.classList.add(KEY)
+						if (match[1] === '"id"' || match[1] === '"name"') tmp.classList.add(USEFUL)
+					} else if (match[1]) {
+						tmp.classList.add(STR)
+					} else if (match[4]) {
+						tmp.classList.add(ERR)
+					} else if (match[0] === "true" || match[0] === "false") {
+						tmp.classList.add(BOOL)
+					} else if (match[0] === "null") {
+						tmp.classList.add(NULL)
+					} else {
+						tmp.classList.add(val <= Number.MAX_SAFE_INTEGER ? NUM : ERR)
+						if (opts.showDate !== "never" && val > 1e9 && val < 1e14) {
+							d.setTime(val < 4294967296 ? val * 1000 : val)
+							if (opts.showDate === "tooltip") tmp.title = d[opts.showDateFn]()
+							else tmp.dataset.c = d[opts.showDateFn]()
 						}
-						if (match[3]) {
-							tmp.classList.add(KEY)
-							if (match[1] === '"id"' || match[1] === '"name"') tmp.classList.add(USEFUL)
-						} else if (match[1]) {
-							tmp.classList.add(STR)
-						} else if (match[4]) {
-							tmp.classList.add(ERR)
-						} else if (match[0] === "true" || match[0] === "false") {
-							tmp.classList.add(BOOL)
-						} else if (match[0] === "null") {
-							tmp.classList.add(NULL)
-						} else {
-							tmp.classList.add(val <= Number.MAX_SAFE_INTEGER ? NUM : ERR)
-							if (opts.showDate !== "never" && val > 1e9 && val < 1e14) {
-								d.setTime(val < 4294967296 ? val * 1000 : val)
-								if (opts.showDate === "tooltip") tmp.title = d[opts.showDateFn]()
-								else tmp.dataset.c = d[opts.showDateFn]()
-							}
-						}
-						val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
-						len = match[3] ? 140 : 1400
-						if (afterColon) {
-							node.appendChild(colon.cloneNode(true))
-						} else {
-							tmp.dataset.l = lineNo++
-							if (node.lastChild) node.lastChild.textContent += spaces
-							else val = spaces + val
-						}
-						if (val.length > len) {
-							len >>= 1
-							tmp.textContent = val.slice(0, len)
-							node.appendChild(tmp)
-							val = val.slice(len)
-							el("i", node, "m").dataset.c = "+" + val.length + " more"
-							tmp = span.cloneNode()
-							tmp.classList.add("d" + rand)
-						}
-						tmp.textContent = val
+					}
+					val = match[1] ? (unesc ? '"' + JSON.parse(match[1]) + '"' : match[1]) : val
+					len = match[3] ? 140 : 1400
+					if (afterColon) {
+						node.appendChild(colon.cloneNode(true))
+					} else {
+						tmp.dataset.l = lineNo++
+						if (node.lastChild) node.lastChild.textContent += spaces
+						else val = spaces + val
+					}
+					if (val.length > len) {
+						len >>= 1
+						tmp.textContent = val.slice(0, len)
 						node.appendChild(tmp)
+						val = val.slice(len)
+						el("i", node, "m").dataset.c = "+" + val.length + " more"
+						tmp = span.cloneNode()
+						tmp.classList.add("d" + rand)
 					}
-					afterColon = match[3]
-					if (++i > 9000) {
-						len = str.length
-						document.title = (0|(100*re.lastIndex/len)) + "% of " + units(len)
-						return setTimeout(loop, 0, str, re)
-					}
+					tmp.textContent = val
+					node.appendChild(tmp)
 				}
-				document.title = ""
-				window.data = str ? JSON.parse(str) : Error("Empty JSON")
-
-			} catch(e) {
-				tmp = box.insertBefore(el("div"), box.firstChild)
-				tmp.className = ERR
-				tmp.textContent = e
+				afterColon = match[3]
+				if (++i > 9000) {
+					len = str.length
+					document.title = (0|(100*re.lastIndex/len)) + "% of " + units(len)
+					return setTimeout(loop, 0, str, re)
+				}
 			}
+			document.title = ""
 		}
 	}
 	function formatBody() {
