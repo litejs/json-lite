@@ -26,6 +26,7 @@ var css, next, opts
 	error: "#f12",
 	wrap: true,
 	menus: true,
+	navInfo: true,
 	unescape: false,
 	sizeLimit: 10485760,
 	indent: "  ",
@@ -80,6 +81,7 @@ function readConf() {
 				'div.r' + rand + '{margin-left:8px}'
 			) +
 			'i.c', '+.d', '+[data-l]:before{display:none}' +
+			'.p', '{color:' + opts.info + ';margin:0 0 5px 0}' +
 			'.x', '{border:1px solid ' + opts.info + ';padding:1em}' +
 			'a.l', '{text-decoration:none}' +
 			'a.l', ':hover,a.l', ':focus{text-decoration:underline}' +
@@ -393,6 +395,13 @@ function func(rand, opts, op, msg) {
 			link.target = "_blank"
 		}
 
+		if (to === body && opts.navInfo) try {
+			var nav = performance.getEntriesByType("navigation")[0]
+			, endNames = { request: "responseStart" }
+			, t = "domainLookup,connect,request,response".split(",").map(function(n) { return (nav[endNames[n] || n + "End"] - nav[n + "Start"]) + "ms" })
+			el("div", node, "p").textContent = `// Status ${nav.responseStatus} (dns:${t[0]},tcp:${t[1]},req:${t[2]},res:${t[3]})`
+			if (nav.serverTiming && nav.serverTiming.length) el("div", node, "p").textContent = "// serverTiming: " + JSON.stringify(nav.serverTiming)
+		} catch(e) {}
 		try {
 			window.data = str ? JSON.parse(str) : Error("Empty JSON")
 		} catch(e) {
