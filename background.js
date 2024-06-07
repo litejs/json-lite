@@ -70,6 +70,9 @@ function readConf() {
 			'.r', '.w', '{white-space:pre-wrap}' +
 			'div.r', '{position:relative;padding:10px 20px}' +
 			'div.d', '{vertical-align:bottom}' +
+			'i.i', ',i.m', '{cursor:pointer;font-style:normal}' +
+			'[data-c]:before,[data-c]:after{color:' + opts.info + '}' +
+			'i.h', ':before,[data-c]:hover:before,[data-c]:hover:after{color:' + opts.infoHover + '}' +
 			(
 				opts.lineNo ?
 				'body>div.r' + rand + '{min-height:100%}div.r' + rand + '{border-left:60px solid ' + opts.numBg + '}' +
@@ -80,9 +83,7 @@ function readConf() {
 			'.x', '{border:1px solid ' + opts.info + ';padding:1em}' +
 			'a.l', '{text-decoration:none}' +
 			'a.l', ':hover,a.l', ':focus{text-decoration:underline}' +
-			'i.i', ',i.m', '{cursor:pointer;font-style:normal;color:' + opts.info + '}' +
-			'i.h', ',i.m', ':hover,i.i', ':hover{color:' + opts.infoHover + '}'+
-			'i.i', ':before{position:absolute;left:0;content:"\u25BC";display:inline-block;padding:2px 9px;margin:-2px;transition:transform .2s}' +
+			'i.i', ':before{position:absolute;left:0;content:"\u25BC";display:inline-block;padding:0 7px;transition:transform .2s}' +
 			'i.c', ':before{transform:rotate(-90deg)}' +
 			(cssVar[opts.showSize] || 'i.c'), ':after,i.m', ':after{margin-left:8px;content:attr(data-c)}' +
 			'i.c', '+.d', '{white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0;border:0;display:inline-block;overflow:hidden;max-width:50%}' +
@@ -97,7 +98,7 @@ function readConf() {
 				opts.showDate !== "never" ?
 				'.n' + rand + '[data-c]' + (opts.showDate === 'hover' ? ':hover':'') +
 				':after{z-index:1;position:absolute;margin-left:1em;padding:0 .6em;white-space:nowrap;background:' + opts.bg +
-				';color:' + opts.infoHover + ';content:" // " attr(data-c)}' :
+				';content:" // " attr(data-c)}' :
 				''
 			) +
 			'.b', '{color:' + opts.bool + '}' +
@@ -405,16 +406,6 @@ function func(rand, opts, op, msg) {
 			body.lastChild.lastChild.textContent += jsonp[3]
 		}
 
-		function fragment(a) {
-			var frag = document.createDocumentFragment()
-			el("span", frag).textContent = (afterColon ? ": " : spaces) + a
-			if (!afterColon) frag.lastChild.dataset.l = lineNo++
-			el("i", frag, "i")
-			frag.appendChild(div.cloneNode())
-			el("span", frag, "q").textContent = spaces + (a === "{" ? "}" : "]")
-			return frag
-		}
-
 		function loop(str, re) {
 			var len, match, val, tmp
 			, i = 0
@@ -425,7 +416,10 @@ function func(rand, opts, op, msg) {
 					val = match[0]
 					if (val === "{" || val === "[") {
 						path.push(node)
-						node.appendChild(fragment(val))
+						if (!afterColon) el("span", node).dataset.l = lineNo++
+						el("i", node, "i").textContent = (afterColon ? ": " : spaces) + val
+						node.appendChild(div.cloneNode())
+						el("span", node, "q").textContent = spaces + (val === "{" ? "}" : "]")
 						node = node.lastChild.previousSibling
 						node.len = 1
 						node.start = re.lastIndex
@@ -447,7 +441,7 @@ function func(rand, opts, op, msg) {
 							val.textContent.replace(/'|\\/g, "\\$&") :
 							node.parentNode.len
 						} else {
-							node.nextSibling.textContent = val
+							node.nextSibling.textContent = node.previousSibling.textContent + val
 							node.parentNode.removeChild(node.previousSibling)
 							node.parentNode.removeChild(node)
 						}
