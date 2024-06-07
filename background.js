@@ -32,6 +32,7 @@ var css, next, opts
 	showDate: "hover",
 	showDateFn: "toString",
 	showSize: "collapsed",
+	dblclickFn: "",
 	lineNo: true,
 	usefulCollapse: true,
 	newtab: false
@@ -248,19 +249,19 @@ function func(rand, opts, op, msg) {
 			return unescape(str)
 		}
 	}
-	document.addEventListener("dblclick", function(e) {
+	if (opts.dblclickFn) document.addEventListener("dblclick", function(e) {
 		var txt, target = e.target.nodeType === 3 ? e.target.parentNode : e.target
 		if (target.matches("." + STR)) {
 			try {
 				txt = JSON.parse(target.textContent)
-				e.preventDefault()
-				JSON.parse(txt)
-				draw(txt, target)
-			} catch(e) {
-				try {
+				if (opts.dblclickFn === "format") {
+					e.preventDefault()
+					JSON.parse(txt)
+					draw(txt, target)
+				} else if (opts.dblclickFn === "atob") {
 					target.textContent = fns.atob(txt)
-				} catch(e) {}
-			}
+				}
+			} catch(e) {}
 		}
 	})
 
