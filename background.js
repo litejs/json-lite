@@ -72,7 +72,7 @@ function readConf() {
 			'div.d', '{vertical-align:bottom}' +
 			(
 				opts.lineNo ?
-				'div.r' + rand + '{min-height:100%;border-left:60px solid ' + opts.numBg + '}' +
+				'body>div.r' + rand + '{min-height:100%}div.r' + rand + '{border-left:60px solid ' + opts.numBg + '}' +
 				'[data-l]:before{font-weight:normal;text-align:right;width:60px;content:attr(data-l);position:absolute;left:-68px;color:' + opts.numCol + '}' :
 				'div.r' + rand + '{margin-left:8px}'
 			) +
