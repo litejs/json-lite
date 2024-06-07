@@ -260,7 +260,7 @@ function func(rand, opts, op, msg) {
 				if (opts.dblclickFn === "format") {
 					e.preventDefault()
 					JSON.parse(txt)
-					draw(txt, target)
+					draw(txt, target, 0, "x" + rand)
 				} else if (opts.dblclickFn === "atob") {
 					target.textContent = fns.atob(txt)
 				}
