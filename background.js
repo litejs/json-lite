@@ -108,7 +108,7 @@ function readConf() {
 			'.e', '{color:' + opts.error + '}' +
 			'.o', '{color:' + opts.null + '}' +
 			'.e', ',.b', '{font-weight:bold}' +
-			'div.e', '{font-size:120%;margin:0 0 1em}'
+			'div.e', '{white-space:normal;font-size:120%;margin:0 0 1em}'
 		].join(rand)
 
 		if (!editor) {
