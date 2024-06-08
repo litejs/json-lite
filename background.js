@@ -107,6 +107,10 @@ function readConf() {
 			'.k', '{color:' + opts.property + '}' +
 			'.e', '{color:' + opts.error + '}' +
 			'.o', '{color:' + opts.null + '}' +
+			'.g', '{float:right;margin:-4px -14px;border-radius:4px;border:1px solid ' + opts.info + ';background:#ddd}' +
+			'.gb', '{font: 20px/20px serif;cursor:pointer;padding:0 2px}' +
+			'.gb', ':hover{background:#ccc}' +
+			'.gb', ':active{background:#999}' +
 			'.e', ',.b', '{font-weight:bold}' +
 			'div.e', '{white-space:normal;font-size:120%;margin:0 0 1em}'
 		].join(rand)
@@ -355,26 +359,6 @@ function func(rand, opts, op, msg) {
 		}
 	}
 
-	function onClick(e) {
-		var target = e.target
-		, isCollapsed = target.classList.contains(COLL)
-		e.stopPropagation()
-		if (target.tagName === "I") {
-			if (target.classList.contains("m" + rand)) {
-				target.previousSibling.appendChild(target.nextSibling.firstChild)
-				target.parentNode.removeChild(target.nextSibling)
-				target.parentNode.removeChild(target)
-			} else if (e.altKey) {
-				changeSiblings(target, COLL, !isCollapsed)
-			} else if (e[mod]) {
-				isCollapsed = target.nextSibling.querySelector("i")
-				if (isCollapsed) change(target.nextSibling, "i", COLL, !isCollapsed.classList.contains(COLL))
-			} else {
-				target.classList[isCollapsed ? "remove" : "add"](COLL)
-			}
-		}
-	}
-
 	function draw(str, to, first, box) {
 		var afterColon
 		, spaces = ""
@@ -386,6 +370,7 @@ function func(rand, opts, op, msg) {
 		, path = []
 		, lineNo = 1
 		, jsonp = /^([\/*&;='"$\w\s]{0,99}\b[$a-z_][$\w]{0,99}\s*\()([^]+)(\)[\s;]*)$/i.exec(str)
+		, oldTxt = to.textContent
 		colon.textContent = ": "
 		comma.textContent = ",\n"
 
@@ -393,6 +378,12 @@ function func(rand, opts, op, msg) {
 
 		if (opts.newtab) {
 			link.target = "_blank"
+		}
+
+		if (first === 0) {
+			var btnGroup = el("div", node, "g")
+			, closeBtn = el("div", btnGroup, "gb")
+			closeBtn.textContent = "⨯"
 		}
 
 		if (to === body && opts.navInfo) try {
@@ -408,7 +399,29 @@ function func(rand, opts, op, msg) {
 			el("div", node, "e").textContent = e
 		}
 
-		node.addEventListener("click", onClick, true)
+		node.addEventListener("click", onClick, false)
+		function onClick(e) {
+			var target = e.target
+			, isCollapsed = target.classList.contains(COLL)
+			e.stopPropagation()
+			if (target.tagName === "I") {
+				if (target.classList.contains("m" + rand)) {
+					target.previousSibling.appendChild(target.nextSibling.firstChild)
+					target.parentNode.removeChild(target.nextSibling)
+					target.parentNode.removeChild(target)
+				} else if (e.altKey) {
+					changeSiblings(target, COLL, !isCollapsed)
+				} else if (e[mod]) {
+					isCollapsed = target.nextSibling.querySelector("i")
+					if (isCollapsed) change(target.nextSibling, "i", COLL, !isCollapsed.classList.contains(COLL))
+				} else {
+					target.classList[isCollapsed ? "remove" : "add"](COLL)
+				}
+			} else if (target === closeBtn) {
+				to.textContent = oldTxt
+			}
+		}
+
 		if (first) {
 			to.replaceChild(box = node, first)
 		} else {
