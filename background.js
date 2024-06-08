@@ -408,7 +408,7 @@ function func(rand, opts, op, msg) {
 			el("div", node, "e").textContent = e
 		}
 
-		to.addEventListener("click", onClick, true)
+		node.addEventListener("click", onClick, true)
 		if (first) {
 			to.replaceChild(box = node, first)
 		} else {
@@ -552,7 +552,6 @@ function func(rand, opts, op, msg) {
 		}
 	}
 	function formatPlain() {
-		body.removeEventListener("click", onClick, true)
 		if (first && first.tagName === "PRE") {
 			body.innerHTML = ""
 			body.appendChild(first)
