@@ -360,7 +360,7 @@ function func(rand, opts, op, msg) {
 	}
 
 	function draw(str, to, first, box) {
-		var afterColon
+		var afterColon, tmp
 		, spaces = ""
 		, node = div.cloneNode()
 		, link = el("a", 0, "l")
@@ -394,7 +394,7 @@ function func(rand, opts, op, msg) {
 			if (nav.serverTiming && nav.serverTiming.length) el("div", node, "p").textContent = "// serverTiming: " + JSON.stringify(nav.serverTiming)
 		} catch(e) {}
 		try {
-			window.data = str ? JSON.parse(str) : Error("Empty JSON")
+			window.data = str ? JSON.parse(jsonp ? jsonp[2] : str) : Error("Empty JSON")
 		} catch(e) {
 			el("div", node, "e").textContent = e
 		}
@@ -430,7 +430,8 @@ function func(rand, opts, op, msg) {
 		}
 		loop(jsonp ? jsonp[2] : str, re)
 		if (jsonp) {
-			body.lastChild.firstChild.firstChild.textContent = jsonp[1] + body.lastChild.firstChild.firstChild.textContent
+			tmp = body.querySelector("i")
+			tmp.textContent = jsonp[1] + tmp.textContent
 			body.lastChild.lastChild.textContent += jsonp[3]
 		}
 
