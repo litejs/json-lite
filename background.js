@@ -391,8 +391,11 @@ function func(rand, opts, op, msg) {
 			, t = "domainLookup,connect,request,response".split(",").map(
 				n => Math.round(nav[n === "request" ? "responseStart" : n + "End"] - nav[n + "Start"]) + "ms"
 			)
-			el("div", node, "p").textContent = `// Status ${nav.responseStatus} (dns:${t[0]},tcp:${t[1]},req:${t[2]},res:${t[3]})`
-			if (nav.serverTiming && nav.serverTiming.length) el("div", node, "p").textContent = "// serverTiming: " + JSON.stringify(nav.serverTiming)
+			t = `// Status ${nav.responseStatus} (dns:${t[0]} tcp:${t[1]} req:${t[2]} res:${t[3]})`
+			if (nav.serverTiming && nav.serverTiming.length) t += " serverTiming " + nav.serverTiming.map(
+				ent => ent.name + (ent.description ? `:${ent.description}:` : ":") + ent.duration
+			).join(" ")
+			el("div", node, "p").textContent = t
 		} catch(e) {}
 		try {
 			window.data = str ? JSON.parse(jsonp ? jsonp[2] : str) : Error("Empty JSON")
