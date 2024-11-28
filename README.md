@@ -1,5 +1,10 @@
 
-JSON Lite
+[1]: https://badgen.net/chrome-web-store/users/acacmjcicejlmjcheoklfdchempahoag?label=Chrome
+[2]: https://chrome.google.com/webstore/detail/json-lite/acacmjcicejlmjcheoklfdchempahoag
+[3]: https://badgen.net/amo/users/json-lite?label=Firefox
+[4]: https://addons.mozilla.org/en-US/firefox/addon/json-lite/
+
+JSON Lite &ndash; [![Chrome users][1]][2] [![Firefox users][3]][4]
 =========
 
 Browser extension for viewing JSON files.
